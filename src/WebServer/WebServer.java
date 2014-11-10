@@ -1,7 +1,8 @@
 package WebServer;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -13,7 +14,7 @@ public class WebServer {
 	private ServerSocket server;
 	private Socket socket;
 	private PrintWriter output;
-	//private ObjectOutputStream output;
+	private BufferedReader input;
 	
 	public WebServer(){
 
@@ -34,7 +35,8 @@ public class WebServer {
 			{
 				waitForConnection();
 				setupStreams();
-				writeSomething();
+				getFromBrowser();
+				respondToBrowser();
 				closeEverything();
 				
 			}catch(Exception e){
@@ -60,17 +62,37 @@ public class WebServer {
 	//setup stream to send and receive data
 	private void setupStreams() throws IOException{
 		
-		//output = new ObjectOutputStream(socket.getOutputStream());
-		output = new PrintWriter(socket.getOutputStream(), true);
-		output.flush();
-		
+		try
+		{
+			output = new PrintWriter(socket.getOutputStream(), true);
+			output.flush();
+			
+			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		}catch(Exception e){
+			System.out.println("Error setup streams");
+		}
 		//should add input streams for getting request(get) from browser 
 		//input = new ObjectInputStream(socket.getInputStream());
 		
 
 	}
 			
-	private void writeSomething(){
+	private void getFromBrowser(){
+		
+		try 
+		{
+			String str = "";
+			
+			while(!(str = input.readLine()).equals(null))
+				System.out.println("String from browser: " + str);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	private void respondToBrowser(){
 		//output.print("GET/HTTP/1.1");
 		output.println(
 				"<html>"
@@ -78,7 +100,7 @@ public class WebServer {
 				+ "</html>");
 		output.println("");
 		
-		System.out.println("message send");
+		System.out.println("Message send");
 		
 	}
 	
