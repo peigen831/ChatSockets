@@ -35,7 +35,7 @@ public class Server extends JFrame{
 			new ActionListener(){
 				public void actionPerformed(ActionEvent event){
 					//sendMessage(event.getActionCommand());
-					//userText.setText("");
+					userText.setText("");
 				}
 			}
 		);
