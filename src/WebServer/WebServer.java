@@ -81,10 +81,14 @@ public class WebServer {
 		
 		try 
 		{
-			String str = "";
+			String str;
 			
-			while(!(str = input.readLine()).equals(null))
+			while(!(str = input.readLine()).equals(""))
+			{
 				System.out.println("String from browser: " + str);
+			}
+			
+			System.out.println("Done receiving from browser");
 			
 		} catch (IOException e) {
 			e.printStackTrace();
