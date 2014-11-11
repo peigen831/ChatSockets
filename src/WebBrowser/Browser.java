@@ -120,11 +120,13 @@ public class Browser extends JFrame{
 		String str;
 		
 		try{
-			while((str = input.readLine()) != null)
-			{
+			do {
+				str = input.readLine();
 				System.out.println("Respond: "+ str);
 				content += str + "\n"; 
 			}
+			while(input.ready() && str != null);
+			System.out.println("Done receiving");
 			
 		}catch(Exception e){
 			System.out.println("Failed to get Respond");
