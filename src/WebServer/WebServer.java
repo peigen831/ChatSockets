@@ -91,7 +91,7 @@ public class WebServer {
 			
 			while(!(str = input.readLine()).equals(""))
 			{
-				System.out.println("String from browser: " + str);
+				System.out.println(str);
 			}
 			
 			System.out.println("Done receiving from browser");
