@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -78,12 +79,19 @@ public class Browser extends JFrame{
 		}
 	}
 	
-	private void connectToServer(String URL) throws UnknownHostException, IOException{
-		System.out.println("Attemping Connection...\n");
-		
-		socket = new Socket(URL, 80);
-		
-		System.out.println("Connected to: " + socket.getInetAddress()+ "\n");
+	private void connectToServer(String URL){
+		try
+		{
+			System.out.println("Attemping Connection...\n");
+			
+			socket = new Socket(InetAddress.getByName(parseHost(URL)), 80);
+			
+			System.out.println("Connected to: " + socket.getInetAddress()+ "\n");
+			
+		}catch(Exception e){
+			System.out.println("Error: connect to server");
+		}
+			
 	}
 	
 	private void setupStreams(){
@@ -94,15 +102,24 @@ public class Browser extends JFrame{
 			
 			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		}catch(Exception e){
-			System.out.println("Error setup streams");
+			System.out.println("Error: setup streams");
 		}
 	}
 	
+	public String parseDirectory(String given)
+	{
+		String[] split = given.split("/");
+		return split[split.length-1];
+	}
+	
+	public String parseHost(String given){
+		return given.split("/")[0].split(":")[0];
+	}
 	
 	private void sendRequest(String URL){
 		output.println(
-				"GET / HTTP/1.1\n"
-				+ "Host: " + URL + "\n"
+				"GET /" + parseDirectory(URL) + " HTTP/1.1\n"
+				+ "Host: " + parseHost(URL) + "\n"
 				+ "Connection: keep-alive\n"
 				+ "Accept: * " + "//" + "*\n"
 				+ "User-Agent: Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.102 Safari/537.36\n"
@@ -149,5 +166,11 @@ public class Browser extends JFrame{
 		display.setText(content);
 		
 		addressBar.setText("");
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Browser browser = new Browser();
+		browser.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }

@@ -24,7 +24,7 @@ public class WebServer {
 	public WebServer(){
 		try 
 		{
-			server = new ServerSocket(8080, 10, InetAddress.getByName("localhost"));
+			server = new ServerSocket(80, 10, InetAddress.getByName("localhost"));
 		} catch (UnknownHostException e1) {
 			System.out.println("Unknown host");
 			e1.printStackTrace();
