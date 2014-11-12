@@ -3,6 +3,8 @@ package WebBrowser;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,14 +27,25 @@ public class Browser extends JFrame{
 	private BufferedReader input;
 	
 	//constructor
-	public Browser(){
+	public Browser() {
 		super("CSC-Browser");
 		
 		addressBar = new JTextField("Enter the URL:");
+		addressBar.addFocusListener(new FocusListener() {
+			
+			public void focusLost(FocusEvent arg0) {}
+			
+			public void focusGained(FocusEvent arg0) {
+				addressBar.selectAll();
+			}
+		});
 		addressBar.addActionListener(
-			new ActionListener(){
-				public void actionPerformed(ActionEvent event){
+			new ActionListener() {
+				public void actionPerformed(ActionEvent event) {
+					String str = addressBar.getText();
 					loadPage(event.getActionCommand());
+					addressBar.setText(str);
+					requestFocusInWindow();
 				}
 			}
 		);
@@ -42,10 +55,9 @@ public class Browser extends JFrame{
 		display = new JEditorPane();
 		display.setEditable(false);
 		display.addHyperlinkListener(
-			new HyperlinkListener(){
-				public void hyperlinkUpdate(HyperlinkEvent event){
-					if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
-					{
+			new HyperlinkListener() {
+				public void hyperlinkUpdate(HyperlinkEvent event) {
+					if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 						loadPage(event.getURL().toString());
 					}
 				}
@@ -56,9 +68,8 @@ public class Browser extends JFrame{
 		setVisible(true);
 	}
 	
-	private void loadPage(String URL){
-		try
-		{
+	private void loadPage(String URL) {
+		try {
 			//this part should change to sockets.
 			connectToServer(URL);
 			
@@ -70,15 +81,15 @@ public class Browser extends JFrame{
 					
 			setPage(content);
 			
-		}catch(Exception e){
+		} catch(Exception e) {
 			System.out.println("Crap");
 			
-		}finally{
+		} finally {
 			closeEverything();
 		}
 	}
 	
-	private void connectToServer(String URL) throws UnknownHostException, IOException{
+	private void connectToServer(String URL) throws UnknownHostException, IOException {
 		System.out.println("Attemping Connection...\n");
 		
 		socket = new Socket(URL, 80);
@@ -86,20 +97,19 @@ public class Browser extends JFrame{
 		System.out.println("Connected to: " + socket.getInetAddress()+ "\n");
 	}
 	
-	private void setupStreams(){
-		try
-		{
+	private void setupStreams() {
+		try {
 			output = new PrintWriter(socket.getOutputStream(), true);
 			output.flush();
 			
 			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		}catch(Exception e){
+		}catch(Exception e) {
 			System.out.println("Error setup streams");
 		}
 	}
 	
 	
-	private void sendRequest(String URL){
+	private void sendRequest(String URL) {
 		output.println(
 				"GET / HTTP/1.1\n"
 				+ "Host: " + URL + "\n"
@@ -108,18 +118,17 @@ public class Browser extends JFrame{
 				+ "User-Agent: Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.102 Safari/537.36\n"
 				+ "Accept-Encoding: gzip,deflate,sdch\n"
 				+ "Accept-Language: zh-CN,zh;q=0.8\n"
-				);
+		);
 		
 		System.out.println("Request sent");
 	}
 	
-	private String getRespond()
-	{
+	private String getRespond() {
 		
 		String content = "";
 		String str;
 		
-		try{
+		try {
 			do {
 				str = input.readLine();
 				System.out.println("Respond: "+ str);
@@ -128,16 +137,15 @@ public class Browser extends JFrame{
 			while(input.ready() && str != null);
 			System.out.println("Done receiving");
 			
-		}catch(Exception e){
+		} catch(Exception e) {
 			System.out.println("Failed to get Respond");
 		}
 		
 		return content;
 	}
 	
-	private void closeEverything(){
-		try 
-		{
+	private void closeEverything() {
+		try {
 			input.close();
 			socket.close();
 		} catch (IOException e) {
@@ -145,7 +153,7 @@ public class Browser extends JFrame{
 		}
 	}
 	
-	private void setPage(String content){
+	private void setPage(String content) {
 		display.setText(content);
 		
 		addressBar.setText("");
