@@ -16,10 +16,6 @@ import java.net.UnknownHostException;
 public class WebServer {
 
 	private ServerSocket server;
-	private Socket socket;
-	private PrintWriter output;
-	private BufferedReader input;
-	private String getRequest;
 	
 	public WebServer(){
 		try 
@@ -37,11 +33,11 @@ public class WebServer {
 		{
 			try
 			{
-				waitForConnection();
-				setupStreams();
-				getFromBrowser();
-				respondToBrowser();
-				closeEverything();
+				Socket clientSocket = server.accept();
+				
+				Subserver subserver = new Subserver(clientSocket);
+				subserver.start();
+				//waitForConnection();
 				
 			}catch(Exception e){
 				System.out.println("Error occure wait for connection and setup streams.");
@@ -50,128 +46,19 @@ public class WebServer {
 			System.out.println("Disconnected");
 		}
 	}
-	
+	/*
 	private void waitForConnection(){
 		try
 		{	
-			System.out.println("Start waiting for connection");
 			socket = server.accept();
-			System.out.println("Someone connected");
 			
 		}catch(Exception e){
 			System.out.println("Setup server socket failed.");
 		}	
 	}
+	*/
 	
-	//setup stream to send and receive data
-	private void setupStreams() throws IOException{
-		
-		try
-		{
-			output = new PrintWriter(socket.getOutputStream(), true);
-			output.flush();
-			
-			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		}catch(Exception e){
-			System.out.println("Error setup streams");
-		}
-		
-
-	}
-			
-	private void getFromBrowser(){
-		
-		try 
-		{
-			getRequest = input.readLine();
-			
-			System.out.println(getRequest);
-			
-			String str;
-			
-			while(!(str = input.readLine()).equals(""))
-			{
-				System.out.println(str);
-			}
-			
-			System.out.println("Done receiving from browser");
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
 	
-	public String parseGetRequest(){
-		String result;
-		
-		result = getRequest.split(" ")[1];
-		
-		result = result.substring(1, result.length());
-		
-		return result;
-		
-	}
-	
-	public String getFileContent(String filePath) throws IOException
-	{
-		FileReader reader = new FileReader("src/WebServer/" + filePath);
-		BufferedReader br = new BufferedReader(reader);
-		String result = "";
-		
-	    try 
-	    {
-	        StringBuilder sb = new StringBuilder();
-	        String line = br.readLine();
-
-	        while (line != null) 
-	        {
-	            sb.append(line);
-	            sb.append(System.lineSeparator());
-	            line = br.readLine();
-	        }
-	        
-	        result = sb.toString();
-	        
-	    }catch(Exception e){
-	    	System.out.println("IO Error");
-	    	
-	    }finally {
-			br.close();
-	    }
-	    
-	    return result;
-	}
-	
-	private void respondToBrowser() throws IOException{
-		
-		String fileName = parseGetRequest();
-		
-		String fileContent = getFileContent(fileName);
-		
-		try
-		{
-			output.println(fileContent);
-			
-			System.out.println("Message send");
-			
-		}catch(Exception e){
-			System.out.println("respond to browser failed");
-		}
-	}
-	
-	private void closeEverything()
-	{
-		try 
-		{
-			output.close();
-			input.close();
-			socket.close();
-			
-		} catch (IOException e) {
-			System.out.println("Close failed");
-		}
-	}
 	
 	public static void main(String args[])
 	{

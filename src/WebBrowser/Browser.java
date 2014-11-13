@@ -18,18 +18,19 @@ import javax.swing.JTextField;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
-public class Browser extends JFrame{
+public class Browser extends JFrame implements Runnable {
 	private JTextField addressBar;
 	private JEditorPane display;
 	private Socket socket;
 	private PrintWriter output;
 	private BufferedReader input;
+	private int i;
 	
 	//constructor
-	public Browser(){
+	public Browser(int i){
 		super("CSC-Browser");
-		
-		addressBar = new JTextField("Enter the URL:");
+		this.i = i;
+		/*addressBar = new JTextField("Enter the URL:");
 		addressBar.addActionListener(
 			new ActionListener(){
 				public void actionPerformed(ActionEvent event){
@@ -54,13 +55,14 @@ public class Browser extends JFrame{
 		);
 		add(new JScrollPane(display), BorderLayout.CENTER);
 		setSize(500,300);
-		setVisible(true);
+		setVisible(false);*/
 	}
 	
 	private void loadPage(String URL){
 		try
 		{
 			//this part should change to sockets.
+			long start = System.currentTimeMillis();
 			connectToServer(URL);
 			
 			setupStreams();
@@ -68,11 +70,15 @@ public class Browser extends JFrame{
 			sendRequest(URL);
 			
 			String content = getRespond();
-					
+			
+			long end = System.currentTimeMillis();
+			
+			System.out.println(i + ": " + (end-start));
+			
 			setPage(content);
 			
 		}catch(Exception e){
-			System.out.println("Crap");
+			//System.out.println("Crap");
 			
 		}finally{
 			closeEverything();
@@ -82,11 +88,8 @@ public class Browser extends JFrame{
 	private void connectToServer(String URL){
 		try
 		{
-			System.out.println("Attemping Connection...\n");
 			
 			socket = new Socket(InetAddress.getByName(parseHost(URL)), 80);
-			
-			System.out.println("Connected to: " + socket.getInetAddress()+ "\n");
 			
 		}catch(Exception e){
 			System.out.println("Error: connect to server");
@@ -127,7 +130,6 @@ public class Browser extends JFrame{
 				+ "Accept-Language: zh-CN,zh;q=0.8\n"
 				);
 		
-		System.out.println("Request sent");
 	}
 	
 	private String getRespond()
@@ -139,11 +141,10 @@ public class Browser extends JFrame{
 		try{
 			do {
 				str = input.readLine();
-				System.out.println("Respond: "+ str);
 				content += str + "\n"; 
 			}
 			while(input.ready() && str != null);
-			System.out.println("Done receiving");
+			
 			
 		}catch(Exception e){
 			System.out.println("Failed to get Respond");
@@ -167,10 +168,9 @@ public class Browser extends JFrame{
 		
 		addressBar.setText("");
 	}
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Browser browser = new Browser();
-		browser.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+	@Override
+	public void run() {
+		loadPage("localhost:80/one.html");
 	}
 }

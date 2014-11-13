@@ -6,8 +6,12 @@ public class Driver {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Browser browser = new Browser();
-		browser.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		for (int i = 0; i < 160; i++) {
+			Thread t = (new Thread(new Browser(i)));
+			t.start();
+		}
+		
+		
 	}
 
 }
