@@ -3,6 +3,8 @@ package WebBrowser;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -32,9 +34,12 @@ public class Browser extends JFrame implements Runnable {
 		this.i = i;
 		/*addressBar = new JTextField("Enter the URL:");
 		addressBar.addActionListener(
-			new ActionListener(){
-				public void actionPerformed(ActionEvent event){
+			new ActionListener() {
+				public void actionPerformed(ActionEvent event) {
+					String str = addressBar.getText();
 					loadPage(event.getActionCommand());
+					addressBar.setText(str);
+					requestFocusInWindow();
 				}
 			}
 		);
@@ -44,10 +49,9 @@ public class Browser extends JFrame implements Runnable {
 		display = new JEditorPane();
 		display.setEditable(false);
 		display.addHyperlinkListener(
-			new HyperlinkListener(){
-				public void hyperlinkUpdate(HyperlinkEvent event){
-					if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
-					{
+			new HyperlinkListener() {
+				public void hyperlinkUpdate(HyperlinkEvent event) {
+					if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 						loadPage(event.getURL().toString());
 					}
 				}
@@ -58,9 +62,8 @@ public class Browser extends JFrame implements Runnable {
 		setVisible(false);*/
 	}
 	
-	private void loadPage(String URL){
-		try
-		{
+	private void loadPage(String URL) {
+		try {
 			//this part should change to sockets.
 			long start = System.currentTimeMillis();
 			connectToServer(URL);
@@ -80,7 +83,7 @@ public class Browser extends JFrame implements Runnable {
 		}catch(Exception e){
 			//System.out.println("Crap");
 			
-		}finally{
+		} finally {
 			closeEverything();
 		}
 	}
@@ -94,17 +97,16 @@ public class Browser extends JFrame implements Runnable {
 		}catch(Exception e){
 			System.out.println("Error: connect to server");
 		}
-			
+	
 	}
 	
-	private void setupStreams(){
-		try
-		{
+	private void setupStreams() {
+		try {
 			output = new PrintWriter(socket.getOutputStream(), true);
 			output.flush();
 			
 			input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		}catch(Exception e){
+		} catch (Exception e) {
 			System.out.println("Error: setup streams");
 		}
 	}
@@ -119,7 +121,7 @@ public class Browser extends JFrame implements Runnable {
 		return given.split("/")[0].split(":")[0];
 	}
 	
-	private void sendRequest(String URL){
+	private void sendRequest(String URL) {
 		output.println(
 				"GET /" + parseDirectory(URL) + " HTTP/1.1\n"
 				+ "Host: " + parseHost(URL) + "\n"
@@ -128,17 +130,16 @@ public class Browser extends JFrame implements Runnable {
 				+ "User-Agent: Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.102 Safari/537.36\n"
 				+ "Accept-Encoding: gzip,deflate,sdch\n"
 				+ "Accept-Language: zh-CN,zh;q=0.8\n"
-				);
+		);
 		
 	}
 	
-	private String getRespond()
-	{
+	private String getRespond() {
 		
 		String content = "";
 		String str;
 		
-		try{
+		try {
 			do {
 				str = input.readLine();
 				content += str + "\n"; 
@@ -146,16 +147,15 @@ public class Browser extends JFrame implements Runnable {
 			while(input.ready() && str != null);
 			
 			
-		}catch(Exception e){
+		} catch(Exception e) {
 			System.out.println("Failed to get Respond");
 		}
 		
 		return content;
 	}
 	
-	private void closeEverything(){
-		try 
-		{
+	private void closeEverything() {
+		try {
 			input.close();
 			socket.close();
 		} catch (IOException e) {
@@ -163,7 +163,7 @@ public class Browser extends JFrame implements Runnable {
 		}
 	}
 	
-	private void setPage(String content){
+	private void setPage(String content) {
 		display.setText(content);
 		
 		addressBar.setText("");
