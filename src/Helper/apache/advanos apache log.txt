@@ -1,0 +1,1542 @@
+1:
+0: 5540
+
+10:
+6: 5535
+9: 5608
+3: 5708
+1: 5716
+4: 5719
+0: 5735
+5: 5649
+8: 5647
+7: 8519
+2: 8613
+
+20:
+2: 5709
+5: 5710
+3: 5721
+9: 5714
+19: 5702
+17: 5789
+7: 5809
+14: 5804
+6: 5816
+4: 5849
+13: 5849
+0: 5865
+18: 5844
+1: 5877
+8: 5900
+11: 5896
+12: 5895
+10: 5911
+16: 5907
+15: 5908
+
+30:
+3: 5530
+4: 5534
+8: 5537
+2: 5548
+28: 5561
+29: 5562
+26: 5580
+27: 5579
+12: 5610
+7: 5627
+15: 5620
+25: 5652
+24: 5664
+18: 5688
+22: 5669
+20: 5711
+0: 5751
+16: 5744
+6: 5757
+1: 5779
+9: 5769
+10: 5781
+5: 5791
+11: 5803
+23: 5793
+13: 5824
+19: 5809
+17: 5827
+21: 5809
+14: 5833
+
+40:
+3: 5529
+0: 5534
+7: 5539
+6: 5553
+15: 5545
+29: 5610
+39: 5612
+32: 5619
+30: 5628
+38: 5634
+11: 5725
+34: 5697
+1: 5764
+22: 5726
+16: 5752
+20: 5741
+5: 5830
+10: 5834
+14: 5840
+13: 5852
+4: 5943
+18: 5928
+19: 5915
+8: 5939
+9: 5937
+35: 5901
+12: 5941
+17: 5976
+21: 5957
+23: 5958
+27: 5965
+25: 5968
+24: 5979
+31: 5978
+2: 6023
+26: 6011
+33: 6009
+37: 6010
+28: 6017
+36: 6014
+
+50:
+41: 5578
+45: 5577
+0: 5637
+42: 5644
+33: 5664
+49: 5655
+43: 5659
+48: 5665
+1: 5721
+39: 5718
+24: 5741
+4: 5797
+3: 5798
+6: 5800
+5: 5808
+2: 5848
+8: 5840
+9: 5847
+7: 5851
+12: 5857
+15: 5928
+11: 5941
+14: 5948
+16: 5953
+17: 5957
+10: 5975
+47: 5946
+23: 6025
+25: 6032
+28: 6034
+18: 6044
+31: 6038
+22: 6051
+37: 6050
+21: 6065
+30: 6082
+20: 6097
+36: 6091
+27: 6105
+35: 6107
+19: 6124
+38: 6144
+26: 6153
+40: 6145
+44: 6160
+34: 6174
+32: 6179
+29: 6183
+46: 6176
+13: 6202
+
+60:
+5: 5749
+10: 5748
+59: 5916
+57: 5924
+38: 5969
+15: 6096
+14: 6101
+58: 6053
+0: 6120
+7: 6210
+3: 6223
+13: 6221
+44: 6200
+1: 6274
+42: 6225
+6: 6284
+4: 6289
+8: 6285
+12: 6316
+33: 6289
+2: 6335
+17: 6314
+9: 6337
+11: 6344
+28: 6319
+18: 6343
+34: 6327
+37: 6399
+23: 6418
+39: 6416
+20: 6432
+29: 6430
+32: 6500
+21: 6519
+43: 6504
+48: 6515
+35: 6540
+26: 6550
+45: 6540
+49: 6539
+50: 6580
+25: 6598
+27: 6600
+30: 6621
+16: 6634
+40: 6632
+19: 6657
+52: 6646
+51: 6650
+46: 6655
+47: 6669
+24: 6691
+41: 6682
+36: 6727
+53: 6725
+22: 6752
+31: 6755
+54: 6742
+55: 6746
+56: 6747
+
+70:
+47: 9814
+56: 9886
+64: 9934
+41: 10266
+5: 10463
+6: 10480
+30: 10596
+69: 10576
+2: 10650
+44: 10614
+62: 10624
+49: 10675
+52: 10678
+53: 10786
+0: 10838
+59: 10795
+31: 10848
+8: 10888
+10: 10894
+13: 10891
+63: 10952
+14: 10998
+18: 11001
+15: 11018
+1: 11040
+7: 11034
+19: 11116
+22: 11118
+23: 11119
+21: 11121
+17: 11154
+9: 11167
+28: 11145
+26: 11240
+4: 11270
+24: 11247
+16: 11268
+32: 11262
+11: 11284
+68: 11317
+29: 11342
+60: 11326
+36: 11351
+34: 11363
+33: 11372
+50: 11365
+39: 11410
+12: 11440
+35: 11432
+54: 11427
+37: 11441
+42: 11469
+46: 11480
+48: 11466
+58: 11479
+51: 11540
+3: 11585
+55: 11551
+43: 11559
+25: 11571
+38: 11573
+40: 11580
+57: 11578
+67: 11575
+66: 11590
+65: 11590
+27: 11629
+
+80:
+9: 7765
+2: 7796
+57: 7756
+60: 7888
+5: 7964
+53: 7959
+13: 8129
+29: 8101
+50: 8121
+67: 8110
+37: 8187
+42: 8249
+27: 8260
+34: 8373
+61: 8366
+24: 8402
+78: 8361
+1: 8444
+49: 8425
+58: 8420
+0: 8488
+62: 8429
+72: 8452
+59: 8468
+79: 8465
+54: 8492
+74: 8484
+70: 8492
+55: 8576
+73: 8571
+76: 8583
+66: 8597
+45: 8734
+63: 8733
+28: 8767
+25: 8736
+43: 8721
+12: 8876
+77: 8597
+8: 8876
+4: 8868
+65: 8823
+6: 8974
+16: 8969
+14: 8966
+3: 8991
+17: 8970
+46: 8960
+15: 8982
+10: 9058
+31: 9048
+11: 9059
+36: 9059
+30: 9072
+41: 9070
+44: 9072
+21: 9111
+33: 9116
+48: 9107
+20: 9134
+39: 9132
+18: 9155
+23: 9152
+38: 9163
+22: 9185
+19: 9201
+69: 9171
+51: 9220
+40: 9231
+75: 9207
+52: 9234
+35: 9241
+26: 9252
+32: 9265
+47: 9277
+
+
+90:
+Exception in thread "Thread-21" java.lang.OutOfMemoryError: Java heap space
+17: 8824
+24: 9122
+1: 9178
+4: 9177
+8: 9197
+26: 9175
+19: 9277
+31: 9270
+49: 9261
+23: 9406
+67: 9377
+54: 9415
+52: 9433
+61: 9432
+30: 9461
+50: 9449
+44: 9577
+64: 9555
+60: 9664
+65: 9664
+33: 9721
+66: 9695
+2: 9766
+46: 9719
+15: 9833
+7: 9851
+29: 9830
+51: 9824
+40: 9841
+12: 9871
+43: 9842
+47: 9849
+22: 9921
+14: 9940
+0: 9962
+25: 9927
+53: 9926
+39: 9941
+35: 9944
+42: 10009
+56: 10002
+38: 10017
+6: 10077
+37: 10044
+16: 10080
+59: 10052
+63: 10068
+62: 10071
+77: 10074
+76: 10147
+10: 10212
+68: 10163
+82: 10169
+80: 10178
+28: 10250
+9: 10295
+45: 10263
+13: 10302
+78: 10249
+73: 10253
+5: 10380
+85: 10312
+79: 10304
+86: 10361
+87: 10376
+36: 10422
+83: 10389
+3: 10476
+72: 10438
+11: 10504
+84: 10445
+89: 10444
+88: 10453
+70: 10486
+41: 10577
+58: 10571
+74: 10554
+71: 10560
+32: 10595
+69: 10567
+75: 10570
+
+
+100:
+97: 9280
+8: 9548
+58: 9494
+16: 9540
+17: 9692
+9: 9706
+30: 9687
+23: 9705
+20: 9712
+21: 9815
+46: 9813
+86: 10082
+10: 10165
+98: 10386
+25: 10133
+5: 10111
+55: 10743
+50: 10748
+41: 9921
+66: 10715
+11: 11076
+84: 10678
+3: 10642
+52: 11347
+27: 10598
+65: 11336
+61: 11352
+26: 10597
+70: 11347
+75: 10540
+60: 11585
+15: 11645
+1: 10564
+4: 10561
+78: 11589
+47: 11621
+2: 10426
+57: 10487
+40: 11722
+56: 10481
+49: 11721
+24: 10390
+13: 10411
+64: 10342
+76: 11711
+18: 10376
+28: 10173
+32: 11965
+91: 10118
+77: 10118
+36: 11975
+38: 11957
+34: 11979
+22: 11958
+44: 11942
+43: 11934
+33: 12005
+74: 11901
+42: 11873
+72: 11983
+80: 11982
+85: 11983
+63: 11844
+73: 11834
+14: 12073
+35: 12041
+95: 11803
+71: 11818
+37: 11844
+79: 11678
+54: 11629
+67: 11474
+99: 11986
+68: 11470
+82: 11449
+45: 11466
+19: 11480
+89: 11414
+83: 11318
+53: 11257
+87: 11211
+88: 11210
+29: 11173
+96: 11109
+90: 10990
+94: 10974
+81: 10875
+93: 10867
+39: 10827
+12: 10867
+59: 10786
+92: 10753
+
+
+200:
+Exception in thread "Thread-89" java.lang.OutOfMemoryError: Java heap space
+	at java.util.Arrays.copyOf(Unknown Source)
+	at java.lang.AbstractStringBuilder.expandCapacity(Unknown Source)
+	at java.lang.AbstractStringBuilder.ensureCapacityInternal(Unknown Source)
+	at java.lang.AbstractStringBuilder.append(Unknown Source)
+	at java.lang.StringBuffer.append(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at WebBrowser.Browser.getRespond(Browser.java:133)
+	at WebBrowser.Browser.loadPage(Browser.java:64)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-121" java.lang.OutOfMemoryError: Java heap space
+	at java.util.Arrays.copyOf(Unknown Source)
+	at java.lang.AbstractStringBuilder.expandCapacity(Unknown Source)
+	at java.lang.AbstractStringBuilder.ensureCapacityInternal(Unknown Source)
+	at java.lang.AbstractStringBuilder.append(Unknown Source)
+	at java.lang.StringBuffer.append(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at WebBrowser.Browser.getRespond(Browser.java:133)
+	at WebBrowser.Browser.loadPage(Browser.java:64)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-152" java.lang.OutOfMemoryError: Java heap space
+	at java.util.Arrays.copyOf(Unknown Source)
+	at java.lang.AbstractStringBuilder.expandCapacity(Unknown Source)
+23: 14992
+132: 15338
+122: 15383
+25: 15589
+149: 15594
+38: 15662
+10: 15822
+11: 15853
+19: 15842
+	at java.lang.AbstractStringBuilder.ensureCapacityInternal(Unknown Source)
+	at java.lang.AbstractStringBuilder.append(Unknown Source)
+	at java.lang.StringBuffer.append(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at WebBrowser.Browser.getRespond(Browser.java:133)
+	at WebBrowser.Browser.loadPage(Browser.java:64)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-65" java.lang.OutOfMemoryError: Java heap space
+142: 15798
+Exception in thread "Thread-62" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-119" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-32" java.lang.OutOfMemoryError: Java heap space
+52: 15891
+Exception in thread "Thread-29" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-37" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-38" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-47" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-45" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-25" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-59" Exception in thread "Thread-141" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-110" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-126" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-139" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-156" 110: 16113
+128: 16240
+java.lang.OutOfMemoryError: Java heap space
+	at java.util.Arrays.copyOf(Unknown Source)
+	at java.lang.AbstractStringBuilder.expandCapacity(Unknown Source)
+	at java.lang.AbstractStringBuilder.ensureCapacityInternal(Unknown Source)
+	at java.lang.AbstractStringBuilder.append(Unknown Source)
+	at java.lang.StringBuffer.append(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at WebBrowser.Browser.getRespond(Browser.java:133)
+	at WebBrowser.Browser.loadPage(Browser.java:64)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+146: 16529
+java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-132" 137: 16831
+java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-50" java.lang.OutOfMemoryError: Java heap space
+106: 16996
+135: 16982
+57: 17069
+32: 17282
+111: 17218
+Exception in thread "Thread-145" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-85" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-124" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-116" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-154" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-84" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-135" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-151" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-128" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-127" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-49" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-66" java.lang.OutOfMemoryError: Java heap space
+102: 19661
+Exception in thread "Thread-131" java.lang.OutOfMemoryError: Java heap space
+152: 19657
+113: 19780
+33: 19835
+91: 19796
+124: 19820
+35: 19878
+96: 19843
+148: 19861
+18: 19987
+34: 19982
+72: 19965
+50: 20084
+104: 20053
+54: 20090
+17: 20126
+53: 20137
+62: 20143
+51: 20154
+68: 20153
+112: 20169
+20: 20238
+174: 20156
+26: 20255
+157: 20219
+154: 20230
+97: 20261
+78: 20407
+98: 20406
+129: 20393
+164: 20368
+145: 20397
+99: 20497
+15: 20560
+60: 20540
+12: 20579
+136: 20498
+107: 20582
+101: 20587
+95: 20596
+22: 20660
+6: 20682
+143: 20670
+80: 20725
+159: 20683
+94: 20726
+90: 20839
+76: 20878
+43: 20900
+81: 20882
+70: 20898
+160: 20884
+16: 20986
+92: 20937
+103: 20934
+85: 20974
+82: 20977
+161: 20925
+117: 21012
+105: 21031
+169: 21003
+147: 21032
+186: 21050
+141: 21092
+158: 21168
+39: 21254
+47: 21251
+1: 21291
+40: 21313
+67: 21302
+42: 21328
+77: 21308
+13: 21355
+156: 21266
+14: 21452
+55: 21427
+74: 21433
+27: 21460
+121: 21406
+73: 21489
+69: 21495
+75: 21594
+41: 21614
+114: 21573
+29: 21635
+45: 21672
+21: 21688
+133: 21624
+162: 21609
+189: 21600
+66: 21691
+108: 21665
+139: 21720
+86: 21761
+56: 21779
+71: 21771
+30: 21804
+116: 21754
+59: 21802
+79: 21929
+100: 21985
+119: 22165
+93: 22178
+89: 22766
+170: 22893
+163: 23095
+173: 23118
+63: 23292
+168: 23376
+198: 23459
+165: 23847
+171: 23891
+179: 23893
+188: 23923
+178: 23938
+8: 24130
+176: 24038
+7: 24155
+185: 24037
+181: 24077
+190: 24074
+5: 24216
+191: 24093
+183: 24099
+182: 24171
+177: 24222
+0: 24351
+184: 24238
+3: 24366
+172: 24248
+9: 24375
+193: 24321
+4: 24472
+2: 24475
+87: 24414
+192: 24396
+187: 24416
+167: 24427
+175: 24440
+195: 24435
+197: 24472
+196: 24478
+194: 24487
+199: 24498
+180: 24507
+166: 24540
+
+400:
+Exception in thread "Thread-354" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Error: connect to server
+Error: connect to server
+Error: setup streams
+Exception in thread "Thread-352" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Exception in thread "Thread-357" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Exception in thread "Thread-360" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-365" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-363" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Exception in thread "Thread-379" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-373" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-376" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Error: connect to server
+Error: setup streams
+Exception in thread "Thread-382" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Error: connect to server
+Error: connect to server
+Error: setup streams
+Exception in thread "Thread-387" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Error: setup streams
+Exception in thread "Thread-392" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-395" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+Error: connect to server
+Error: setup streams
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: connect to serverException in thread "Thread-355" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-371" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-367" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-386" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+
+Error: setup streams
+Error: setup streams
+Exception in thread "Thread-358" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-390" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-398" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Exception in thread "Thread-397" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-366" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Exception in thread "Thread-353" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-400" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Exception in thread "Thread-374" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-388" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Exception in thread "Thread-381" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-362" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-356" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-368" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-361" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Exception in thread "Thread-378" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-399" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-389" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-394" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-384" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Error: connect to server
+Error: setup streams
+Exception in thread "Thread-393" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-377" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+Error: connect to server
+Error: setup streams
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-372" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-359" Exception in thread "Thread-383" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-375" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-385" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-396" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-391" java.lang.NullPointerExceptionError: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+Error: connect to server
+Error: setup streams
+
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-380" Error: connect to server
+Error: setup streams
+java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-369" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-370" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-364" java.lang.NullPointerException
+	at WebBrowser.Browser.closeEverything(Browser.java:148)
+	at WebBrowser.Browser.loadPage(Browser.java:76)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-58" 18: 9405
+64: 12839
+128: 13271
+82: 13960
+112: 14233
+Exception in thread "Thread-39" java.lang.OutOfMemoryError: Java heap space
+	at java.util.Arrays.copyOf(Unknown Source)
+	at java.lang.AbstractStringBuilder.expandCapacity(Unknown Source)
+	at java.lang.AbstractStringBuilder.ensureCapacityInternal(Unknown Source)
+	at java.lang.AbstractStringBuilder.append(Unknown Source)
+	at java.lang.StringBuffer.append(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at WebBrowser.Browser.getRespond(Browser.java:133)
+	at WebBrowser.Browser.loadPage(Browser.java:64)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-36" java.lang.OutOfMemoryError: Java heap space
+	at java.util.Arrays.copyOf(Unknown Source)
+	at java.lang.AbstractStringBuilder.expandCapacity(Unknown Source)
+	at java.lang.AbstractStringBuilder.ensureCapacityInternal(Unknown Source)
+	at java.lang.AbstractStringBuilder.append(Unknown Source)
+	at java.lang.StringBuffer.append(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at WebBrowser.Browser.getRespond(Browser.java:133)
+	at WebBrowser.Browser.loadPage(Browser.java:64)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-73" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-71" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-110" 45: 14506
+java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-51" java.lang.OutOfMemoryError: Java heap space
+84: 14585
+4: 17817
+9: 17811
+31: 17812
+14: 17838
+39: 18061
+21: 18082
+85: 18069
+Exception in thread "Thread-72" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-74" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-45" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-43" java.lang.OutOfMemoryError: Java heap space
+28: 20429Exception in thread "Thread-44" java.lang.OutOfMemoryError: Java heap space
+53: 20644
+
+Exception in thread "Thread-47" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-16" java.lang.OutOfMemoryError: Java heap space
+34: 21052
+Exception in thread "Thread-57" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-31" java.lang.OutOfMemoryError: Java heap space
+75: 21179
+104: 21254
+Exception in thread "Thread-52" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-28" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-33" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-53" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-25" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-42" java.lang.OutOfMemoryError: Java heap space
+	at java.util.Arrays.copyOf(Unknown Source)
+	at java.lang.AbstractStringBuilder.expandCapacity(Unknown Source)
+	at java.lang.AbstractStringBuilder.ensureCapacityInternal(Unknown Source)
+	at java.lang.AbstractStringBuilder.append(Unknown Source)
+	at java.lang.StringBuffer.append(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at WebBrowser.Browser.getRespond(Browser.java:133)
+	at WebBrowser.Browser.loadPage(Browser.java:64)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-17" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-321" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-64" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-118" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-136" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-14" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-288" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-120" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-82" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-93" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-78" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-141" java.lang.OutOfMemoryError: Java heap space
+89: 22540
+Exception in thread "Thread-60" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-6" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-94" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-2" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-346" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-24" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-139" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-41" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-131" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-20" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-55" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-63" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-69" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-122" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-119" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-117" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-66" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-88" java.lang.OutOfMemoryError: Java heap space
+java.lang.OutOfMemoryError: Java heap space
+	at java.util.Arrays.copyOf(Unknown Source)
+	at java.lang.AbstractStringBuilder.expandCapacity(Unknown Source)
+	at java.lang.AbstractStringBuilder.ensureCapacityInternal(Unknown Source)
+	at java.lang.AbstractStringBuilder.append(Unknown Source)
+	at java.lang.StringBuffer.append(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at java.io.BufferedReader.readLine(Unknown Source)
+	at WebBrowser.Browser.getRespond(Browser.java:133)
+	at WebBrowser.Browser.loadPage(Browser.java:64)
+	at WebBrowser.Browser.run(Browser.java:163)
+	at java.lang.Thread.run(Unknown Source)
+Exception in thread "Thread-156" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-106" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-169" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-68" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-299" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-212" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-124" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-289" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-232" Exception in thread "Thread-279" java.lang.OutOfMemoryError: Java heap space
+java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-238" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-234" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-235" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-233" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-243" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-246" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-244" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-241" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-248" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-249" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-253" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-252" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-254" Exception in thread "Thread-251" java.lang.OutOfMemoryError: Java heap space
+java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-258" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-255" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-260" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-257" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-262" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-259" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-263" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-264" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-267" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-273" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-266" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-269" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-272" Exception in thread "Thread-104" java.lang.OutOfMemoryError: Java heap space
+java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-49" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-130" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-87" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-128" java.lang.OutOfMemoryError: Java heap space
+8: 30290
+Exception in thread "Thread-111" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-8" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-145" java.lang.OutOfMemoryError: Java heap space
+29: 10131
+78: 31308
+Exception in thread "Thread-140" java.lang.OutOfMemoryError: Java heap space
+132: 31661
+Exception in thread "Thread-103" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-153" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-81" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-100" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-185" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-189" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-188" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-164" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-174" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-225" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-197" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-215" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-220" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-227" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-226" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-211" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-208" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-224" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-144" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-23" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-147" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-213" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-126" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-125" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-80" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-37" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-48" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-114" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-205" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-98" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-99" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-92" java.lang.OutOfMemoryError: Java heap space
+37: 37512
+Exception in thread "Thread-116" java.lang.OutOfMemoryError: Java heap space
+25: 37710
+88: 37755
+100: 37788
+Exception in thread "Thread-210" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-182" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-177" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-159" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-203" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-198" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-178" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-190" Exception in thread "Thread-155" java.lang.OutOfMemoryError: Java heap space
+java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-165" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-108" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-21" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-70" 148: 39893
+java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-95" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-4" java.lang.OutOfMemoryError: Java heap space
+60: 40431
+Exception in thread "Thread-7" java.lang.OutOfMemoryError: Java heap space
+137: 40642
+Exception in thread "Thread-137" java.lang.OutOfMemoryError: Java heap space
+145: 40713
+10: 40953
+147: 40840
+11: 41040
+83: 40969
+17: 41065
+12: 41193
+290: 41409
+Exception in thread "Thread-50" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-161" java.lang.OutOfMemoryError: Java heap space
+Exception in thread "Thread-77" java.lang.OutOfMemoryError: Java heap space
+55: 42471
+285: 42303
+Exception in thread "Thread-239" java.lang.OutOfMemoryError: Java heap space
+131: 42879
+Exception in thread "Thread-112" 142: 43026
+java.lang.OutOfMemoryError: Java heap space
+289: 43270
+126: 43438
+Exception in thread "Thread-109" java.lang.OutOfMemoryError: Java heap space
+270: 43315
+0: 43587
+277: 43346
+349: 43344
+346: 43480
+275: 43610
+273: 43615
+335: 43557
+302: 43624
+169: 43717
+114: 43783
+106: 43790
+306: 43744
+328: 43686
+58: 43965
+95: 43935
+120: 44018
+61: 44079
+348: 43811
+74: 44079
+101: 44071
+96: 44208
+327: 44008
+122: 44227
+329: 44019
+330: 44120
+344: 44124
+301: 44219
+133: 44483
+134: 44511
+149: 44510
+315: 44373
+309: 44609
+340: 44471
+303: 44522
+276: 44636
+318: 44519
+274: 44869
+33: 45068
+294: 44845
+332: 44776
+286: 44848
+249: 44757
+338: 44646
+66: 44891
+312: 45010
+311: 45008
+313: 44995
+235: 45265
+307: 44984
+281: 45239
+336: 45057
+292: 45116
+316: 45092
+300: 45532
+279: 45103
+208: 45719
+321: 45021
+151: 45792
+269: 45681
+162: 46018
+180: 45731
+153: 46065
+191: 45721
+218: 45686
+161: 45707
+217: 45568
+150: 45638
+230: 45544
+228: 45421
+26: 46414
+90: 46368
+2: 46461
+299: 45374
+244: 45391
+325: 46605
+167: 46764
+194: 47172
+193: 47175
+323: 45286
+347: 45167
+236: 47124
+341: 46996
+283: 46967
+205: 47179
+185: 47038
+172: 47201
+343: 46884
+170: 47425
+221: 46985
+179: 47007
+322: 46861
+159: 47046
+246: 46840
+241: 46825
+227: 46827
+165: 46873
+317: 46642
+201: 46720
+220: 46679
+339: 46437
+295: 46507
+174: 46591
+282: 46496
+264: 46379
+337: 46280
+326: 46277
+314: 46318
+141: 46308
+267: 46109
+291: 46076
+215: 46111
+260: 46087
+280: 45917
+297: 45794
+255: 45793
+350: 45685
+331: 47353
+175: 47503
+333: 47359
+284: 47342
+213: 47380
+229: 47352
+342: 47234
+324: 47181
+182: 47317
+192: 47310
+304: 47218
+198: 47279
+310: 47510
+157: 47792
+190: 47748
+239: 47736
+222: 47758
+195: 47796
+206: 47809
+216: 47861
+200: 47887
+293: 47863
+296: 47960
+305: 48054
+171: 48153
+156: 48205
+178: 48182
+199: 48203
+186: 48233
+166: 48249
+183: 48242
+203: 48238
+308: 48217
+334: 48164
+319: 48220
+
+
+
+
+

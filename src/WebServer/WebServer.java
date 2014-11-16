@@ -20,7 +20,7 @@ public class WebServer {
 	public WebServer(){
 		try 
 		{
-			server = new ServerSocket(80, 10, InetAddress.getByName("localhost"));
+			server = new ServerSocket(80, 1000, InetAddress.getByName("169.254.81.35"));
 		} catch (UnknownHostException e1) {
 			System.out.println("Unknown host");
 			e1.printStackTrace();
@@ -33,8 +33,10 @@ public class WebServer {
 		{
 			try
 			{
+
+				System.out.println("Wait connected");
 				Socket clientSocket = server.accept();
-				
+				System.out.println("Someone connected");
 				Subserver subserver = new Subserver(clientSocket);
 				subserver.start();
 				//waitForConnection();
@@ -42,8 +44,6 @@ public class WebServer {
 			}catch(Exception e){
 				System.out.println("Error occure wait for connection and setup streams.");
 			}
-			
-			System.out.println("Disconnected");
 		}
 	}
 	/*

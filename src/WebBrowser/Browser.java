@@ -1,28 +1,17 @@
 package WebBrowser;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 
 public class Browser extends JFrame implements Runnable {
-	private JTextField addressBar;
-	private JEditorPane display;
+	//private JTextField addressBar;
+	//private JEditorPane display;
 	private Socket socket;
 	private PrintWriter output;
 	private BufferedReader input;
@@ -164,13 +153,13 @@ public class Browser extends JFrame implements Runnable {
 	}
 	
 	private void setPage(String content) {
-		display.setText(content);
+		//display.setText(content);
 		
-		addressBar.setText("");
+		//addressBar.setText("");
 	}
 
 	@Override
 	public void run() {
-		loadPage("localhost:80/one.html");
+		loadPage("169.254.106.168:80/one.html");
 	}
 }

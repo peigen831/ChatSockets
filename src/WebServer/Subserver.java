@@ -138,7 +138,7 @@ public class Subserver extends Thread{
 				output.close();
 				input.close();
 				socket.close();
-				
+				System.out.println("Disconnected");
 			} catch (IOException e) {
 				System.out.println("Close failed");
 			}
