@@ -74,18 +74,19 @@ public class AverageComputer {
 	
 	public static void main(String args[])
 	{
-		printAverageTimeB("apache/10.txt");
-		printAverageTimeB("apache/20.txt");
-		printAverageTimeB("apache/30.txt");
-		printAverageTimeB("apache/40.txt");
-		printAverageTimeB("apache/50.txt");
-		printAverageTimeB("apache/60.txt");
-		printAverageTimeB("apache/70.txt");
-		printAverageTimeB("apache/80.txt");
-		printAverageTimeB("apache/90.txt");
-		printAverageTimeB("apache/100.txt");
-		printAverageTimeB("apache/200.txt");
-		printAverageTimeB("apache/400.txt");
+		printAverageTimeB("improved/10.txt");
+		printAverageTimeB("improved/20.txt");
+		printAverageTimeB("improved/30.txt");
+		printAverageTimeB("improved/40.txt");
+		printAverageTimeB("improved/50.txt");
+		printAverageTimeB("improved/100.txt");
+		printAverageTimeB("improved/200.txt");
+		printAverageTimeB("improved/400.txt");
+		printAverageTimeB("improved/800.txt");
+		printAverageTimeB("improved/1600.txt");
+		printAverageTimeB("improved/3200.txt");
+		printAverageTimeB("improved/6400.txt");
 		
 	}
 }
+

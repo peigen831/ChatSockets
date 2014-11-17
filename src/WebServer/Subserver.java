@@ -52,7 +52,6 @@ public class Subserver extends Thread{
 				String str;
 				do {
 					str = input.readLine();
-					//Syste
 				}while(input.ready() && str != null);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -122,7 +121,7 @@ public class Subserver extends Thread{
 				output.close();
 				input.close();
 				socket.close();
-				System.out.println("Disconnected");
+				//System.out.println("Disconnected");
 			} catch (IOException e) {
 				System.out.println("Close failed");
 			}

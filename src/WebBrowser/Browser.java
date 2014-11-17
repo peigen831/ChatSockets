@@ -135,7 +135,6 @@ public class Browser extends JFrame implements Runnable {
 			}
 			while(input.ready() && str != null);
 			
-			
 		} catch(Exception e) {
 			System.out.println("Failed to get Respond");
 		}

@@ -24,7 +24,6 @@ public class WebServer {
 	public WebServer(){
 		
 		loadFile();
-		
 		startServer();
 		
 	}
@@ -74,9 +73,9 @@ public class WebServer {
 		{
 			try
 			{
-				System.out.println("Wait connected");
+				//System.out.println("Wait connected");
 				Socket clientSocket = server.accept();
-				System.out.println("Someone connected");
+				//System.out.println("Someone connected");
 				Subserver subserver = new Subserver(clientSocket);
 				subserver.start();
 				
