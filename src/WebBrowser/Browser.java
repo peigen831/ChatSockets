@@ -67,7 +67,7 @@ public class Browser extends JFrame implements Runnable {
 			
 			System.out.println(i + ": " + (end-start));
 			
-			setPage(content);
+			//setPage(content);
 			
 		}catch(Exception e){
 			//System.out.println("Crap");
@@ -160,6 +160,6 @@ public class Browser extends JFrame implements Runnable {
 
 	@Override
 	public void run() {
-		loadPage("169.254.106.168:80/one.html");
+		loadPage("localhost/one.html");
 	}
 }

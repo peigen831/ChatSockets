@@ -43,36 +43,20 @@ public class Subserver extends Thread{
 			}catch(Exception e){
 				System.out.println("Error setup streams");
 			}
-			
-
 		}
 				
 		private void getFromBrowser(){
-			
 			try 
 			{
 				getRequest = input.readLine();
-				
-				//System.out.println(getRequest);
-				
-				
 				String str;
-				
 				do {
 					str = input.readLine();
-					//System.out.println("Respond: "+ str);
+					//Syste
 				}while(input.ready() && str != null);
-				/*
-				while(!(str = input.readLine()).equals(""))
-				{
-					System.out.println(str);
-				}
-				*/
-				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
 		}
 		
 		public String parseGetRequest(){
@@ -119,12 +103,12 @@ public class Subserver extends Thread{
 		private void respondToBrowser() throws IOException{
 			
 			String fileName = parseGetRequest();
-			
-			String fileContent = getFileContent(fileName);
+			//String fileContent = getFileContent(fileName);
 			
 			try
 			{
-				output.println(fileContent);
+				if(fileName.equals("one.html"))
+					output.println(WebServer.oneMB);
 				
 			}catch(Exception e){
 				System.out.println("respond to browser failed");

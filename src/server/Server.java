@@ -24,6 +24,8 @@ public class Server extends JFrame{
 	private ServerSocket server;
 	private Socket connection;
 	private int nClient = 0;
+
+	public static String oneMB = "";
 	
 	public Server(){
 		
