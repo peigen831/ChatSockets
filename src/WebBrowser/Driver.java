@@ -6,9 +6,13 @@ public class Driver {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		for (int i = 0; i < 6400; i++) {
-			Thread t = (new Thread(new Browser(i)));
-			t.start();
+		for (int i = 0; i < 1; i++) {
+			try
+			{
+				Thread t = (new Thread(new Browser(i)));
+				t.start();
+			}catch(Exception e){
+			}
 		}
 		
 		
