@@ -11,7 +11,9 @@ public class Subserver extends Thread{
 	
 	final static int clientNewVersion = 1;
 	final static int serverNewVersion = 2;
-	final static int sameVersion = 3;
+	final static int newFile = 3;
+	final static int sameVersion = 4;
+	
 	Socket socket;
 	PrintWriter output;
 	BufferedReader input;
