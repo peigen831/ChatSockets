@@ -98,6 +98,7 @@ public class Subserver extends Thread{
 		
 		for(File file : fileList) {
 			serverFiledateMap.put(file.getName(), file.lastModified());
+			System.out.println("Server's own file: " + file.getName() + " was last modified " + file.lastModified());
 		}
 	}
 	
