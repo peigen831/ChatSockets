@@ -9,6 +9,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class Subserver extends Thread{
 	
@@ -119,7 +131,100 @@ public class Subserver extends Thread{
 			e.printStackTrace();
 		}
 	}
-	
+	public void sendFileMetadata(File file)
+	{
+		String filename=file.getName();
+		long filesize=file.length();
+		 try {
+		        OutputStream os = socket.getOutputStream();
+		        DataOutputStream dos = new DataOutputStream(os);
+		        dos.writeUTF(filename);  
+		        dos.writeLong(filesize);
+		 }catch(IOException e)
+		 {
+			 e.printStackTrace();
+		 }
+		
+	}
+	public String[] getFileMetadata()
+	{
+		String filename=null;
+		long filesize=0;
+		try{
+	        InputStream in=socket.getInputStream();
+	        DataInputStream dataStream = new DataInputStream(in);
+	        filename = dataStream.readUTF();
+	        filesize=dataStream.readLong();
+	        System.out.println(filename);
+		}catch(IOException e)
+		 {
+			 e.printStackTrace();
+		 }
+		String [] metadata=new String[]{filename,Long.toString(filesize)};
+		return metadata;
+		
+	}
+	public void sendFile(File file)
+	{
+		byte[] fileByteArray = new byte[(int) file.length()];
+	      BufferedInputStream bis=null;
+		try {
+			bis = new BufferedInputStream(new FileInputStream(file));
+		} catch (FileNotFoundException e1) {
+			System.out.println("File not found");
+			
+		}
+	      try {
+			bis.read(fileByteArray, 0, fileByteArray.length);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	     
+	      try {
+	    	  OutputStream os = socket.getOutputStream();
+			os.write(fileByteArray, 0, fileByteArray.length);
+			os.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	      
+	}
+	//TODO make sure the server sends file name and size to client and vice versa
+	public void receiveFile(String filename, long filesize)
+	{
+		byte[] mybytearray = new byte[(int) filesize];
+	    InputStream is=null;
+		try {
+			is = socket.getInputStream();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	    FileOutputStream fos=null;
+		try {
+			fos = new FileOutputStream(filename);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    BufferedOutputStream bos = new BufferedOutputStream(fos);
+	    int bytesRead;
+	     int current=0;
+		try {
+			do {
+			bytesRead =  is.read(mybytearray, current, (mybytearray.length-current));
+	         if(bytesRead >= 0) current += bytesRead;
+		 } while(bytesRead > -1);
+			 bos.write(mybytearray, 0, bytesRead);
+			 bos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	  
+	}
 	
 	private void closeEverything() {
 		try {
