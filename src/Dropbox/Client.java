@@ -8,10 +8,11 @@ import java.net.Socket;
 
 public class Client extends Thread{
 	
-	final static int clientNewVersion = 1;
-	final static int serverNewVersion = 2;
-	final static int newFile = 3;
-	final static int sameVersion = 4;
+	final static int NEW_CLIENT_VERSION = 1;
+	final static int NEW_SERVER_VERSION = 2;
+	final static int SAME_VERSION = 3;
+	final static int END_STATUS_CHECK = 4;
+	
 	private Socket socket;
 	private PrintWriter output;
 	private BufferedReader input;
@@ -49,7 +50,7 @@ public class Client extends Thread{
 		
 		for(int i = 0; i < fileList.length; i++)
 		{
-			sb.append(fileList[i].lastModified() + " " + fileList[i].getName());
+			sb.append(fileList[i].getName() + " " + fileList[i].lastModified());
 			if(i < fileList.length-1)
 				sb.append("\n");
 		}

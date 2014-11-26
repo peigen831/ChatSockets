@@ -1,23 +1,26 @@
 package Dropbox;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Subserver extends Thread{
 	
-	final static int clientNewVersion = 1;
-	final static int serverNewVersion = 2;
-	final static int newFile = 3;
-	final static int sameVersion = 4;
+	final static int NEW_CLIENT_VERSION = 1;
+	final static int NEW_SERVER_VERSION = 2;
+	final static int SAME_VERSION = 3;
+	final static int END_STATUS_CHECK = 4;
 	
 	Socket socket;
 	PrintWriter output;
 	BufferedReader input;
 	HashMap<String, String> filedateMap = new HashMap<String, String>();
+	ArrayList<String> serverUpdateList = new ArrayList<String>();
+	ArrayList<String> clientUpdateList = new ArrayList<String>();
 	
 	public Subserver(Socket clientSocket){
 		this.socket = clientSocket;
@@ -29,7 +32,8 @@ public class Subserver extends Thread{
 		{
 			setupStreams();
 			getClientFilelist();
-			
+			updateFileStatus();
+			//updateFiles();
 			//if something new on client
 			//	then send request to client
 			//	then get the respond from
@@ -44,7 +48,31 @@ public class Subserver extends Thread{
 		}
 	}
 	
-	public void setupStreams(){
+	
+	
+	public void updateFileStatus(){
+		for(Map.Entry<String, String> entry: filedateMap.entrySet()){
+			int type = Server.monitor.checkFile(entry.getKey(), entry.getValue());
+			
+			if(type == NEW_SERVER_VERSION)
+				clientUpdateList.add(entry.getKey());
+			
+			else if(type == NEW_CLIENT_VERSION)
+			{
+				serverUpdateList.add(entry.getKey());
+			}
+		}
+	}
+	
+	
+	public void printMap(HashMap<String, String> map){
+		for(Map.Entry<String, String> entry : map.entrySet()){
+		    System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());
+		}
+	}
+	
+	
+	private void setupStreams(){
 		try
 		{
 			output = new PrintWriter(socket.getOutputStream(), true);
@@ -56,7 +84,7 @@ public class Subserver extends Thread{
 		}
 	}
 	
-	public void getClientFilelist(){
+	private void getClientFilelist(){
 		try 
 		{
 			String str;
