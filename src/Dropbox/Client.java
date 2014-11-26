@@ -49,7 +49,7 @@ public class Client extends Thread{
 		
 		for(int i = 0; i < fileList.length; i++)
 		{
-			sb.append(fileList[i].lastModified() + " " + fileList[i].getName());
+			sb.append(fileList[i].lastModified() + ":" + fileList[i].getName());
 			if(i < fileList.length-1)
 				sb.append("\n");
 		}
@@ -73,7 +73,7 @@ public class Client extends Thread{
 	}
 
 	public static void main(String[] args) {
-		Client client1 = new Client("Client1File");
+		Client client1 = new Client("Client2File");
 		
 		client1.start();
 	}
