@@ -1,5 +1,6 @@
 package Dropbox;
 
+
 import java.io.File;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -16,13 +17,13 @@ class monitor{
 	//Condition sendFile = lock.newCondition();
 	boolean using = false;
 	
-	public int checkFile(String filename, String lastModify){
+	public int checkFile(String filename, Long lastModify){
 		lock.lock();
 		
 		int result;
-		File file = new File("src/Dropbox/Server/" + filename );
+		File file = new File("src/Dropbox/Server/" + filename);
 		
-		Long clientFileDate = Long.parseLong(lastModify);
+		Long clientFileDate = lastModify;
 		Long serverFileDate = file.lastModified();
 		
 		if(Long.compare(serverFileDate, clientFileDate) < 0 )
