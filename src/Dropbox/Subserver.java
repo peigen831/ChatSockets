@@ -237,6 +237,7 @@ public class Subserver extends Thread{
 			output.close();
 			input.close();
 			socket.close();
+			System.out.println("Subserver: close everything");
 		}
 		catch (Exception e) {
 			e.printStackTrace();

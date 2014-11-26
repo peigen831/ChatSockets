@@ -57,6 +57,7 @@ class monitor{
 		 {
 			 e.printStackTrace();
 		 }
+		 System.out.println("Server: SENT METADATA of" + filename );
 		 
 		 //send file 
 		byte[] fileByteArray = new byte[(int) file.length()];
@@ -80,6 +81,7 @@ class monitor{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	    System.out.println("Server: Done sending file");
 	}
 	
 	public void updateFile(){
