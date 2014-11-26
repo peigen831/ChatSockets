@@ -1,7 +1,13 @@
 package Dropbox;
 
 
+import java.io.BufferedInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -29,18 +35,51 @@ class monitor{
 		if(Long.compare(serverFileDate, clientFileDate) < 0 )
 			result = Subserver.NEW_CLIENT_VERSION;
 		
-		else if(Long.compare(serverFileDate, clientFileDate) > 0)
+		else
 			result = Subserver.NEW_SERVER_VERSION;
-		
-		else result = Subserver.SAME_VERSION;
 		
 		lock.unlock();
 		
 		return result;
 	}
 	
-	public void sendFile(){
+	public void sendFile(OutputStream os, String filename)
+	{
+		//send metadata
+		File file = new File("src/Dropbox/Server/" + filename);
 		
+		long filesize = file.length();
+		 try {
+		        DataOutputStream dos = new DataOutputStream(os);
+		        dos.writeUTF(filename);  
+		        dos.writeLong(filesize);
+		 }catch(IOException e)
+		 {
+			 e.printStackTrace();
+		 }
+		 
+		 //send file 
+		byte[] fileByteArray = new byte[(int) file.length()];
+	    BufferedInputStream bis=null;
+	    
+		try {
+			bis = new BufferedInputStream(new FileInputStream(file));
+		} catch (FileNotFoundException e1) {
+			System.out.println("File not found");
+			
+		}
+	    try {
+			bis.read(fileByteArray, 0, fileByteArray.length);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	     
+	    try {
+			os.write(fileByteArray, 0, fileByteArray.length);
+			os.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void updateFile(){
@@ -55,18 +94,6 @@ public class Server {
 	private ServerSocket server;
 	
 	static monitor monitor = new monitor();
-	
-	static HashMap<String, String> filedateMap = new HashMap<String, String>();
-	
-	private void loadFilelist(){
-		File folder = new File("src/Dropbox/Server");
-		File[] fileList = folder.listFiles();
-		
-		for(int i = 0; i < fileList.length; i++)
-		{
-			filedateMap.put(fileList[i].getName(), String.valueOf(fileList[i].lastModified()));
-		}
-	}
 	
 	private void startServer(){
 		try 
@@ -93,11 +120,9 @@ public class Server {
 	}
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
 		Server server = new Server();
 		
-		
-		server.loadFilelist();
 		server.startServer();
 	}
 

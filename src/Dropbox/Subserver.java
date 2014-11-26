@@ -11,10 +11,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -22,12 +20,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import WebServer.WebServer;
+
 public class Subserver extends Thread{
 	
 	final static int NEW_CLIENT_VERSION = 1;
 	final static int NEW_SERVER_VERSION = 2;
-	final static int SAME_VERSION = 3;
-	final static int END_STATUS_CHECK = 4;
+	final static int END_SYNCHRONIZE = 3;
 	
 	Socket socket;
 	PrintWriter output;
@@ -51,17 +50,9 @@ public class Subserver extends Thread{
 
 			updateFileStatus();
 			
-
+			updateClient();
 			//getServerFilelist();
 			
-			
-			// Print remaining unique or latest files
-
-			for(Entry<String, Long> entry : filedateMap.entrySet()) {
-				System.out.println("Client unique/latest file: " + entry.getKey());
-			}
-			
-
 			//sendFilesToClient();
 			
 			//requestFilesFromClient();
@@ -74,7 +65,19 @@ public class Subserver extends Thread{
 	}
 
 	
-	
+	public void updateClient(){
+		int type = NEW_SERVER_VERSION;
+		
+		output.println(type);
+		for(int i = 0; i < clientUpdateList.size(); i++)
+		{
+			try {
+				Server.monitor.sendFile(socket.getOutputStream(), clientUpdateList.get(i));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	
 	public void updateFileStatus(){
 		for(Map.Entry<String, Long> entry: filedateMap.entrySet()){
@@ -88,6 +91,7 @@ public class Subserver extends Thread{
 				serverUpdateList.add(entry.getKey());
 			}
 		}
+		System.out.println("Server: finish update status");
 	}
 	
 	
@@ -97,9 +101,6 @@ public class Subserver extends Thread{
 		}
 	}
 	
-	
-
-
 	public void setupStreams(){
 		try {
 
@@ -121,16 +122,17 @@ public class Subserver extends Thread{
 			
 			do {
 				str = input.readLine();
-				System.out.println(str);
-				split = str.split(":");
-				filedateMap.put(split[1], Long.parseLong(split[0]));
-				System.out.println("Server notes that " + split[1]  + " was last modified on " + split[0]);
+				System.out.println("Server: Receive - " + str);
+				split = str.split(" ");
+				filedateMap.put(split[0], Long.parseLong(split[1]));
 				
 			}while(input.ready() && str != null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	
 	public void sendFileMetadata(File file)
 	{
 		String filename=file.getName();
@@ -144,26 +146,10 @@ public class Subserver extends Thread{
 		 {
 			 e.printStackTrace();
 		 }
+		 System.out.println("Server: META DATA SENT - " + filename);
 		
 	}
-	public String[] getFileMetadata()
-	{
-		String filename=null;
-		long filesize=0;
-		try{
-	        InputStream in=socket.getInputStream();
-	        DataInputStream dataStream = new DataInputStream(in);
-	        filename = dataStream.readUTF();
-	        filesize=dataStream.readLong();
-	        System.out.println(filename);
-		}catch(IOException e)
-		 {
-			 e.printStackTrace();
-		 }
-		String [] metadata=new String[]{filename,Long.toString(filesize)};
-		return metadata;
-		
-	}
+	
 	public void sendFile(File file)
 	{
 		byte[] fileByteArray = new byte[(int) file.length()];
@@ -189,8 +175,28 @@ public class Subserver extends Thread{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	      
+	      System.out.println("SERVER: FILE SENT");
 	}
+	
+	public String[] getFileMetadata()
+	{
+		String filename=null;
+		long filesize=0;
+		try{
+	        InputStream in=socket.getInputStream();
+	        DataInputStream dataStream = new DataInputStream(in);
+	        filename = dataStream.readUTF();
+	        filesize=dataStream.readLong();
+	        System.out.println(filename);
+		}catch(IOException e)
+		 {
+			 e.printStackTrace();
+		 }
+		String [] metadata=new String[]{filename,Long.toString(filesize)};
+		return metadata;
+		
+	}
+	
 	//TODO make sure the server sends file name and size to client and vice versa
 	public void receiveFile(String filename, long filesize)
 	{
@@ -236,6 +242,4 @@ public class Subserver extends Thread{
 			e.printStackTrace();
 		}
 	}
-	
-	
 }
