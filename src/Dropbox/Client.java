@@ -110,7 +110,7 @@ public class Client extends Thread{
 	        DataInputStream dataStream = new DataInputStream(in);
 	        filename = dataStream.readUTF();
 	        filesize = dataStream.readLong();
-	        System.out.println("Client: Filename" + filename + " Size:" + filesize);
+	        System.out.println("Client: Filename: " + filename + " :: Size:" + filesize);
 		}catch(IOException e)
 		 {
 			 e.printStackTrace();
@@ -122,36 +122,16 @@ public class Client extends Thread{
 	//TODO make sure the server sends file name and size to client and vice versa
 		public void receiveFile(String filename, long filesize)
 		{
-			byte[] mybytearray = new byte[(int) filesize];
-		    InputStream is=null;
-		    
 			try {
-				is = socket.getInputStream();
-			} catch (IOException e1) {
-				e1.printStackTrace();
+				byte[] mybytearray = new byte[1024];
+			    InputStream is = socket.getInputStream();
+			    FileOutputStream fos = new FileOutputStream("src/Dropbox/" + folderName + "/" + filename);
+			    BufferedOutputStream bos = new BufferedOutputStream(fos);
+			    int bytesRead = is.read(mybytearray, 0, mybytearray.length);
+			    bos.write(mybytearray, 0, bytesRead);
+			    bos.close();
 			}
-			
-		    FileOutputStream fos=null;
-			try {
-				fos = new FileOutputStream(filename);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			
-		    BufferedOutputStream bos = new BufferedOutputStream(fos);
-		    int bytesRead;
-		    int current=0;
-		     
-			try {
-				do {
-					bytesRead =  is.read(mybytearray, current, (mybytearray.length-current));
-			        if(bytesRead >= 0) 
-			        	 current += bytesRead;
-				} while(bytesRead > -1);
-				bos.write(mybytearray, 0, bytesRead);
-				bos.close();
-				
-			} catch (IOException e) {
+			catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

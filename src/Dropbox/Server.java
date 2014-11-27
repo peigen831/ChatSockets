@@ -5,13 +5,11 @@ import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -28,15 +26,18 @@ class monitor{
 		
 		int result;
 		File file = new File("src/Dropbox/Server/" + filename);
-		
-		Long clientFileDate = lastModify;
-		Long serverFileDate = file.lastModified();
-		
-		if(Long.compare(serverFileDate, clientFileDate) < 0 )
+		if (file.exists()) {
+			Long clientFileDate = lastModify;
+			Long serverFileDate = file.lastModified();
+			
+			if(Long.compare(serverFileDate, clientFileDate) < 0 )
+				result = Subserver.NEW_CLIENT_VERSION;
+			else
+				result = Subserver.NEW_SERVER_VERSION;
+		}
+		else {
 			result = Subserver.NEW_CLIENT_VERSION;
-		
-		else
-			result = Subserver.NEW_SERVER_VERSION;
+		}
 		
 		lock.unlock();
 		
@@ -49,10 +50,10 @@ class monitor{
 		File file = new File("src/Dropbox/Server/" + filename);
 		
 		long filesize = file.length();
-		 try {
-		        DataOutputStream dos = new DataOutputStream(os);
-		        dos.writeUTF(filename);  
-		        dos.writeLong(filesize);
+		try {
+			DataOutputStream dos = new DataOutputStream(os);
+		    dos.writeUTF(filename);  
+		    dos.writeLong(filesize);
 		 }catch(IOException e)
 		 {
 			 e.printStackTrace();
@@ -60,27 +61,17 @@ class monitor{
 		 System.out.println("Server: SENT METADATA of" + filename );
 		 
 		 //send file 
-		byte[] fileByteArray = new byte[(int) file.length()];
-	    BufferedInputStream bis=null;
-	    
-		try {
-			bis = new BufferedInputStream(new FileInputStream(file));
-		} catch (FileNotFoundException e1) {
-			System.out.println("File not found");
-			
-		}
-	    try {
-			bis.read(fileByteArray, 0, fileByteArray.length);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	     
-	    try {
-			os.write(fileByteArray, 0, fileByteArray.length);
-			os.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		 byte[] mybytearray = new byte[(int) file.length()];
+		 try {
+		    BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+		    bis.read(mybytearray, 0, mybytearray.length);
+		    os.write(mybytearray, 0, mybytearray.length);
+		    os.flush();
+		    bis.close();
+		 } catch (Exception e) {
+			 e.printStackTrace();
+		 }
+		    
 	    System.out.println("Server: Done sending file");
 	}
 	
