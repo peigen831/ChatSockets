@@ -2,10 +2,14 @@ package Dropbox;
 
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -19,7 +23,54 @@ class monitor{
 	final Lock lock = new ReentrantLock();
 	Condition server = lock.newCondition();
 	//Condition sendFile = lock.newCondition();
+	InputStream in;
+	OutputStream out;
 	boolean using = false;
+	
+
+	public void updateServerFile(InputStream inputStream){
+		lock.lock();
+		
+		in = inputStream;
+		
+		String[] metadata = getFileMetadata();
+		receiveFile(metadata[0], Long.parseLong(metadata[1]));
+		
+		lock.unlock();
+	}
+	
+	public String[] getFileMetadata()
+	{
+		String filename=null;
+		long filesize=0;
+		try{
+	        DataInputStream dataStream = new DataInputStream(in);
+	        filename = dataStream.readUTF();
+	        filesize = dataStream.readLong();
+	        System.out.println("Server: receive metadata Filename: " + filename + "; Size:" + filesize);
+		}catch(IOException e)
+		 {
+			 e.printStackTrace();
+		 }
+		String [] metadata=new String[]{filename,Long.toString(filesize)};
+		return metadata;
+	}
+	
+	
+	public void receiveFile(String filename, long filesize)
+	{
+		try {
+			byte[] mybytearray = new byte[(int)filesize];
+		    FileOutputStream fos = new FileOutputStream("src/Dropbox/Server/" + filename);
+		    BufferedOutputStream bos = new BufferedOutputStream(fos);
+		    int bytesRead = in.read(mybytearray, 0, mybytearray.length);
+		    bos.write(mybytearray, 0, bytesRead);
+		    System.out.println("Server: received - " + filename);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public int checkFile(String filename, Long lastModify){
 		lock.lock();
@@ -54,6 +105,7 @@ class monitor{
 			DataOutputStream dos = new DataOutputStream(os);
 		    dos.writeUTF(filename);  
 		    dos.writeLong(filesize);
+		    dos.flush();
 		 }catch(IOException e)
 		 {
 			 e.printStackTrace();
@@ -67,23 +119,15 @@ class monitor{
 		    bis.read(mybytearray, 0, mybytearray.length);
 		    os.write(mybytearray, 0, mybytearray.length);
 		    os.flush();
-		    bis.close();
 		 } catch (Exception e) {
 			 e.printStackTrace();
 		 }
 		    
 	    System.out.println("Server: Done sending file");
 	}
-	
-	public void updateFile(){
-		
-	}
 }
 
 public class Server {
-	
-
-	
 	private ServerSocket server;
 	
 	static monitor monitor = new monitor();

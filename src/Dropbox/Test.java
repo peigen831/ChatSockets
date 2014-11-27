@@ -41,7 +41,12 @@ public class Test {
 	}
 
 	public static void main(String[] args) {
-		checkFiles();
+		StringBuilder sb = new StringBuilder();
+		sb.append("asdasdad\n");
+		sb.append("adsad");
+		System.out.println(sb.toString());
+		
+		
 	}
 
 }
