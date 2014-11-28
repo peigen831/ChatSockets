@@ -1,4 +1,4 @@
-package Dropbox;
+package src.Dropbox;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -39,7 +39,7 @@ public class Client extends Thread{
 		
 		sendFiledataToServer();
 		
-		synchronizeFile();
+		//synchronizeFile();
 		
 		closeEverything();
 	}

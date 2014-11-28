@@ -1,4 +1,4 @@
-package Dropbox;
+package src.Dropbox;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,12 +36,10 @@ public class Subserver extends Thread{
 			setupStreams();
 			
 			getFiledataFromClient();
-			
-			// generateFilelist();
 
-			knowFileStatus();
+			verifyToUpdateFileStatus();
 			
-			updateClientFile();
+			//updateClientFile();
 			
 			//updateServerFile();
 			
@@ -109,22 +107,23 @@ public class Subserver extends Thread{
 	
 	
 	
-	public void knowFileStatus(){
+	public void verifyToUpdateFileStatus(){
 		//lacking: when server has a file that client doesn't have
 		
-		for(Map.Entry<String, Long> entry: filedateMap.entrySet()){
-			int type = Server.monitor.checkFile(entry.getKey(), entry.getValue());
-			if(type == NEW_SERVER_VERSION)
-				clientUpdateList.add(entry.getKey());
-			
-			else if(type == NEW_CLIENT_VERSION)
-			{
-				serverUpdateList.add(entry.getKey());
-			}
-		}
-		System.out.println("Subserver: updated file status");
+		clientUpdateList = Server.monitor.getClientToUpdateList(filedateMap);
+		System.out.println("Client to update list: ");
+		printList(clientUpdateList);
+		
+		serverUpdateList = Server.monitor.getServerToUpdateList(filedateMap);
+		System.out.println("Server to update list: ");
+		printList(serverUpdateList);
+		
 	}
 	
+	public void printList(ArrayList<String> list){
+		for(int i =0 ; i<list.size(); i++)
+			System.out.println(list.get(i));
+	}
 	
 	public void printMap(HashMap<String, String> map){
 		for(Map.Entry<String, String> entry : map.entrySet()){

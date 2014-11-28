@@ -1,4 +1,4 @@
-package Dropbox;
+package src.Dropbox;
 
 
 import java.io.BufferedInputStream;
@@ -14,6 +14,9 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -72,27 +75,52 @@ class monitor{
 		}
 	}
 	
-	public int checkFile(String filename, Long lastModify){
+	public ArrayList<String> getClientToUpdateList(HashMap<String, Long> filedataMap){
 		lock.lock();
 		
-		int result;
-		File file = new File("src/Dropbox/Server/" + filename);
-		if (file.exists()) {
-			Long clientFileDate = lastModify;
-			Long serverFileDate = file.lastModified();
-			
-			if(Long.compare(serverFileDate, clientFileDate) < 0 )
-				result = Subserver.NEW_CLIENT_VERSION;
-			else
-				result = Subserver.NEW_SERVER_VERSION;
-		}
-		else {
-			result = Subserver.NEW_CLIENT_VERSION;
-		}
+		ArrayList<String> clientToUpdateList = new ArrayList<String>();
+		File folder = new File("src/Dropbox/server");
+		File[] fileList = folder.listFiles();
 		
+		for(int i = 0; i < fileList.length; i++){
+			
+			String filename = fileList[i].getName();
+			Long serverFiledate = fileList[i].lastModified();
+			
+			if(filedataMap.containsKey(fileList[i].getName()))
+			{
+				Long clientFiledate = filedataMap.get(filename);
+				if(Long.compare(serverFiledate, clientFiledate) > 0 )
+					clientToUpdateList.add(filename);
+			}
+			else
+				clientToUpdateList.add(fileList[i].getName());
+		}
 		lock.unlock();
 		
-		return result;
+		return clientToUpdateList;
+	}
+	
+	public ArrayList<String> getServerToUpdateList(HashMap<String, Long> filedataMap){
+		lock.lock();
+		ArrayList<String> serverToUpdateList = new ArrayList<String>();
+		
+		for(Map.Entry<String, Long> entry: filedataMap.entrySet()){
+			String filename = entry.getKey();
+			Long clientFileDate = entry.getValue();
+			
+			File file = new File("src/Dropbox/Server/" + filename);
+			if (file.exists()) {
+				Long serverFileDate = file.lastModified();
+				if(Long.compare(serverFileDate, clientFileDate) < 0 )
+					serverToUpdateList.add(filename);
+			}
+			else
+				serverToUpdateList.add(filename);
+			
+		}
+		lock.unlock();
+		return serverToUpdateList;
 	}
 	
 	public void sendFile(OutputStream os, String filename)
