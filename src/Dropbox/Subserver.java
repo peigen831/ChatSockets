@@ -152,8 +152,11 @@ public class Subserver extends Thread{
 			
 			do {
 				str = input.readLine();
-				split = str.split(" ");
-				filedateMap.put(split[0], Long.parseLong(split[1]));
+				if(!str.equals(""))
+				{
+					split = str.split(" ");
+					filedateMap.put(split[0], Long.parseLong(split[1]));
+				}
 				
 			}while(input.ready() && str != null);
 		} catch (Exception e) {
