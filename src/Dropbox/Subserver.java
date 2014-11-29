@@ -1,10 +1,19 @@
-package src.Dropbox;
+package Dropbox;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,9 +25,15 @@ public class Subserver extends Thread{
 	final static int END_SYNCHRONIZE = 3;
 	final static String END_SERVER_REQUEST = "end server request";
 	
+	final static int NAME_BYTE_SIZE=128;
+	final static int FILESIZE_BYTE_SIZE=8;
+	final static int FILE_BYTE_SIZE=40000;
+	
 	Socket socket;
 	PrintWriter output;
 	BufferedReader input;
+	
+	private String folderName="Server";
 	
 	ArrayList<String> serverUpdateList = new ArrayList<String>();
 	ArrayList<String> clientUpdateList = new ArrayList<String>();
@@ -35,9 +50,11 @@ public class Subserver extends Thread{
 		try {
 			setupStreams();
 			
-			getFiledataFromClient();
+			//getFiledataFromClient();
 
-			verifyToUpdateFileStatus();
+			//verifyToUpdateFileStatus();
+			
+			receiveFile();
 			
 			//updateClientFile();
 			
@@ -160,6 +177,89 @@ public class Subserver extends Thread{
 			e.printStackTrace();
 		}
 	}
+	
+	public void sendFileToClient(String filename)
+	{
+		//send metadata
+		//TODO send metadata as bytestream
+		File file = new File("src/Dropbox/"+ folderName + "/" + filename);
+		
+		long filesize = file.length();
+		OutputStream os = null;
+		byte [] nameBytes=null;
+		byte[] sizeBytes=null;
+		try {
+			os = socket.getOutputStream();
+			/*DataOutputStream dos = new DataOutputStream(os);
+		    dos.writeUTF(filename);  
+		    dos.writeLong(filesize);*/
+			
+			ByteBuffer nameByteBuffer= ByteBuffer.allocate(NAME_BYTE_SIZE);
+			nameByteBuffer.put(filename.getBytes(Charset.forName("UTF-8")));
+			nameBytes=nameByteBuffer.array();
+			sizeBytes=ByteBuffer.allocate(FILESIZE_BYTE_SIZE).putLong(filesize).array();
+			
+		 }catch(Exception e)
+		 {
+			 e.printStackTrace();
+		 }
+		 System.out.println("Client: SENT METADATA of " + filename );
+		 
+		 //send file, TODO allow variable size
+		// byte[] fileBytes = new byte[(int) file.length()];//since file length is variable, the sender should wait between file sends.
+		ByteBuffer fileByteBuffer=ByteBuffer.allocate(FILE_BYTE_SIZE);
+		 byte[]fileBytes=new byte[FILE_BYTE_SIZE];
+		 try {
+		    BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+		    bis.read(fileBytes, 0, fileBytes.length);
+		    ByteBuffer buffer = ByteBuffer.allocate(nameBytes.length + sizeBytes.length+fileBytes.length);
+		    buffer.put(nameBytes); 
+		    buffer.put(sizeBytes);
+		    buffer.put(fileBytes);
+		    byte[] byteArray=buffer.array();
+		    
+		   //os.write(mybytearray, 0, mybytearray.length);
+		    os.write(byteArray, 0, byteArray.length);
+		    os.flush();
+		 } catch (Exception e) {
+			 e.printStackTrace();
+		 }
+		    
+	    System.out.println("Client: Done sending file " + filename);
+	}
+	
+	public void receiveFile()
+	{
+		try {
+			byte[] mybytearray = new byte[NAME_BYTE_SIZE+FILESIZE_BYTE_SIZE+FILE_BYTE_SIZE];
+		    InputStream is = socket.getInputStream();
+		    is.read(mybytearray, 0, mybytearray.length);
+		    String filename;
+		    long filesize;
+		    
+		    byte []nameBytes=new byte[NAME_BYTE_SIZE];
+		    System.arraycopy(mybytearray, 0, nameBytes, 0, NAME_BYTE_SIZE);
+		    filename=new String(nameBytes, "UTF-8").trim();
+		    
+		    
+		    byte []sizeBytes=new byte[FILESIZE_BYTE_SIZE];
+		    System.arraycopy(mybytearray, NAME_BYTE_SIZE, sizeBytes, 0, FILESIZE_BYTE_SIZE);
+		    filesize = ByteBuffer.wrap(sizeBytes).getLong();
+		   
+		    System.out.println("Received File Size: "+filesize);
+		    System.out.println("Received Filename: "+filename);
+		    String filepath="src/Dropbox/"+folderName + "/" + filename;
+		    System.out.println("Writing to "+filepath);
+		    FileOutputStream fos = new FileOutputStream(filepath);
+		    BufferedOutputStream bos = new BufferedOutputStream(fos);
+		    bos.write(mybytearray, NAME_BYTE_SIZE+FILESIZE_BYTE_SIZE, (int)filesize);//write from immediately after metadata up to filesize, assuming that filesize is actual size of file in bytes
+		    bos.flush();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	private void closeEverything() {
 		try {
