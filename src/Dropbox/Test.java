@@ -41,11 +41,10 @@ public class Test {
 	}
 
 	public static void main(String[] args) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("asdasdad\n");
-		sb.append("adsad");
-		System.out.println(sb.toString());
-		
+		String a = null;
+		System.out.println(a);
+		a= "aasdad";
+		System.out.println(a);
 		
 	}
 

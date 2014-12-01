@@ -1,4 +1,4 @@
-package Dropbox;
+package dropbox_v2;
 
 
 import java.io.BufferedInputStream;
@@ -36,44 +36,49 @@ class monitor{
 		
 		in = inputStream;
 		
-		String[] metadata = getFileMetadata();
-		receiveFile(metadata[0], Long.parseLong(metadata[1]));
+		receiveFile();
 		
 		lock.unlock();
 	}
 	
-	public String[] getFileMetadata()
+	
+	//TODO to be revised
+	public void receiveFile()
 	{
-		String filename=null;
-		long filesize=0;
-		try{
-	        DataInputStream dataStream = new DataInputStream(in);
-	        filename = dataStream.readUTF();
-	        filesize = dataStream.readLong();
-	        System.out.println("Server: receive metadata Filename: " + filename + "; Size:" + filesize);
-		}catch(IOException e)
-		 {
-			 e.printStackTrace();
-		 }
-		String [] metadata=new String[]{filename,Long.toString(filesize)};
-		return metadata;
+		
 	}
 	
-	
-	public void receiveFile(String filename, long filesize)
-	{
-		try {
-			byte[] mybytearray = new byte[(int)filesize];
-		    FileOutputStream fos = new FileOutputStream("src/Dropbox/Server/" + filename);
-		    BufferedOutputStream bos = new BufferedOutputStream(fos);
-		    int bytesRead = in.read(mybytearray, 0, mybytearray.length);
-		    bos.write(mybytearray, 0, bytesRead);
-		    System.out.println("Server: received - " + filename);
+	//TODO  to be revised
+		public void sendFile(OutputStream os, String filename)
+		{
+			//send metadata
+			File file = new File("src/Dropbox/Server/" + filename);
+			
+			long filesize = file.length();
+			try {
+				DataOutputStream dos = new DataOutputStream(os);
+			    dos.writeUTF(filename);  
+			    dos.writeLong(filesize);
+			    dos.flush();
+			 }catch(IOException e)
+			 {
+				 e.printStackTrace();
+			 }
+			 System.out.println("Server: SENT METADATA of" + filename );
+			 
+			 //send file 
+			 byte[] mybytearray = new byte[(int) file.length()];
+			 try {
+			    BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+			    bis.read(mybytearray, 0, mybytearray.length);
+			    os.write(mybytearray, 0, mybytearray.length);
+			    os.flush();
+			 } catch (Exception e) {
+				 e.printStackTrace();
+			 }
+			    
+		    System.out.println("Server: Done sending file");
 		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 	
 	public ArrayList<String> getClientToUpdateList(HashMap<String, Long> filedataMap){
 		lock.lock();
@@ -122,40 +127,10 @@ class monitor{
 		lock.unlock();
 		return serverToUpdateList;
 	}
-	
-	public void sendFile(OutputStream os, String filename)
-	{
-		//send metadata
-		File file = new File("src/Dropbox/Server/" + filename);
-		
-		long filesize = file.length();
-		try {
-			DataOutputStream dos = new DataOutputStream(os);
-		    dos.writeUTF(filename);  
-		    dos.writeLong(filesize);
-		    dos.flush();
-		 }catch(IOException e)
-		 {
-			 e.printStackTrace();
-		 }
-		 System.out.println("Server: SENT METADATA of" + filename );
-		 
-		 //send file 
-		 byte[] mybytearray = new byte[(int) file.length()];
-		 try {
-		    BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-		    bis.read(mybytearray, 0, mybytearray.length);
-		    os.write(mybytearray, 0, mybytearray.length);
-		    os.flush();
-		 } catch (Exception e) {
-			 e.printStackTrace();
-		 }
-		    
-	    System.out.println("Server: Done sending file");
-	}
 }
 
 public class Server {
+	
 	private ServerSocket server;
 	
 	static monitor monitor = new monitor();

@@ -1,4 +1,4 @@
-package src.Dropbox;
+package Dropbox;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
