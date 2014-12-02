@@ -2,6 +2,8 @@ package Dropbox;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.text.SimpleDateFormat;
 
 public class Test {
@@ -36,16 +38,30 @@ public class Test {
 			sb.append(fileList[i].lastModified() + " " + fileList[i].getName() + "\n");
 		}
 		System.out.println(sb.toString());
-		//get all file list with date
-		//send file name with date per line
+	}
+	
+	public static void getFileContent(){
+		StringBuilder sb = new StringBuilder();
+		try {
+			
+			FileReader fr = new FileReader("src/Dropbox/Server/file3");
+			BufferedReader reader = new BufferedReader(fr);
+			String str;
+			while((str = reader.readLine()) != null){
+
+				sb.append("\n");
+				sb.append(str);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(sb.toString());
+		
 	}
 
 	public static void main(String[] args) {
-		String a = null;
-		System.out.println(a);
-		a= "aasdad";
-		System.out.println(a);
-		
+		getFileContent();
 	}
 
 }

@@ -71,7 +71,21 @@ public class Client extends Thread{
 	}
 	
 	public void receiveFile(){
-		
+		try
+		{
+			int nFile = Integer.parseInt(input.readLine());
+			
+			while(nFile > 0)
+			{
+				//create file
+				//get filename
+				//get content until END OF FILE
+				//nFile--
+			}
+					
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	

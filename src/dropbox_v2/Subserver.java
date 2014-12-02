@@ -96,16 +96,9 @@ public class Subserver extends Thread{
 
 		output.println(type);
 		
-		System.out.println("Subserver: File to update " + clientUpdateList.get(i));
+		output.println(clientUpdateList.size());
 		
-		for(int i = 0; i < clientUpdateList.size(); i++)
-		{	
-			try {
-				Server.monitor.sendFile(socket.getOutputStream(), clientUpdateList.get(i));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		Server.monitor.sendFile(output, clientUpdateList);
 	}
 	
 	public void verifyToUpdateFileStatus(){

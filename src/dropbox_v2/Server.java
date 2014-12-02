@@ -3,14 +3,17 @@ package dropbox_v2;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -48,37 +51,30 @@ class monitor{
 		
 	}
 	
-	//TODO  to be revised
-		public void sendFile(OutputStream os, String filename)
+	//TODO  to be test
+	public void sendFile(PrintWriter output, ArrayList<String> updateList)
+	{
+		for(int i = 0; i < updateList.size(); i++)
 		{
-			//send metadata
-			File file = new File("src/Dropbox/Server/" + filename);
+			output.println(updateList.get(i));
+			try
+			{
+				FileReader fr = new FileReader("src/Dropbox/Server/" + updateList.get(i));
+				BufferedReader reader = new BufferedReader(fr);
+				String str;
+				
+				while((str = reader.readLine()) != null){
+					output.println(str);
+				}
+				
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 			
-			long filesize = file.length();
-			try {
-				DataOutputStream dos = new DataOutputStream(os);
-			    dos.writeUTF(filename);  
-			    dos.writeLong(filesize);
-			    dos.flush();
-			 }catch(IOException e)
-			 {
-				 e.printStackTrace();
-			 }
-			 System.out.println("Server: SENT METADATA of" + filename );
-			 
-			 //send file 
-			 byte[] mybytearray = new byte[(int) file.length()];
-			 try {
-			    BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-			    bis.read(mybytearray, 0, mybytearray.length);
-			    os.write(mybytearray, 0, mybytearray.length);
-			    os.flush();
-			 } catch (Exception e) {
-				 e.printStackTrace();
-			 }
-			    
-		    System.out.println("Server: Done sending file");
+			output.println(Subserver.END_OF_FILE);
+			System.out.println("Subserver: Sent " + updateList.get(i));
 		}
+	}
 	
 	public ArrayList<String> getClientToUpdateList(HashMap<String, Long> filedataMap){
 		lock.lock();
