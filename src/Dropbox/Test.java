@@ -1,9 +1,11 @@
 package Dropbox;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 public class Test {
@@ -57,11 +59,22 @@ public class Test {
 			e.printStackTrace();
 		}
 		System.out.println(sb.toString());
-		
+	}
+	
+	public static void createFile(){
+		String text = "Hello world";
+        try {
+          File file = new File("example.txt");
+          BufferedWriter output = new BufferedWriter(new FileWriter(file));
+          output.write(text+"\n");
+          output.close();
+        } catch ( IOException e ) {
+           e.printStackTrace();
+        }
 	}
 
 	public static void main(String[] args) {
-		getFileContent();
+		createFile();
 	}
 
 }

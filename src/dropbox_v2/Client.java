@@ -3,11 +3,13 @@ package dropbox_v2;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,6 +25,7 @@ public class Client extends Thread{
 	static final String END_OF_UPDATE_LIST = "END OF UPDATE LIST";
 	static final String CLOSE_CONNECTION = "CLOSE CONNECTION";
 	
+	private final String filePath = "src/Dropbox/";
 	private Socket socket;
 	private PrintWriter output;
 	private BufferedReader input;
@@ -77,15 +80,36 @@ public class Client extends Thread{
 			
 			while(nFile > 0)
 			{
-				//create file
-				//get filename
-				//get content until END OF FILE
-				//nFile--
+				updateFile();
+				nFile--;
 			}
 					
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+	}
+	
+	public void updateFile(){
+        try 
+        {
+        	String filename = input.readLine();
+        	File file = new File(filePath + folderName + "/" + filename);
+        	BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        	
+        	String str;
+        	str = input.readLine();
+        	while(!str.equals(Subserver.END_OF_FILE))
+        	{
+        		writer.write(str);
+        		str = input.readLine();
+        		if(!str.equals(Subserver.END_OF_FILE))
+        			writer.newLine();
+        	}
+        	System.out.println("Client: received - " + filename);
+        	writer.close();
+        }catch (Exception e ) {
+           e.printStackTrace();
+        }
 	}
 	
 	
