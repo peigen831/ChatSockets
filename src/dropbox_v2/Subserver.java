@@ -1,4 +1,4 @@
-package Dropbox;
+package dropbox_v2;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,20 +11,18 @@ import java.util.Map;
 
 public class Subserver extends Thread{
 	
-	final static int NEW_CLIENT_VERSION = 1;
-	final static int NEW_SERVER_VERSION = 2;
-	final static int END_SYNCHRONIZE = 3;
-	final static String END_SERVER_REQUEST = "end server request";
+	static final String UPDATE_CLIENT = "UPDATE CLIENT";
+	static final String UPDATE_SERVER = "UPDATE SERVER";
+	static final String END_OF_FILE = "END OF FILE";
+	static final String CLOSE_CONNECTION = "CLOSE CONNECTION";
 	
-	Socket socket;
-	PrintWriter output;
-	BufferedReader input;
+	private Socket socket;
+	private PrintWriter output;
+	private BufferedReader input;
 	
-	ArrayList<String> serverUpdateList = new ArrayList<String>();
-	ArrayList<String> clientUpdateList = new ArrayList<String>();
-
-	long lastConnection = 0;
-	HashMap<String, Long> filedateMap = new HashMap<>();
+	private ArrayList<String> serverUpdateList = new ArrayList<String>();
+	private ArrayList<String> clientUpdateList = new ArrayList<String>();
+	private HashMap<String, Long> filedateMap = new HashMap<>();
 
 	
 	public Subserver(Socket clientSocket){
@@ -39,7 +37,8 @@ public class Subserver extends Thread{
 
 			verifyToUpdateFileStatus();
 			
-			//updateClientFile();
+			//DOING HERE
+			updateClientFile();
 			
 			//updateServerFile();
 			
@@ -49,7 +48,7 @@ public class Subserver extends Thread{
 			e.printStackTrace();
 		}
 	}
-	
+	/*
 	public void updateServerFile(){
 		String type = NEW_CLIENT_VERSION + "\n";
 		
@@ -57,10 +56,8 @@ public class Subserver extends Thread{
 		for(int i = 0; i < serverUpdateList.size(); i++)
 		{
 			output.print(type);
-			output.flush();
 			System.out.println("Subserver: sent request type");
 			output.print(serverUpdateList.get(i) + "\n");
-			output.flush();
 			System.out.println("Subserver: sent requested filename");
 			try {
 				Server.monitor.updateServerFile(socket.getInputStream());
@@ -72,7 +69,9 @@ public class Subserver extends Thread{
 		//end of requesting files
 		//output.print(END_SERVER_REQUEST);
 	}
+	*/
 	
+	/*
 	public void sendFileRequestToClient (){
 		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < serverUpdateList.size(); i++)
@@ -89,23 +88,18 @@ public class Subserver extends Thread{
 		}
 		
 	}
+	*/
 	
 	
 	public void updateClientFile(){
-		int type = NEW_SERVER_VERSION;
+		String type = UPDATE_CLIENT;
+
+		output.println(type);
 		
-		for(int i = 0; i < clientUpdateList.size(); i++)
-		{
-			output.println(type);
-			try {
-				Server.monitor.sendFile(socket.getOutputStream(), clientUpdateList.get(i));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		output.println(clientUpdateList.size());
+		
+		Server.monitor.sendFile(output, clientUpdateList);
 	}
-	
-	
 	
 	public void verifyToUpdateFileStatus(){
 		//lacking: when server has a file that client doesn't have
@@ -125,8 +119,8 @@ public class Subserver extends Thread{
 			System.out.println(list.get(i));
 	}
 	
-	public void printMap(HashMap<String, String> map){
-		for(Map.Entry<String, String> entry : map.entrySet()){
+	public void printMap(HashMap<String, Long> map){
+		for(Map.Entry<String, Long> entry : map.entrySet()){
 		    System.out.printf("Key : %s and Value: %s %n", entry.getKey(), entry.getValue());
 		}
 	}
@@ -152,13 +146,13 @@ public class Subserver extends Thread{
 			
 			do {
 				str = input.readLine();
-				if(!str.equals(""))
-				{
-					split = str.split(" ");
-					filedateMap.put(split[0], Long.parseLong(split[1]));
-				}
+				
+				split = str.split(" ");
+				
+				filedateMap.put(split[0], Long.parseLong(split[1]));
 				
 			}while(input.ready() && str != null);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -166,7 +160,7 @@ public class Subserver extends Thread{
 	
 	private void closeEverything() {
 		try {
-			output.println(END_SYNCHRONIZE);
+			output.println(CLOSE_CONNECTION);
 			output.close();
 			input.close();
 			socket.close();

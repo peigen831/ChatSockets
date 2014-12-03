@@ -1,7 +1,11 @@
 package Dropbox;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 public class Test {
@@ -36,12 +40,41 @@ public class Test {
 			sb.append(fileList[i].lastModified() + " " + fileList[i].getName() + "\n");
 		}
 		System.out.println(sb.toString());
-		//get all file list with date
-		//send file name with date per line
+	}
+	
+	public static void getFileContent(){
+		StringBuilder sb = new StringBuilder();
+		try {
+			
+			FileReader fr = new FileReader("src/Dropbox/Server/file3");
+			BufferedReader reader = new BufferedReader(fr);
+			String str;
+			while((str = reader.readLine()) != null){
+
+				sb.append("\n");
+				sb.append(str);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(sb.toString());
+	}
+	
+	public static void createFile(){
+		String text = "Hello world";
+        try {
+          File file = new File("example.txt");
+          BufferedWriter output = new BufferedWriter(new FileWriter(file));
+          output.write(text+"\n");
+          output.close();
+        } catch ( IOException e ) {
+           e.printStackTrace();
+        }
 	}
 
 	public static void main(String[] args) {
-		checkFiles();
+		createFile();
 	}
 
 }
