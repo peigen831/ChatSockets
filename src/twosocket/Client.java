@@ -17,7 +17,8 @@ public class Client {
 	
 	private String hostName = "localhost";
 	private int portNumber = 80;
-	private String folderName = "Client1_Folder/";
+	private String folderName;
+	private String clientProperties;
 	private long lastSync;
 	
 	private Socket socket;
@@ -27,8 +28,10 @@ public class Client {
 	private List<String> listToGet;
 	private List<String> listToGive;
 	
-	public Client() {
-		ResourceBundle rb = ResourceBundle.getBundle("twosocket.client");
+	public Client(String clientName) {
+		folderName = clientName + "_Folder/";
+		clientProperties = "src/twosocket/" + clientName + ".properties";
+		ResourceBundle rb = ResourceBundle.getBundle("twosocket." + clientName);
 		lastSync = Long.parseLong(rb.getString("LAST_SYNC"));
 		
 		connectToServer();
@@ -159,7 +162,7 @@ public class Client {
 			Properties properties = new Properties();
 			properties.setProperty("LAST_SYNC", Long.toString(lastSync));
 			
-			File file = new File("src/twosocket/client.properties");
+			File file = new File(clientProperties);
 			FileOutputStream fileOut = new FileOutputStream(file);
 			properties.store(fileOut, null);
 			fileOut.close();
@@ -171,6 +174,7 @@ public class Client {
 	}
 	
 	public static void main(String[] args) {
-		new Client();
+		new Client("Client1");
+		new Client("Client2");
 	}
 }
