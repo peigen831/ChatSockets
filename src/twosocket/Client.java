@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-public class Client {
+public class Client extends Thread {
 	
 	private String hostName = "localhost";
 	private int portNumber = 80;
@@ -33,7 +33,10 @@ public class Client {
 		clientProperties = "src/twosocket/" + clientName + ".properties";
 		ResourceBundle rb = ResourceBundle.getBundle("twosocket." + clientName);
 		lastSync = Long.parseLong(rb.getString("LAST_SYNC"));
-		
+	}
+	
+	@Override
+	public void run() {
 		connectToServer();
 		
 		setupStreams();
@@ -174,7 +177,7 @@ public class Client {
 	}
 	
 	public static void main(String[] args) {
-		new Client("Client1");
-		new Client("Client2");
+		(new Client("Client1")).start();
+		(new Client("Client2")).start();;
 	}
 }

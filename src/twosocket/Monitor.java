@@ -9,11 +9,14 @@ import java.util.List;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Monitor {
 	private long lastSync;
 	private List<String> updatingFiles;
-	private Condition condition;
+	final Lock lock = new ReentrantLock();
+	Condition mutex = lock.newCondition();
 	
 	public Monitor() {
 		ResourceBundle rb = ResourceBundle.getBundle("twosocket.server");
@@ -25,7 +28,9 @@ public class Monitor {
 		return lastSync;
 	}
 	
-	public synchronized void checkAndSetLastSync(long lastSync) {
+	public void checkAndSetLastSync(long lastSync) {
+		lock.lock();
+		
 		if (lastSync > this.lastSync) {
 			this.lastSync = lastSync;
 		}
@@ -43,22 +48,33 @@ public class Monitor {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		lock.unlock();
 	}
 	
-	public synchronized boolean updateFile(String file) {
+	public boolean updateFile(String file) {
+		lock.lock();
+		
 		while (updatingFiles.contains(file)) {
 			try {
-				condition.await();
+				mutex.await();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				return false;
 			}
 		}
+		
 		updatingFiles.add(file);
+		lock.unlock();
+		
 		return true;
 	}
 	
-	public synchronized void doneUpdatingFile(String file) {
+	public void doneUpdatingFile(String file) {
+		lock.lock();
 		updatingFiles.remove(file);
+		mutex.signalAll();
+		
+		lock.unlock();
 	}
 }
