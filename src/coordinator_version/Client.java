@@ -27,6 +27,7 @@ public class Client extends Thread {
 	
 	private List<String> listToGet;
 	private List<String> listToGive;
+	private List<String> listToDeleteServer;
 	
 	public Client(String clientName) {
 		folderName = clientName + "_Folder/";
@@ -122,6 +123,7 @@ public class Client extends Thread {
 		boolean disconnect = false;
 		listToGet = new ArrayList<>();
 		listToGive = new ArrayList<>();
+		listToDeleteServer=new ArrayList<>();
 		do {
 			try {
 				index = inputFromServer.readLine();
@@ -134,6 +136,7 @@ public class Client extends Thread {
 					case "TO_GET": listToGet.add(arr[1]); break;
 					case "TO_GIVE": listToGive.add(arr[1]); break;
 					case "TO_DESTROY": File file = new File(folderName + arr[1]); file.delete(); break;
+					case "TO_DESTROY_SERVER": listToDeleteServer.add(arr[1]); break;
 					case "INDEX_DONE": disconnect = true; break;
 				}
 			}
