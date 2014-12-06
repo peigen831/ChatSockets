@@ -58,7 +58,8 @@ public class StandardSubserver extends Subserver {
 		}
 	}
 	
-	private void parseAndRunCommand(String command) {
+	@Override
+	protected void parseAndRunCommand(String command) {
 		System.out.println("Command: " + command);
 		switch (command) {
 			case "INDEX": getIndex(); break;

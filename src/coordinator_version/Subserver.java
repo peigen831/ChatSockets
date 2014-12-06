@@ -9,11 +9,11 @@ import java.net.Socket;
 
 public class Subserver extends Thread {
 	
-	private Monitor monitor;
+	protected Monitor monitor;
 	
-	private Socket socket;
-	private PrintWriter outputToClient;
-	private BufferedReader inputFromClient;
+	protected Socket socket;
+	protected PrintWriter outputToClient;
+	protected BufferedReader inputFromClient;
 	
 	public Subserver(Socket socket, Monitor monitor) {
 		this.socket = socket;
@@ -50,8 +50,9 @@ public class Subserver extends Thread {
 		}
 	}
 	
-	private void parseAndRunCommand(String command) {
+	protected void parseAndRunCommand(String command) {
 		System.out.println("Command: " + command);
+		
 	}
 	
 	
