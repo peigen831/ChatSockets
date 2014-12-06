@@ -1,6 +1,9 @@
 package coordinator_version.coordinator;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -12,6 +15,11 @@ import java.util.Map.Entry;
 import coordinator_version.Monitor;
 import coordinator_version.Subserver;
 
+/**
+ * Serves a client connecting to the coordinator
+ * @author Andrew
+ *
+ */
 public class FrontSubserver extends Subserver{
 
 	public FrontSubserver(Socket socket, Monitor monitor) {
@@ -58,42 +66,64 @@ public class FrontSubserver extends Subserver{
 			}
 		} while (index != null);
 		
-		// Get server's file index and compare to client's file index
-		//TODO change source of master file list
-		File folder = new File("Coordinator_Folder/");
-		File[] fileList = folder.listFiles();
-		
-		for(File file : fileList) {
-			String filename = file.getName();
-			long filedate = file.lastModified();
-			
-			// if the file exists on both client and server
-			if (mapIndexFromClient.containsKey(filename)) {
-				
-				// if the file on server is newer
-				if (mapIndexFromClient.get(filename) < filedate) {
-					listIndexToGive.add(filename);
-				}
-				// if the file on client is newer
-				else if (mapIndexFromClient.get(filename) > filedate){
-					listIndexToGet.add(filename);
-				}
-				
-				// if the file on client is not updated, do nothing
-				
-				mapIndexFromClient.remove(filename);
-			}
-			
-			// if the file only exists on the server
-			else {
-				if (filedate > mapIndexFromClient.get("LAST_SYNC")) {
-					listIndexToGive.add(filename);
-				}
-				else {
-					listToDestroyServer.add(filename);
-				}
-			}
+		// Get coordinator's file index and compare to client's file index
+		File masterList = new File(Coordinator.FILE_MASTER_LIST);
+		BufferedReader br=null;
+		try {
+			br = new BufferedReader(new FileReader(masterList));
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+		String line;
+		try {
+			while ((line = br.readLine()) != null) {
+			   String[] results=line.split(":");
+			   
+			   
+			   String filename = results[0];
+				long filedate = Long.parseLong(results[1]);
+				
+				// if the file exists on both client and server
+				if (mapIndexFromClient.containsKey(filename)) {
+					
+					// if the file on server is newer
+					if (mapIndexFromClient.get(filename) < filedate) {
+						listIndexToGive.add(filename);
+					}
+					// if the file on client is newer
+					else if (mapIndexFromClient.get(filename) > filedate){
+						listIndexToGet.add(filename);
+					}
+					
+					// if the file on client is not updated, do nothing
+					
+					mapIndexFromClient.remove(filename);
+				}
+				
+				// if the file only exists on the server
+				else {
+					if (filedate > mapIndexFromClient.get("LAST_SYNC")) {
+						listIndexToGive.add(filename);
+					}
+					else {
+						listToDestroyServer.add(filename);
+					}
+				}
+			   
+			}
+			br.close();
+		} catch (NumberFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
+		
+		
 		
 		mapIndexFromClient.remove("LAST_SYNC");
 		// check for files that exist only on the client

@@ -4,15 +4,27 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Map.Entry;
 
 import coordinator_version.Monitor;
 import coordinator_version.Subserver;
 
+/**
+ * Serves a server connecting to the coordinator
+ * @author Andrew
+ *
+ */
 public class BackSubserver extends Subserver{
 
 	private String serverProperties; 
+	
 	
 	public BackSubserver(Socket socket, Monitor monitor) {
 		super(socket, monitor);
@@ -22,8 +34,13 @@ public class BackSubserver extends Subserver{
 	@Override
 	protected void parseAndRunCommand(String command) {
 		System.out.println("Command: " + command);
-		switch(command){
-			
+		switch (command) {
+			case "INDEX": receiveFileList(); break;
+			/*case "GET": giveFile(); break;
+			case "GET_SIZE": getFileSize(); break;
+			case "GIVE": getFile(); break;
+			case "INSYNC": monitor.checkAndSetLastSync(System.currentTimeMillis()); break;*/
+			default: break;
 		}
 	}
 	
@@ -57,5 +74,45 @@ public class BackSubserver extends Subserver{
 	private void receiveFileList()
 	{
 		
-	}
+			
+			//TODO for each file to be sent to the client, include the IP + port  of the relevant server
+			String index = null;
+			
+			Map<String, Long> mapIndexFromClient = new HashMap<>();
+			
+			// Get server's file index
+			do {
+				try {
+					index = inputFromClient.readLine();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				if (index != null) {
+					if (index.equals("INDEX_DONE")) {
+						break;
+					}
+					String[] file = index.split(":");
+					mapIndexFromClient.put(file[0], Long.parseLong(file[1]));
+				}
+			} while (index != null);
+			
+			//write master list to file
+			//TODO test if this writes properly; this version assumes that the server's list of files is already the master list
+			File f=new File(Coordinator.FILE_MASTER_LIST);
+			PrintWriter printWriter=null;
+			try {
+				printWriter = new PrintWriter(f);
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	       
+			for(Map.Entry e: mapIndexFromClient.entrySet())
+			{
+				printWriter.println(e.getKey()+":"+e.getValue());
+			}
+			printWriter.close();
+			
+		}	
+	
 }

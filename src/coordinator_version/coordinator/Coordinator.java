@@ -14,7 +14,7 @@ import coordinator_version.Server;
 public class Coordinator extends Thread {
 	private int maxServers=3;
 	private int numServers=0;
-	
+	public static final String FILE_MASTER_LIST="src/coordinator_version/coordinator/file_master_list";
 	
 	Server frontServer;
 	Server backServer;
