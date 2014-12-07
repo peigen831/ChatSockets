@@ -19,9 +19,9 @@ public class Server {
 		
 		while(true) {
 			try {
-				System.out.println("SERVER: Wait connected");
+				//System.out.println("SERVER: Wait connected");
 				Socket clientSocket = server.accept();
-				System.out.println("SERVER: Someone connected");
+				//System.out.println("SERVER: Someone connected");
 				Subserver subserver = new Subserver(clientSocket, monitor);
 				subserver.start();
 				

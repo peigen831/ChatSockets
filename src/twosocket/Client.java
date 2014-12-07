@@ -2,24 +2,21 @@ package twosocket;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
-import java.util.ResourceBundle;
 
 public class Client extends Thread {
 	
 	private String hostName = "localhost";
 	private int portNumber = 80;
 	private String folderName;
-	private String clientProperties;
-	private long lastSync;
+	//private String clientProperties;
+	//private long lastSync;
+	private String clientName;
 	
 	private Socket socket;
 	private PrintWriter outputToServer;
@@ -29,10 +26,12 @@ public class Client extends Thread {
 	private List<String> listToGive;
 	
 	public Client(String clientName) {
+		this.clientName = clientName;
 		folderName = clientName + "_Folder/";
-		clientProperties = "src/twosocket/" + clientName + ".properties";
-		ResourceBundle rb = ResourceBundle.getBundle("twosocket." + clientName);
-		lastSync = Long.parseLong(rb.getString("LAST_SYNC"));
+		
+		//clientProperties = "src/twosocket/" + clientName + ".properties";
+		//ResourceBundle rb = ResourceBundle.getBundle("twosocket." + clientName);
+		//lastSync = Long.parseLong(rb.getString("LAST_SYNC"));
 	}
 	
 	@Override
@@ -73,7 +72,8 @@ public class Client extends Thread {
 			}
 		}
 		
-		setLastSync();
+		//TODO remove
+		//setLastSync();
 	}
 	
 	private void connectToServer() {
@@ -101,9 +101,12 @@ public class Client extends Thread {
 		File[] fileList = folder.listFiles();
 		StringBuilder sb = new StringBuilder();
 		
+		//TODO append client name
 		sb.append("INDEX\n");
 		
-		sb.append("LAST_SYNC:" + lastSync + "\n");
+		sb.append("NAME:" + clientName + "\n");
+		
+		//sb.append("LAST_SYNC:" + lastSync + "\n");
 		
 		for(int i = 0; i < fileList.length; i++) {
 			sb.append(fileList[i].getName() + ":" + fileList[i].lastModified() + "\n");
@@ -150,7 +153,7 @@ public class Client extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
+	/*
 	private void setLastSync() {
 		connectToServer();
 		
@@ -175,7 +178,7 @@ public class Client extends Thread {
 			e.printStackTrace();
 		}
 	}
-	
+	*/
 	public static void main(String[] args) {
 		(new Client("Client1")).start();
 		(new Client("Client2")).start();;
