@@ -29,9 +29,6 @@ public class Client extends Thread {
 		this.clientName = clientName;
 		folderName = clientName + "_Folder/";
 		
-		//clientProperties = "src/twosocket/" + clientName + ".properties";
-		//ResourceBundle rb = ResourceBundle.getBundle("twosocket." + clientName);
-		//lastSync = Long.parseLong(rb.getString("LAST_SYNC"));
 	}
 	
 	@Override
@@ -72,7 +69,6 @@ public class Client extends Thread {
 			}
 		}
 		
-		//TODO remove
 		//setLastSync();
 	}
 	
@@ -101,12 +97,9 @@ public class Client extends Thread {
 		File[] fileList = folder.listFiles();
 		StringBuilder sb = new StringBuilder();
 		
-		//TODO append client name
 		sb.append("INDEX\n");
 		
 		sb.append("NAME:" + clientName + "\n");
-		
-		//sb.append("LAST_SYNC:" + lastSync + "\n");
 		
 		for(int i = 0; i < fileList.length; i++) {
 			sb.append(fileList[i].getName() + ":" + fileList[i].lastModified() + "\n");
@@ -153,32 +146,7 @@ public class Client extends Thread {
 			e.printStackTrace();
 		}
 	}
-	/*
-	private void setLastSync() {
-		connectToServer();
-		
-		setupStreams();
-		
-		outputToServer.println("INSYNC");
-		
-		closeConnection();
-		
-		lastSync = System.currentTimeMillis();
-		try {
-			Properties properties = new Properties();
-			properties.setProperty("LAST_SYNC", Long.toString(lastSync));
-			
-			File file = new File(clientProperties);
-			FileOutputStream fileOut = new FileOutputStream(file);
-			properties.store(fileOut, null);
-			fileOut.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	*/
+	
 	public static void main(String[] args) {
 		(new Client("Client1")).start();
 		(new Client("Client2")).start();;

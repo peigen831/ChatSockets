@@ -283,7 +283,7 @@ public class Subserver extends Thread {
 				file.renameTo(new File("Server_Folder/" + arrStrFile[0]));
 				file.delete();
 		}
-		//TODO VERIFY
+		
 		monitor.doneUpdatingFile(arrStrFile[0]);
 	}
 	
