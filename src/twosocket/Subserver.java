@@ -156,19 +156,19 @@ public class Subserver extends Thread {
 			
 			// if the file only exists on the server
 			else {
-				// add to client, if filedate on server is greater than last syn of client
-				if (!clientProp.containsKey(filename)) {
-					listIndexToGive.add(filename);
-					clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
-					serverPropertyAction.put(filename, System.currentTimeMillis()+ ":ADDED");
-				}
-				
-				// delete on server, if filedate on server is lesser than last syn of client
-				else if(clientProp.containsKey(filename) && !(mapIndexFromClient.containsKey(filename))){
+				// delete on server, 
+				if(clientProp.containsKey(filename)){
 					listToDestroyServer.add(filename);
 					serverPropertyAction.put(filename, System.currentTimeMillis() + ":DELETED");
 					System.out.println(filename + " clientProp.containskey: DELETE on server");
 				}
+				
+				// add to client, 
+				else if (!clientProp.containsKey(filename)) {
+					listIndexToGive.add(filename);
+					clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
+					serverPropertyAction.put(filename, System.currentTimeMillis()+ ":ADDED");
+				}	
 			}
 		}
 		
@@ -312,25 +312,29 @@ public class Subserver extends Thread {
 		}
 		File file = new File("Server_Folder/" + filedata);
 		
-		outputToClient.println(file.getName() + ":" + file.length());
-		//TODO if file not found establish protocol with client
-		try {
-			OutputStream out = socket.getOutputStream();
-			FileInputStream fis = new FileInputStream(file);
-	        int x = 0;
-	        while(true) {
-	            x = fis.read();
-	            if(x == -1)
-	            	break;
-	            out.write(x);
-	        }
-	        out.flush();
-	        fis.close();
-	        out.close();
+		if(!file.exists())
+			outputToClient.println("NOT_FOUND");
+		
+		else{
+			outputToClient.println(file.getName() + ":" + file.length());
+			try {
+				OutputStream out = socket.getOutputStream();
+				FileInputStream fis = new FileInputStream(file);
+		        int x = 0;
+		        while(true) {
+		            x = fis.read();
+		            if(x == -1)
+		            	break;
+		            out.write(x);
+		        }
+		        out.flush();
+		        fis.close();
+		        out.close();
+			}
+			catch (Exception e) {
+		    	e.printStackTrace();
+		    }
 		}
-		catch (Exception e) {
-	    	e.printStackTrace();
-	    }
 	}
 	
 	private void closeEverything(){

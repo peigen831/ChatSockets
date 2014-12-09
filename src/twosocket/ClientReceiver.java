@@ -96,6 +96,11 @@ public class ClientReceiver extends Thread {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			if(!filedata.equals("NOT_FOUND"))
+				receiveFile(filedata);
+		}
+		
+		private void receiveFile(String filedata){
 			String[] arrStrFile = filedata.split(":");
 			System.out.println("Receive " + filedata);
 			fileSizeToReceive = Long.parseLong(arrStrFile[1]);
