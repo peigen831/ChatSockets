@@ -66,7 +66,7 @@ public class StandardSubserver extends Subserver {
 			case "GET": giveFile(); break;
 			case "GET_SIZE": getFileSize(); break;
 			case "GIVE": getFile(); break;
-			case "INSYNC": monitor.checkAndSetLastSync(System.currentTimeMillis()); break;
+			//case "INSYNC": monitor.checkAndSetLastSync(System.currentTimeMillis()); break;
 			default: break;
 		}
 	}
