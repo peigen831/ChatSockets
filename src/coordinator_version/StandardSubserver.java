@@ -15,21 +15,37 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 
-public class StandardSubserver extends Subserver {
+public class StandardSubserver extends Thread {
 	
 	private Monitor monitor;
-	
 	private Socket socket;
 	private PrintWriter outputToClient;
 	private BufferedReader inputFromClient;
 	
+	private String serverPropertiesPath = "src/coordinator_version/server.properties";
+	private String clientPropertiesPath;
+	
 	public StandardSubserver(Socket socket, Monitor monitor) {
-		super(socket, monitor);
+		this.socket = socket;
+		this.monitor = monitor;
 	}
 	
 	@Override
 	public void run() {
+		
+		setupStream();
+		
+		String command = getCommand();
+		
+		parseAndRunCommand(command);
+		
+		closeEverything();
+		
+	}
+	
+	private void setupStream(){
 		try {
 			outputToClient = new PrintWriter(socket.getOutputStream(), true);
 			outputToClient.flush();
@@ -39,34 +55,27 @@ public class StandardSubserver extends Subserver {
 		catch(Exception e){
 			e.printStackTrace();
 		}
-		
+	}
+	
+	private String getCommand(){
 		String command = null;
 		try {
 			command = inputFromClient.readLine();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		parseAndRunCommand(command);
-		
-		try {
-			outputToClient.close();
-			inputFromClient.close();
-			socket.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		return command;
 	}
 	
-	@Override
-	protected void parseAndRunCommand(String command) {
-		System.out.println("Command: " + command);
+	private void parseAndRunCommand(String command) {
+		//System.out.println("Command: " + command);
 		switch (command) {
 			case "INDEX": getIndex(); break;
 			case "GET": giveFile(); break;
 			case "GET_SIZE": getFileSize(); break;
 			case "GIVE": getFile(); break;
-			//case "INSYNC": monitor.checkAndSetLastSync(System.currentTimeMillis()); break;
+			//TODO remove
+			//case "INSYNC": monitor.checkAndSetLastSync(serverPropertiesPath,  System.currentTimeMillis()); break;
 			default: break;
 		}
 	}
@@ -80,7 +89,11 @@ public class StandardSubserver extends Subserver {
 		
 		Map<String, Long> mapIndexFromClient = new HashMap<>();
 		
-		// Get client's file index
+		//for property file
+		HashMap<String, String> serverPropertyAction = new HashMap<>();
+		HashMap<String, String> clientPropertyAction = new HashMap<>();
+		
+		//Get client's file index
 		do {
 			try {
 				index = inputFromClient.readLine();
@@ -91,10 +104,24 @@ public class StandardSubserver extends Subserver {
 				if (index.equals("INDEX_DONE")) {
 					break;
 				}
-				String[] file = index.split(":");
-				mapIndexFromClient.put(file[0], Long.parseLong(file[1]));
+				String[] dataFromClient = index.split(":");
+				
+				//indicate client's identity
+				if(dataFromClient[0].equals("NAME"))
+					clientPropertiesPath = "src/twosocket/" + dataFromClient[1] + ".properties";
+				
+				//indicate files' identity
+				else
+					mapIndexFromClient.put(dataFromClient[0], Long.parseLong(dataFromClient[1]));
 			}
 		} while (index != null);
+		
+
+		//load server property
+		Properties serverProp = monitor.loadProperties(serverPropertiesPath);
+		
+		//load client's property
+		Properties clientProp = monitor.loadProperties(clientPropertiesPath);
 		
 		// Get server's file index and compare to client's file index
 		File folder = new File("Server_Folder/");
@@ -102,18 +129,24 @@ public class StandardSubserver extends Subserver {
 		
 		for(File file : fileList) {
 			String filename = file.getName();
-			long filedate = file.lastModified();
+			long serverLastmodify = file.lastModified();
 			
 			// if the file exists on both client and server
 			if (mapIndexFromClient.containsKey(filename)) {
+				long clientDate = mapIndexFromClient.get(filename);
 				
 				// if the file on server is newer
-				if (mapIndexFromClient.get(filename) < filedate) {
+				if (clientDate < serverLastmodify) {
 					listIndexToGive.add(filename);
+					clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
+					serverPropertyAction.put(filename, System.currentTimeMillis()+ ":ADDED");
 				}
+				
 				// if the file on client is newer
-				else if (mapIndexFromClient.get(filename) > filedate){
+				else if (clientDate > serverLastmodify){
 					listIndexToGet.add(filename);
+					serverPropertyAction.put(filename, System.currentTimeMillis() + ":ADDED");
+					clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
 				}
 				
 				// if the file on client is not updated, do nothing
@@ -123,23 +156,54 @@ public class StandardSubserver extends Subserver {
 			
 			// if the file only exists on the server
 			else {
-				if (filedate > mapIndexFromClient.get("LAST_SYNC")) {
-					listIndexToGive.add(filename);
-				}
-				else {
+				// delete on server, 
+				if(clientProp.containsKey(filename)){
 					listToDestroyServer.add(filename);
+					serverPropertyAction.put(filename, System.currentTimeMillis() + ":DELETED");
+					System.out.println(filename + " clientProp.containskey: DELETE on server");
 				}
+				
+				// add to client, 
+				else if (!clientProp.containsKey(filename)) {
+					listIndexToGive.add(filename);
+					clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
+					serverPropertyAction.put(filename, System.currentTimeMillis()+ ":ADDED");
+				}	
 			}
 		}
 		
-		mapIndexFromClient.remove("LAST_SYNC");
+		//mapIndexFromClient.remove("LAST_SYNC");
+		
 		// check for files that exist only on the client
 		for (Entry<String, Long> entry : mapIndexFromClient.entrySet()) {
-			if (entry.getValue() > monitor.getLastSync()) {
-				listIndexToGet.add(entry.getKey());
+			String filename = entry.getKey();
+			long clientDate = entry.getValue();
+			System.out.println("File info: " + filename + " " + clientDate);
+			
+			if(serverProp.containsKey(filename)){
+				String[] arr = serverProp.get(filename).toString().split(":"); 
+				long serverDate = Long.parseLong(arr[0]);
+				String action = arr[1];
+				
+				// delete on client, if the file previously exist on the server
+				if(action.equals("DELETED") && serverDate >= clientDate){
+					System.out.println("Destroy on client " + filename );
+					listToDestroyClient.add(filename);
+					serverPropertyAction.put(filename, System.currentTimeMillis() + ":DELETED");
+				}
+				
+				// add to server, when clientDate is greater than server's file deleted date
+				else{
+					listIndexToGet.add(filename);
+					serverPropertyAction.put(filename, System.currentTimeMillis() + ":ADDED");
+					clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
+				}
 			}
-			else {
-				listToDestroyClient.add(entry.getKey());
+			//add to server, when server never encounter this file
+			else{
+				listIndexToGet.add(filename);
+				clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
+				serverPropertyAction.put(filename, System.currentTimeMillis() + ":ADDED");
 			}
 		}
 		
@@ -159,10 +223,14 @@ public class StandardSubserver extends Subserver {
 			sb.append("TO_DESTROY:" + filename + "\n");
 		}
 		for (String filename : listToDestroyServer) {
+			String filePath = "Server_Folder/" + filename;
+			monitor.deleteFile(filePath);
+			/*
 			monitor.updateFile(filename);
 			File file = new File("Server_Folder/" + filename);
 			file.delete();
 			monitor.doneUpdatingFile(filename);
+			*/
 		}
 		
 		try {
@@ -172,6 +240,14 @@ public class StandardSubserver extends Subserver {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		
+		long syncTime = System.currentTimeMillis();
+		serverPropertyAction.put("LAST_SYNC", Long.toString(syncTime));
+		clientPropertyAction.put("LAST_SYNC", Long.toString(syncTime));
+		
+		monitor.updateServerProperties(serverPropertiesPath, serverPropertyAction);
+		monitor.updateClientProperties(clientPropertiesPath, clientPropertyAction);
 	}
 	
 	private void getFile() {
@@ -207,6 +283,7 @@ public class StandardSubserver extends Subserver {
 				file.renameTo(new File("Server_Folder/" + arrStrFile[0]));
 				file.delete();
 		}
+		
 		monitor.doneUpdatingFile(arrStrFile[0]);
 	}
 	
@@ -235,24 +312,40 @@ public class StandardSubserver extends Subserver {
 		}
 		File file = new File("Server_Folder/" + filedata);
 		
-		outputToClient.println(file.getName() + ":" + file.length());
+		if(!file.exists())
+			outputToClient.println("NOT_FOUND");
+		
+		else{
+			outputToClient.println(file.getName() + ":" + file.length());
+			try {
+				OutputStream out = socket.getOutputStream();
+				FileInputStream fis = new FileInputStream(file);
+		        int x = 0;
+		        while(true) {
+		            x = fis.read();
+		            if(x == -1)
+		            	break;
+		            out.write(x);
+		        }
+		        out.flush();
+		        fis.close();
+		        out.close();
+			}
+			catch (Exception e) {
+		    	e.printStackTrace();
+		    }
+		}
+	}
+	
+	private void closeEverything(){
 		try {
-			OutputStream out = socket.getOutputStream();
-			FileInputStream fis = new FileInputStream(file);
-	        int x = 0;
-	        while(true) {
-	            x = fis.read();
-	            if(x == -1)
-	            	break;
-	            out.write(x);
-	        }
-	        out.flush();
-	        fis.close();
-	        out.close();
+			outputToClient.close();
+			inputFromClient.close();
+			socket.close();
 		}
 		catch (Exception e) {
-	    	e.printStackTrace();
-	    }
+			e.printStackTrace();
+		}
 	}
 	
 }
