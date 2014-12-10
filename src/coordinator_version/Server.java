@@ -4,15 +4,19 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import coordinator_version.coordinator.BackSubserver;
+import coordinator_version.coordinator.FrontSubserver;
+
 public class Server extends Thread{
 	
 	private ServerSocket server;
 	private Monitor monitor;
 	private int subserverType;
 	
-	public static int COORDINATOR_TO_CLIENT=0;
-	public static int COORDINATOR_TO_SERVER=1;
-	public static int SERVER_TO_CLIENT=2;
+	public static final int COORDINATOR_TO_CLIENT=0;
+	public static final int COORDINATOR_TO_SERVER=1;
+	public static final int SERVER_TO_CLIENT=2;
+	
 	//public static int CLIENT_TO_SERVER=3; //unused; client has no subservers
 	
 	public Server(int subserverType)
@@ -34,7 +38,18 @@ public class Server extends Thread{
 				Socket clientSocket = server.accept();
 				System.out.println("SERVER: Someone connected");
 				//TODO instantiate a different type of subserver depending on the passed subserver type
-				StandardSubserver subserver = new StandardSubserver(clientSocket, monitor);
+				Subserver subserver;
+				switch(subserverType)
+				{
+				case COORDINATOR_TO_CLIENT:
+					subserver=new FrontSubserver(clientSocket, monitor); break;
+				case COORDINATOR_TO_SERVER:
+					subserver=new BackSubserver(clientSocket, monitor); break;
+				case SERVER_TO_CLIENT:
+					subserver = new StandardSubserver(clientSocket, monitor); break;
+				default:
+					subserver = new StandardSubserver(clientSocket, monitor); break;
+				}
 				subserver.start();
 				
 			} catch(Exception e) {

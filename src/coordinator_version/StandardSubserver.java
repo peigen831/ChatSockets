@@ -19,11 +19,6 @@ import java.util.Properties;
 
 public class StandardSubserver extends Subserver {
 	
-	private Monitor monitor;
-	private Socket socket;
-	private PrintWriter outputToClient;
-	private BufferedReader inputFromClient;
-	
 	private String serverPropertiesPath = "src/coordinator_version/server.properties";
 	private String clientPropertiesPath;
 	

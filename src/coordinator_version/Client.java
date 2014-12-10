@@ -2,24 +2,21 @@ package coordinator_version;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
-import java.util.ResourceBundle;
 
 public class Client extends Thread {
 	
 	private String hostName = "localhost";
 	private int portNumber = 80;
 	private String folderName;
-	private String clientProperties;
-	private long lastSync;
+	//private String clientProperties;
+	//private long lastSync;
+	private String clientName;
 	
 	private Socket socket;
 	private PrintWriter outputToServer;
@@ -30,10 +27,9 @@ public class Client extends Thread {
 	private List<String> listToDeleteServer;
 	
 	public Client(String clientName) {
+		this.clientName = clientName;
 		folderName = clientName + "_Folder/";
-		clientProperties = "src/twosocket/" + clientName + ".properties";
-		ResourceBundle rb = ResourceBundle.getBundle("twosocket." + clientName);
-		lastSync = Long.parseLong(rb.getString("LAST_SYNC"));
+		
 	}
 	
 	@Override
@@ -74,7 +70,7 @@ public class Client extends Thread {
 			}
 		}
 		
-		setLastSync();
+		//setLastSync();
 	}
 	
 	private void connectToServer() {
@@ -104,7 +100,7 @@ public class Client extends Thread {
 		
 		sb.append("INDEX\n");
 		
-		sb.append("LAST_SYNC:" + lastSync + "\n");
+		sb.append("NAME:" + clientName + "\n");
 		
 		for(int i = 0; i < fileList.length; i++) {
 			sb.append(fileList[i].getName() + ":" + fileList[i].lastModified() + "\n");
@@ -123,7 +119,6 @@ public class Client extends Thread {
 		boolean disconnect = false;
 		listToGet = new ArrayList<>();
 		listToGive = new ArrayList<>();
-		listToDeleteServer=new ArrayList<>();
 		do {
 			try {
 				index = inputFromServer.readLine();
@@ -136,7 +131,7 @@ public class Client extends Thread {
 					case "TO_GET": listToGet.add(arr[1]); break;
 					case "TO_GIVE": listToGive.add(arr[1]); break;
 					case "TO_DESTROY": File file = new File(folderName + arr[1]); file.delete(); break;
-					case "TO_DESTROY_SERVER": listToDeleteServer.add(arr[1]); break;
+					case "TO_DESTROY_SERVER": listToDeleteServer.add(arr[1]);break;
 					case "INDEX_DONE": disconnect = true; break;
 				}
 			}
@@ -154,33 +149,13 @@ public class Client extends Thread {
 		}
 	}
 	
-	private void setLastSync() {
-		connectToServer();
-		
-		setupStreams();
-		
-		outputToServer.println("INSYNC");
-		
-		closeConnection();
-		
-		lastSync = System.currentTimeMillis();
-		try {
-			Properties properties = new Properties();
-			properties.setProperty("LAST_SYNC", Long.toString(lastSync));
-			
-			File file = new File(clientProperties);
-			FileOutputStream fileOut = new FileOutputStream(file);
-			properties.store(fileOut, null);
-			fileOut.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	public static void main(String[] args) {
 		(new Client("Client1")).start();
-		(new Client("Client2")).start();;
+		try{
+			Thread.sleep(1000);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		(new Client("Client2")).start();
 	}
 }

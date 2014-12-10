@@ -23,6 +23,9 @@ import coordinator_version.Subserver;
  */
 public class BackSubserver extends Subserver{
 
+	/**
+	 * Properties of the server that this BackSubserver is connected to
+	 */
 	private String serverProperties; 
 	
 	
