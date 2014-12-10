@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-public class StandardSubserver extends Thread {
+public class StandardSubserver extends Subserver {
 	
 	private Monitor monitor;
 	private Socket socket;
@@ -28,46 +28,12 @@ public class StandardSubserver extends Thread {
 	private String clientPropertiesPath;
 	
 	public StandardSubserver(Socket socket, Monitor monitor) {
-		this.socket = socket;
-		this.monitor = monitor;
+		super(socket, monitor);
 	}
+	
 	
 	@Override
-	public void run() {
-		
-		setupStream();
-		
-		String command = getCommand();
-		
-		parseAndRunCommand(command);
-		
-		closeEverything();
-		
-	}
-	
-	private void setupStream(){
-		try {
-			outputToClient = new PrintWriter(socket.getOutputStream(), true);
-			outputToClient.flush();
-			
-			inputFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-	}
-	
-	private String getCommand(){
-		String command = null;
-		try {
-			command = inputFromClient.readLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return command;
-	}
-	
-	private void parseAndRunCommand(String command) {
+	protected void parseAndRunCommand(String command) {
 		//System.out.println("Command: " + command);
 		switch (command) {
 			case "INDEX": getIndex(); break;
@@ -337,7 +303,7 @@ public class StandardSubserver extends Thread {
 		}
 	}
 	
-	private void closeEverything(){
+	protected void closeEverything(){
 		try {
 			outputToClient.close();
 			inputFromClient.close();
