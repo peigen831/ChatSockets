@@ -23,7 +23,7 @@ import coordinator_version.Subserver;
  */
 public class FrontSubserver extends Subserver{
 
-	private String serverPropertiesPath = "src/coordinator_version/masterlist.properties";
+	private String serverPropertiesPath = "src/coordinator_version/masterlist.properties";//coordinator properties
 	private String clientPropertiesPath;
 	
 	public FrontSubserver(Socket socket, Monitor monitor) {
@@ -55,7 +55,7 @@ public class FrontSubserver extends Subserver{
 		Map<String, Long> mapIndexFromClient = new HashMap<>();
 		
 		//for property file
-		HashMap<String, String> serverPropertyAction = new HashMap<>();
+		HashMap<String, String> coordinatorPropertyAction = new HashMap<>();
 		HashMap<String, String> clientPropertyAction = new HashMap<>();
 		
 		//Get client's file index
@@ -113,13 +113,13 @@ public class FrontSubserver extends Subserver{
 					if (clientDate < serverLastmodify) {
 						listIndexToGive.add(filename);
 						clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
-						serverPropertyAction.put(filename, System.currentTimeMillis()+ ":ADDED");
+						coordinatorPropertyAction.put(filename, System.currentTimeMillis()+ ":ADDED");
 					}
 					
 					// if the file on client is newer
 					else if (clientDate > serverLastmodify){
 						listIndexToGet.add(filename);
-						serverPropertyAction.put(filename, System.currentTimeMillis() + ":ADDED");
+						coordinatorPropertyAction.put(filename, System.currentTimeMillis() + ":ADDED");
 						clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
 					}
 					
@@ -133,7 +133,7 @@ public class FrontSubserver extends Subserver{
 					// delete on server, 
 					if(clientProp.containsKey(filename)){
 						listToDestroyServer.add(filename);
-						serverPropertyAction.put(filename, System.currentTimeMillis() + ":DELETED");
+						coordinatorPropertyAction.put(filename, System.currentTimeMillis() + ":DELETED");
 						System.out.println(filename + " clientProp.containskey: DELETE on server");
 					}
 					
@@ -141,7 +141,7 @@ public class FrontSubserver extends Subserver{
 					else if (!clientProp.containsKey(filename)) {
 						listIndexToGive.add(filename);
 						clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
-						serverPropertyAction.put(filename, System.currentTimeMillis()+ ":ADDED");
+						coordinatorPropertyAction.put(filename, System.currentTimeMillis()+ ":ADDED");
 					}	
 				}
 				
@@ -177,13 +177,13 @@ public class FrontSubserver extends Subserver{
 				if(action.equals("DELETED") && serverDate >= clientDate){
 					System.out.println("Destroy on client " + filename );
 					listToDestroyClient.add(filename);
-					serverPropertyAction.put(filename, System.currentTimeMillis() + ":DELETED");
+					coordinatorPropertyAction.put(filename, System.currentTimeMillis() + ":DELETED");
 				}
 				
 				// add to server, when clientDate is greater than server's file deleted date
 				else{
 					listIndexToGet.add(filename);
-					serverPropertyAction.put(filename, System.currentTimeMillis() + ":ADDED");
+					coordinatorPropertyAction.put(filename, System.currentTimeMillis() + ":ADDED");
 					clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
 				}
 			}
@@ -191,7 +191,7 @@ public class FrontSubserver extends Subserver{
 			else{
 				listIndexToGet.add(filename);
 				clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
-				serverPropertyAction.put(filename, System.currentTimeMillis() + ":ADDED");
+				coordinatorPropertyAction.put(filename, System.currentTimeMillis() + ":ADDED");
 			}
 		}
 		
@@ -224,10 +224,11 @@ public class FrontSubserver extends Subserver{
 		
 		
 		long syncTime = System.currentTimeMillis();
-		serverPropertyAction.put("LAST_SYNC", Long.toString(syncTime));
+		
+		coordinatorPropertyAction.put("LAST_SYNC", Long.toString(syncTime));
 		clientPropertyAction.put("LAST_SYNC", Long.toString(syncTime));
 		
-		monitor.updateServerProperties(serverPropertiesPath, serverPropertyAction);
+		monitor.updateServerProperties(serverPropertiesPath, coordinatorPropertyAction);
 		monitor.updateClientProperties(clientPropertiesPath, clientPropertyAction);
 		
 	}

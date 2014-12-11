@@ -31,7 +31,6 @@ public class BackSubserver extends Subserver{
 	
 	public BackSubserver(Socket socket, Monitor monitor) {
 		super(socket, monitor);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -56,7 +55,7 @@ public class BackSubserver extends Subserver{
 		long lastHeartbeat = System.currentTimeMillis();
 		try {
 			Properties properties = new Properties();
-			properties.setProperty("LAST_HEARTBEAT", Long.toString(lastHeartbeat));
+			properties.setProperty("LAST_SYNC", Long.toString(lastHeartbeat));
 			properties.setProperty("ADDRESS",socket.getRemoteSocketAddress().toString());
 			properties.setProperty("PORT",Integer.toString(socket.getPort()));
 			
@@ -100,7 +99,15 @@ public class BackSubserver extends Subserver{
 			} while (index != null);
 			
 			//write master list to file
-			//TODO test if this writes properly; this version assumes that the server's list of files is already the master list
+			//TODO test if this writes properly; implement checking; this version assumes that the server's list of files is already the master list
+			/*masterlist format:
+			 * file1:6521671231468:added <server1, server2>
+			 * 
+			 * 
+			 * 
+			 */
+			
+			
 			File f=new File(Coordinator.FILE_MASTER_LIST);
 			PrintWriter printWriter=null;
 			try {

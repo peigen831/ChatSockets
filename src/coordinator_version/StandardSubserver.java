@@ -42,6 +42,7 @@ public class StandardSubserver extends Subserver {
 	}
 	
 	private void getIndex() {
+		//TODO change this to receive the complete list of files to give and receive from client, instead of calculating it here
 		String index = null;
 		List<String> listIndexToGet = new ArrayList<>();
 		List<String> listIndexToGive = new ArrayList<>();
