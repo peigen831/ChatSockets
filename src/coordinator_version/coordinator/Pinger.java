@@ -4,7 +4,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.TimerTask;
 
-import coordinator_version.CoordinatorMonitor;
 
 public class Pinger extends TimerTask {
 	

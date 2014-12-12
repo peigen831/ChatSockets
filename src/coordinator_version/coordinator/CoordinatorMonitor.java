@@ -1,4 +1,4 @@
-package coordinator_version;
+package coordinator_version.coordinator;
 
 import java.util.ArrayList;
 import java.util.List;
