@@ -9,6 +9,16 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/*
+ * Message from Coordinator to Client:
+ * 		TO_GET|filename|server1IP:port|server2IP:port|...
+ * 		TO_GIVE|filename|server1IP:port|server2IP:port|...
+ * 
+ * Message from Client to Server|
+ * 		filename|server2IP:port|server3IP:port|...
+ * 
+ */
 public class Client extends Thread {
 	
 	private String hostName = "localhost";
@@ -55,7 +65,7 @@ public class Client extends Thread {
 		}
 		
 		if (!listToGive.isEmpty()) {
-			ClientSender cs = new ClientSender(hostName, portNumber);
+			ClientSender cs = new ClientSender();
 			cs.setFileList(listToGive);
 			cs.setFolderName(folderName);
 			threads.add(cs);
