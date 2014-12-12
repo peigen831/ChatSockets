@@ -13,32 +13,34 @@ import java.util.List;
 
 public class ClientReceiver extends Thread {
 	
-	private String hostName;
-	private int portNumber;
-	
 	private List<String> fileList;
 	private String folderName;
 	
-    public ClientReceiver(String hostName, int portNumber) {
-    	this.hostName = hostName;
-    	this.portNumber = portNumber;
-    }
+    public ClientReceiver() {}
 	
 	@Override
 	public void run() {
 		while (!fileList.isEmpty()) {
 			List<String> tempFileList = new ArrayList<>(fileList);
-			for (String filename : tempFileList) {
-				Receiver receiver = new Receiver(hostName, portNumber);
-				receiver.setFilepath(folderName, filename);
-				receiver.start();
-				try {
-					receiver.join();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+			for (String fileListItem : tempFileList) {
+				String[] fileArray = fileListItem.split("|");
+				String fileName = fileArray[0];
+				Receiver receiver = new Receiver();
+				receiver.setFilepath(folderName, fileName);
+				for (int i = 1; i < fileArray.length; i++) {
+					String[] serverIp = fileArray[i].split(":");
+					String hostName = serverIp[0];
+					int portNumber = Integer.parseInt(serverIp[1]);
+					receiver.setServerAddress(hostName, portNumber);
+					receiver.start();
+					try {
+						receiver.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 				if (receiver.isReceivedFileCorrect()) {
-					fileList.remove(filename);
+					fileList.remove(fileName);
 				}
 			}
 		}
@@ -60,14 +62,14 @@ public class ClientReceiver extends Thread {
 		private String folderName;
 		private String filename;
 		private long fileSizeToReceive;
+		private boolean connectionSuccess;
 		
 		private Socket socket;
 	    private PrintWriter outputToServer;
 	    private BufferedReader inputFromServer;
 		
-		public Receiver(String hostName, int portNumber) {
-	    	this.hostName = hostName;
-	    	this.portNumber = portNumber;
+		public Receiver() {
+			connectionSuccess = false;
 	    }
 		
 		@Override
@@ -101,7 +103,7 @@ public class ClientReceiver extends Thread {
 		}
 		
 		private void receiveFile(String filedata){
-			String[] arrStrFile = filedata.split(":");
+			String[] arrStrFile = filedata.split("|");
 			System.out.println("Receive " + filedata);
 			fileSizeToReceive = Long.parseLong(arrStrFile[1]);
 			
@@ -152,6 +154,11 @@ public class ClientReceiver extends Thread {
 			}
 		}
 		
+		public void setServerAddress(String hostName, int portNumber) {
+	    	this.hostName = hostName;
+	    	this.portNumber = portNumber;
+		}
+		
 		public void setFilepath(String folderName, String filename) {
 			this.folderName = folderName;
 			this.filename = filename;
@@ -167,6 +174,9 @@ public class ClientReceiver extends Thread {
 			return false;
 		}
 		
+		public boolean isConnectionSuccessful() {
+			return connectionSuccess;
+		}
 	}
 	
 }

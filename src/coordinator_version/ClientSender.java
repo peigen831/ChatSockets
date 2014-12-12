@@ -12,32 +12,41 @@ import java.util.List;
 
 public class ClientSender extends Thread {
 	
-	private String hostName;
-	private int portNumber;
-	
 	private List<String> fileList;
 	private String folderName;
 	
-    public ClientSender(String hostName, int portNumber) {
-    	this.hostName = hostName;
-    	this.portNumber = portNumber;
-    }
+    public ClientSender() {}
     
 	@Override
 	public void run() {
 		while (!fileList.isEmpty()) {
 			List<String> tempFileList = new ArrayList<>(fileList);
-			for (String filename : tempFileList) {
-				Sender sender = new Sender(hostName, portNumber);
-				sender.setFilepath(folderName + filename);
-				sender.start();
-				try {
-					sender.join();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+			for (String fileListItem : tempFileList) {
+				String[] fileArray = fileListItem.split("|");
+				String fileName = fileArray[0];
+				String servers = fileListItem.replace(fileName + "|", "");
+				Sender sender = new Sender();
+				sender.setFilepath(folderName + fileName);
+				for (int i = 1; i < fileArray.length; i++) {
+					String[] serverIp = fileArray[i].split(":");
+					String hostName = serverIp[0];
+					int portNumber = Integer.parseInt(serverIp[1]);
+					servers = servers.replace(fileArray[i] + "|", "");
+					sender.setServerAddress(hostName, portNumber);
+					sender.setBackupServers(servers);
+					sender.start();
+					
+					try {
+						sender.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					if (!sender.isConnectionSuccessful()) {
+						break;
+					}
 				}
 				if (sender.isReceivedFileCorrect()) {
-					fileList.remove(filename);
+					fileList.remove(fileName);
 				}
 			}
 		}
@@ -58,14 +67,15 @@ public class ClientSender extends Thread {
 		
 		private File file;
 		private long receivedFileSize;
+		private String servers;
+		private boolean connectionSuccess;
 		
 		private Socket socket;
 	    private PrintWriter outputToServer;
 	    private BufferedReader inputFromServer;
 		
-		public Sender(String hostName, int portNumber) {
-	    	this.hostName = hostName;
-	    	this.portNumber = portNumber;
+		public Sender() {
+	    	connectionSuccess = false;
 	    }
 	    
 		@Override
@@ -84,7 +94,9 @@ public class ClientSender extends Thread {
 		private void connectToServer() {
 			try {
 				socket = new Socket(hostName, portNumber);
+				connectionSuccess = true;
 			}catch(Exception e) {
+				connectionSuccess = false;
 				e.printStackTrace();
 			}
 		}
@@ -101,8 +113,8 @@ public class ClientSender extends Thread {
 		}
 		
 		private void sendFile() {
-			System.out.println("GIVE " + file.getName() + ":" + file.length());
-			outputToServer.println("GIVE\n" + file.getName() + ":" + file.length());
+			System.out.println("GIVE " + file.getName() + "|" + file.length());
+			outputToServer.println("GIVE\n" + file.getName() + "|" + file.length() + "|" + servers);
 			try {
 				OutputStream out = socket.getOutputStream();
 				FileInputStream fis = new FileInputStream(file);
@@ -144,14 +156,27 @@ public class ClientSender extends Thread {
 			}
 		}
 		
+		public void setServerAddress(String hostName, int portNumber) {
+	    	this.hostName = hostName;
+	    	this.portNumber = portNumber;
+		}
+		
 		public void setFilepath(String filepath) {
 			file = new File(filepath);
+		}
+		
+		public void setBackupServers(String servers) {
+			this.servers = servers;
 		}
 		
 		public boolean isReceivedFileCorrect() {
 			if (file.length() == receivedFileSize)
 				return true;
 			return false;
+		}
+		
+		public boolean isConnectionSuccessful() {
+			return connectionSuccess;
 		}
 	}
 	
