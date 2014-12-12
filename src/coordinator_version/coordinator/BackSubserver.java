@@ -38,6 +38,7 @@ public class BackSubserver extends Subserver{
 		System.out.println("Command: " + command);
 		switch (command) {
 			case "INDEX": receiveFileList(); break;
+			case "FILE_CHANGE":receiveFile();break;
 			/*case "GET": giveFile(); break;
 			case "GET_SIZE": getFileSize(); break;
 			case "GIVE": getFile(); break;
@@ -46,6 +47,8 @@ public class BackSubserver extends Subserver{
 		}
 	}
 	
+
+
 	private void receiveServer(String serverName )
 	{
 		//TODO if we use pings instead of constant connections, check if server already has a file before overwriting the existing file? Or is this unnecessary?
@@ -69,6 +72,26 @@ public class BackSubserver extends Subserver{
 			e.printStackTrace();
 		}
 	}
+	
+	private void receiveFile() {
+		
+		String index = null;
+		
+		try {
+			index = inputFromClient.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if (index != null&&!index.equals("FILE_CHANGE_DONE")) {
+			
+			String[] file = index.split(":");
+			//TODO find file in masterlist
+			//TODO update file last modified and servers available
+			//mapIndexFromClient.put(file[0], Long.parseLong(file[1]));
+		}
+		
+	}
+	
 	
 	/*
 	 * get list of files on server. this method will be triggered when the server sends a certain message
