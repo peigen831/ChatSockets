@@ -4,10 +4,12 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.TimerTask;
 
+import coordinator_version.CoordinatorMonitor;
+
 public class Pinger extends TimerTask {
 	
 	// TODO change monitor type
-	private Object monitor;
+	private CoordinatorMonitor monitor;
 	private String hostName;
 	private int portNumber;
 	private boolean connectionSuccess;
@@ -15,7 +17,7 @@ public class Pinger extends TimerTask {
 	private Socket socket;
     private PrintWriter outputToServer;
 	
-	public Pinger(Object monitor, String hostName, int portNumber) {
+	public Pinger(CoordinatorMonitor monitor, String hostName, int portNumber) {
 		this.monitor = monitor;
 		this.hostName = hostName;
 		this.portNumber = portNumber;
@@ -31,9 +33,11 @@ public class Pinger extends TimerTask {
 		
 		if (connectionSuccess) {
 			// Ask monitor to set server as available
+			monitor.addAvailableServer(hostName, portNumber);
 		}
 		else {
 			// Ask monitor to set server as unavailable
+			monitor.removeAvailableServer(hostName, portNumber);
 		}
 	}
 	
