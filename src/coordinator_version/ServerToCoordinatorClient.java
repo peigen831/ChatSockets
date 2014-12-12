@@ -28,11 +28,20 @@ public class ServerToCoordinatorClient extends Thread {
 	private Socket socket;
 	private PrintWriter outputToServer;
 	private BufferedReader inputFromServer;
+	/**
+	 * null if client is to send a complete list, otherwise will only send metadata of specified file
+	 */
+	private String filename=null;
+	private boolean deleted;
 	
 	public ServerToCoordinatorClient(String serverName) {
 		this.serverName = serverName;
 		folderName = serverName + "_Folder/";
 		
+	}
+	public void setFilename(String filename, boolean deleted){
+		this.filename=filename;
+		this.deleted=deleted;
 	}
 	
 	@Override
@@ -73,23 +82,52 @@ public class ServerToCoordinatorClient extends Thread {
 	}
 	
 	private void sendFileDetails() {
-		File folder = new File(folderName);
-		File[] fileList = folder.listFiles();
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("INDEX\n");
-		
-		sb.append("NAME:" + serverName + "\n");
-		
-		for(int i = 0; i < fileList.length; i++) {
-			sb.append(fileList[i].getName() + ":" + fileList[i].lastModified() + "\n");
+		if(filename==null)
+		{
+			File folder = new File(folderName);
+			File[] fileList = folder.listFiles();
+			StringBuilder sb = new StringBuilder();
+			
+			sb.append("INDEX\n");
+			
+			sb.append("NAME:" + serverName + "\n");
+			
+			for(int i = 0; i < fileList.length; i++) {
+				sb.append(fileList[i].getName() + ":" + fileList[i].lastModified() + "\n");
+			}
+			
+			try {
+				sb.append("INDEX_DONE");
+				outputToServer.println(sb.toString());
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
 		}
-		
-		try {
-			sb.append("INDEX_DONE");
-			outputToServer.println(sb.toString());
-		} catch(Exception e) {
-			e.printStackTrace();
+		else{
+			long lastModified=0;
+			if(!deleted)
+			{
+				File file=new File(folderName+"/"+filename);
+				lastModified=file.lastModified();
+			}
+			else
+			{
+				//TODO logic for deleted files
+			}
+				
+				StringBuilder sb = new StringBuilder();
+				sb.append("FILE_CHANGE\n");
+				sb.append("NAME:" + serverName + "\n");
+				sb.append(filename+"|"+lastModified+"\n");
+				//TODO append file status (added, deleted, modified)
+				
+				try {
+					sb.append("FILE_CHANGE_DONE");
+					outputToServer.println(sb.toString());
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+			
 		}
 	}
 	

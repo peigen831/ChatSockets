@@ -8,6 +8,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+/**
+ * Subserver of a file server
+ * @author Andrew
+ *
+ */
 public class StandardSubserver extends Subserver {
 	
 	public StandardSubserver(Socket socket, Monitor monitor) {
