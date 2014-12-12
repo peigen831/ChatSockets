@@ -7,11 +7,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
- * The socket created by a server in order to send a file(s) to another server.
+ * The socket created by a server in order to send a SINGLE file to another server.
  * 
  * Sends its name, and a list of files on the server, to the coordinator.
  * 
@@ -28,6 +30,8 @@ public class ServerToServerClient extends Thread {
 	//private long lastSync;
 	private String serverName;
 	
+	Map<String, Integer>backupServers=new HashMap<String, Integer>();
+	
 	private Socket socket;
 	private PrintWriter outputToServer;
 	private BufferedReader inputFromServer;
@@ -41,22 +45,32 @@ public class ServerToServerClient extends Thread {
 	 * files to delete on backup server
 	 */
 	private List<String> listToDeleteServer;
+	private String filename;
+	private boolean toDelete=false;
 	
 	
-	public ServerToServerClient(String serverName) {
+	public ServerToServerClient(String serverName, String filename, boolean toDelete) {
 		this.serverName = serverName;
+		this.filename=filename;
+		this.toDelete=toDelete;
 		folderName = serverName + "_Folder/";
 		
+	}
+	/**
+	 * To be called by the StandardSubserver when a file has been received, before running the ServerToServerClient
+	 * @param address
+	 * @param port
+	 */
+	public void addBackupServer(String address, int port)
+	{
+		backupServers.put(address,port);
 	}
 	
 	@Override
 	public void run() {
-		connectToCoordinator();
+		connectToServer();
 		
 		setupStreams();
-
-		//note: coordinator automatically stores server's IP address, port number, and last sync time as based on coordinator's current system time.
-		//sendFileDetails();
 		
 		sendFiles();
 		
@@ -67,28 +81,44 @@ public class ServerToServerClient extends Thread {
 	}
 	
 	private void sendFiles(){
-List<Thread> threads = new ArrayList<>();
+		if(!toDelete)
+			listToGive.add(filename);//we only put the file in a list to avoid modifying ClientSender
+		else
+			listToDeleteServer.add(filename);
 		
 		
+		List<Thread> threads = new ArrayList<>();
 		
-		if (!listToGive.isEmpty()) {
-			ClientSender cs = new ClientSender(hostName, portNumber);
-			cs.setFileList(listToGive);
-			cs.setFolderName(folderName);
-			threads.add(cs);
-			cs.run();
-		}
-		
-		for (Thread thread : threads) {
-			try {
-				thread.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		for(Map.Entry<String, Integer> server: backupServers.entrySet())
+		{
+			hostName=server.getKey();
+			portNumber=server.getValue();
+			if (!listToGive.isEmpty()) {
+				ClientSender cs = new ClientSender(hostName, portNumber);
+				cs.setFileList(listToGive);
+				cs.setFolderName(folderName);
+				threads.add(cs);
+				cs.run();
 			}
+			
+			if(!listToDeleteServer.isEmpty())
+			{
+				//TODO notify backup server to delete the file
+			}
+		
+			for (Thread thread : threads) {
+				try {
+					thread.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			//TODO get confirmation of successful sync
 		}
 	}
 	
-	private void connectToCoordinator() {
+	private void connectToServer() {
 		try {
 			socket = new Socket(hostName, portNumber);
 			
@@ -104,27 +134,6 @@ List<Thread> threads = new ArrayList<>();
 			
 			inputFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private void sendFileDetails() {
-		File folder = new File(folderName);
-		File[] fileList = folder.listFiles();
-		StringBuilder sb = new StringBuilder();
-		
-		sb.append("INDEX\n");
-		
-		sb.append("NAME:" + serverName + "\n");
-		
-		for(int i = 0; i < fileList.length; i++) {
-			sb.append(fileList[i].getName() + ":" + fileList[i].lastModified() + "\n");
-		}
-		
-		try {
-			sb.append("INDEX_DONE");
-			outputToServer.println(sb.toString());
-		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
