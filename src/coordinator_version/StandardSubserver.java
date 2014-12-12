@@ -17,6 +17,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+/**
+ * Subserver of a file server
+ * @author Andrew
+ *
+ */
 public class StandardSubserver extends Subserver {
 	
 	private String serverPropertiesPath = "src/coordinator_version/server.properties";
