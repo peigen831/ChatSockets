@@ -77,9 +77,18 @@ public class ServerToServerClient extends Thread {
 		//getResponse();
 		
 		closeConnection();
+		
+		spawnServerToCoordinatorClient();
 	
 	}
 	
+	private void spawnServerToCoordinatorClient() {
+		// TODO Auto-generated method stub
+		ServerToCoordinatorClient serverToCoordinatorClient =new ServerToCoordinatorClient(serverName);
+		serverToCoordinatorClient.setFilename(filename, toDelete);
+		serverToCoordinatorClient.start();
+		
+	}
 	private void sendFiles(){
 		if(!toDelete)
 			listToGive.add(filename);//we only put the file in a list to avoid modifying ClientSender
@@ -115,6 +124,7 @@ public class ServerToServerClient extends Thread {
 			}
 			
 			//TODO get confirmation of successful sync
+			//TODO pass file status to ServerToCoordinatorClient
 		}
 	}
 	
