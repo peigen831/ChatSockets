@@ -57,7 +57,7 @@ public class Client extends Thread {
 		List<Thread> threads = new ArrayList<>();
 		
 		if (!listToGet.isEmpty()) {
-			ClientReceiver cr = new ClientReceiver(hostName, portNumber);
+			ClientReceiver cr = new ClientReceiver();
 			cr.setFileList(listToGet);
 			cr.setFolderName(folderName);
 			threads.add(cr);

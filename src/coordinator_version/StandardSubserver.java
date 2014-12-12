@@ -98,7 +98,7 @@ public class StandardSubserver extends Subserver {
 			outputToClient.println("NOT_FOUND");
 		
 		else{
-			outputToClient.println(file.getName() + ":" + file.length());
+			outputToClient.println(file.getName() + "|" + file.length());
 			try {
 				OutputStream out = socket.getOutputStream();
 				FileInputStream fis = new FileInputStream(file);
