@@ -32,16 +32,20 @@ public class ServerToCoordinatorClient extends Thread {
 	 * null if client is to send a complete list, otherwise will only send metadata of specified file
 	 */
 	private String filename=null;
-	private boolean deleted;
+	private int status;
+	
+	public static final int STATUS_DELETED=0;
+	public static final int STATUS_ADDED=1;
+	public static final int STATUS_UPDATED=2;
 	
 	public ServerToCoordinatorClient(String serverName) {
 		this.serverName = serverName;
 		folderName = serverName + "_Folder/";
 		
 	}
-	public void setFilename(String filename, boolean deleted){
+	public void setFilename(String filename, int status){
 		this.filename=filename;
-		this.deleted=deleted;
+		this.status=status;
 	}
 	
 	@Override
@@ -93,7 +97,7 @@ public class ServerToCoordinatorClient extends Thread {
 			sb.append("NAME:" + serverName + "\n");
 			
 			for(int i = 0; i < fileList.length; i++) {
-				sb.append(fileList[i].getName() + ":" + fileList[i].lastModified() + "\n");
+				sb.append(fileList[i].getName() + "|" + fileList[i].lastModified() + "\n");
 			}
 			
 			try {
@@ -105,7 +109,7 @@ public class ServerToCoordinatorClient extends Thread {
 		}
 		else{
 			long lastModified=0;
-			if(!deleted)
+			if(status==STATUS_DELETED)
 			{
 				File file=new File(folderName+"/"+filename);
 				lastModified=file.lastModified();
@@ -115,11 +119,24 @@ public class ServerToCoordinatorClient extends Thread {
 				//TODO logic for deleted files
 			}
 				
+				String statusString;
+				switch (status)
+				{
+					case STATUS_DELETED:
+						statusString="DELETED"; break;
+					case STATUS_ADDED:
+						statusString="ADDED";break;
+					case STATUS_UPDATED:
+					default:
+						statusString="UPDATED"; break;
+							
+				}
+					
 				StringBuilder sb = new StringBuilder();
 				sb.append("FILE_CHANGE\n");
 				sb.append("NAME:" + serverName + "\n");
-				sb.append(filename+"|"+lastModified+"\n");
-				//TODO append file status (added, deleted, modified)
+				sb.append(filename+"|"+lastModified+"|"+statusString+"\n");
+				
 				
 				try {
 					sb.append("FILE_CHANGE_DONE");

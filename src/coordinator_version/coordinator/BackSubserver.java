@@ -100,7 +100,6 @@ public class BackSubserver extends Subserver{
 	{
 		
 			
-			//TODO for each file to be sent to the client, include the IP + port  of the relevant server
 			String index = null;
 			
 			Map<String, Long> mapIndexFromClient = new HashMap<>();
