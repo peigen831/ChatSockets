@@ -1,8 +1,10 @@
 package coordinator_version.coordinator;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -27,7 +29,7 @@ public class BackSubserver extends Subserver{
 	 * Properties of the server that this BackSubserver is connected to
 	 */
 	private String serverProperties; 
-	private List<MasterlistEntry> masterList;
+	private List<MasterlistEntry> masterList=new ArrayList<MasterlistEntry>();
 	
 	public BackSubserver(Socket socket, Monitor monitor) {
 		super(socket, monitor);
@@ -50,7 +52,50 @@ public class BackSubserver extends Subserver{
 
 	private void loadMasterlist()
 	{
-		
+
+		File masterListFile = new File(Coordinator.FILE_MASTER_LIST);
+		BufferedReader br=null;
+		try {
+			br = new BufferedReader(new FileReader(masterListFile));
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String line;
+		try {
+			while ((line = br.readLine()) != null) {
+				
+			   String[] results=line.split("|");
+			   MasterlistEntry newFile=new MasterlistEntry();
+			   newFile.setFilename(results[0]);
+			   newFile.setLastUpdate(Long.parseLong(results[1]));
+			   switch(results[2])
+			   {
+			   case "DELETED":
+				   newFile.setStatus(MasterlistEntry.STATUS_DELETED);
+				   break;
+			   case "ADDED":
+				   newFile.setStatus(MasterlistEntry.STATUS_ADDED);
+				   break;
+			   case "UPDATED":
+				   newFile.setStatus(MasterlistEntry.STATUS_UPDATED);
+				   break;
+			   }
+			   for(int i=3;i<results.length;i++)
+			   {
+				   newFile.addServer(results[i]);
+			   }
+			   masterList.add(newFile);
+			   
+			}
+			br.close();
+		} catch (NumberFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	private void receiveServer(String serverName )
 	{
