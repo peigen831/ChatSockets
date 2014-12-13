@@ -89,6 +89,10 @@ public class FrontSubserver extends Subserver{
 		Properties clientProp = monitor.loadProperties(clientPropertiesPath);
 		
 		// Get coordinator's file index and compare to client's file index
+		/**
+		 * Note, if you want you can create a list of MasterlistEntry objects and store data there instead of discarding it every line, 
+		 * but this is not necessary
+		 */
 		File masterList = new File(Coordinator.FILE_MASTER_LIST);
 		BufferedReader br=null;
 		try {
