@@ -27,7 +27,7 @@ public class BackSubserver extends Subserver{
 	 * Properties of the server that this BackSubserver is connected to
 	 */
 	private String serverProperties; 
-	
+	private List<MasterlistEntry> masterList;
 	
 	public BackSubserver(Socket socket, Monitor monitor) {
 		super(socket, monitor);
@@ -48,7 +48,10 @@ public class BackSubserver extends Subserver{
 	}
 	
 
-
+	private void loadMasterlist()
+	{
+		
+	}
 	private void receiveServer(String serverName )
 	{
 		//TODO if we use pings instead of constant connections, check if server already has a file before overwriting the existing file? Or is this unnecessary?
@@ -76,7 +79,7 @@ public class BackSubserver extends Subserver{
 	private void receiveFile() {
 		
 		String index = null;
-		
+		Map<String, String> mapIndexFromClient = new HashMap<>();
 		try {
 			index = inputFromClient.readLine();
 		} catch (IOException e) {
@@ -84,10 +87,10 @@ public class BackSubserver extends Subserver{
 		}
 		if (index != null&&!index.equals("FILE_CHANGE_DONE")) {
 			
-			String[] file = index.split(":");
+			String[] file = index.split("|");
 			//TODO find file in masterlist
 			//TODO update file last modified and servers available
-			//mapIndexFromClient.put(file[0], Long.parseLong(file[1]));
+			mapIndexFromClient.put(file[0], file[1].concat(file[2]));
 		}
 		
 	}
@@ -115,7 +118,7 @@ public class BackSubserver extends Subserver{
 					if (index.equals("INDEX_DONE")) {
 						break;
 					}
-					String[] file = index.split(":");
+					String[] file = index.split("|");
 					mapIndexFromClient.put(file[0], Long.parseLong(file[1]));
 				}
 			} while (index != null);
@@ -141,7 +144,7 @@ public class BackSubserver extends Subserver{
 	       
 			for(Map.Entry e: mapIndexFromClient.entrySet())
 			{
-				printWriter.println(e.getKey()+":"+e.getValue());
+				printWriter.println(e.getKey()+"|"+e.getValue());
 			}
 			printWriter.close();
 			

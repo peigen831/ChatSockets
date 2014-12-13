@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import coordinator_version.coordinator.MasterlistEntry;
+
 
 /**
  * The socket created by a server in order to send a SINGLE file to another server.
@@ -48,9 +50,6 @@ public class ServerToServerClient extends Thread {
 	private String filename;
 	private int status;
 	
-	public static final int STATUS_DELETED=0;
-	public static final int STATUS_ADDED=1;
-	public static final int STATUS_UPDATED=2;
 	
 	
 	public ServerToServerClient(String serverName, String filename, int status) {
@@ -93,7 +92,7 @@ public class ServerToServerClient extends Thread {
 		
 	}
 	private void sendFiles(){
-		if(status!=STATUS_DELETED)
+		if(status!=MasterlistEntry.STATUS_DELETED)
 			listToGive.add(filename);//we only put the file in a list to avoid modifying ClientSender
 		else
 			listToDeleteServer.add(filename);

@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import coordinator_version.coordinator.MasterlistEntry;
+
 
 /**
  * The socket created by a server in order to communicate with the coordinator.
@@ -34,9 +36,6 @@ public class ServerToCoordinatorClient extends Thread {
 	private String filename=null;
 	private int status;
 	
-	public static final int STATUS_DELETED=0;
-	public static final int STATUS_ADDED=1;
-	public static final int STATUS_UPDATED=2;
 	
 	public ServerToCoordinatorClient(String serverName) {
 		this.serverName = serverName;
@@ -109,7 +108,7 @@ public class ServerToCoordinatorClient extends Thread {
 		}
 		else{
 			long lastModified=0;
-			if(status==STATUS_DELETED)
+			if(status==MasterlistEntry.STATUS_DELETED)
 			{
 				File file=new File(folderName+"/"+filename);
 				lastModified=file.lastModified();
@@ -122,11 +121,11 @@ public class ServerToCoordinatorClient extends Thread {
 				String statusString;
 				switch (status)
 				{
-					case STATUS_DELETED:
+					case MasterlistEntry.STATUS_DELETED:
 						statusString="DELETED"; break;
-					case STATUS_ADDED:
+					case MasterlistEntry.STATUS_ADDED:
 						statusString="ADDED";break;
-					case STATUS_UPDATED:
+					case MasterlistEntry.STATUS_UPDATED:
 					default:
 						statusString="UPDATED"; break;
 							
