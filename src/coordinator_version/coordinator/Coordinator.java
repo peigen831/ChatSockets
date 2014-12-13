@@ -13,12 +13,13 @@ import coordinator_version.Server;
 public class Coordinator extends Thread {
 	private int maxServers=3;
 	private int numServers=0;
-	public static final String FILE_MASTER_LIST="src/coordinator_version/coordinator/file_master_list";
+	public static final String MASTER_LIST="src/coordinator_version/Coordinator_Folder/masterlist.properties";
+	public static final String SERVER_FOLDER = "src/coordinator_version/Coordinator_Folder/ServerProperties/";
 	
 	Server frontServer;
 	Server backServer;
 	private coordinator_version.Monitor monitor;//should we pass this monitor instead of having separate monitors for front and back servers?
-	private CoordinatorMonitor coordinatorMonitor;
+	static CoordinatorMonitor coordinatorMonitor;
 	
 	public void run(){
 		coordinatorMonitor = new CoordinatorMonitor();

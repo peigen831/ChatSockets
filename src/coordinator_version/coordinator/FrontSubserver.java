@@ -1,17 +1,14 @@
 package coordinator_version.coordinator;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Set;
 
 import coordinator_version.Monitor;
 import coordinator_version.Subserver;
@@ -23,10 +20,13 @@ import coordinator_version.Subserver;
  */
 public class FrontSubserver extends Subserver{
 
-	private String serverPropertiesPath = "src/coordinator_version/masterlist.properties";//coordinator properties
-	private String clientPropertiesPath;
+	private String clientPropPath = "src/coordinator_version/Coordinator_Folder/ClientProperties/";
+	private Socket socket;
+	public final String ADDED = "ADDED";
+	public final String DELETED = "DELETED";
 	
-	public FrontSubserver(Socket socket, Monitor monitor) {
+	
+	public FrontSubserver(Socket socket, Monitor monitor){
 		super(socket, monitor);
 	}
 	
@@ -55,7 +55,7 @@ public class FrontSubserver extends Subserver{
 		Map<String, Long> mapIndexFromClient = new HashMap<>();
 		
 		//for property file
-		HashMap<String, String> coordinatorPropertyAction = new HashMap<>();
+		HashMap<String, String> masterlistAction = new HashMap<>();
 		HashMap<String, String> clientPropertyAction = new HashMap<>();
 		
 		//Get client's file index
@@ -73,7 +73,7 @@ public class FrontSubserver extends Subserver{
 				
 				//indicate client's identity
 				if(dataFromClient[0].equals("NAME"))
-					clientPropertiesPath = "src/coordinator_version/" + dataFromClient[1] + ".properties";
+					clientPropPath += dataFromClient[1] + ".properties";
 				
 				//indicate files' identity
 				else
@@ -83,83 +83,85 @@ public class FrontSubserver extends Subserver{
 		
 
 		//load server property
-		Properties serverProp = monitor.loadProperties(serverPropertiesPath);
+		Properties serverProp = Coordinator.coordinatorMonitor.loadProperties(Coordinator.MASTER_LIST);
 		
 		//load client's property
-		Properties clientProp = monitor.loadProperties(clientPropertiesPath);
+		Properties clientProp = Coordinator.coordinatorMonitor.loadProperties(clientPropPath);
 		
-		// Get coordinator's file index and compare to client's file index
-		File masterList = new File(Coordinator.FILE_MASTER_LIST);
-		BufferedReader br=null;
-		try {
-			br = new BufferedReader(new FileReader(masterList));
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		String line;
-		try {
-			while ((line = br.readLine()) != null) {
-			   String[] results=line.split(":");
-			   
-			   
-			   String filename = results[0];
-				long serverLastmodify = Long.parseLong(results[1]);
-				// if the file exists on both client and server
-				if (mapIndexFromClient.containsKey(filename)) {
-					long clientDate = mapIndexFromClient.get(filename);
-					
-					// if the file on server is newer
-					if (clientDate < serverLastmodify) {
-						listIndexToGive.add(filename);
-						clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
-						coordinatorPropertyAction.put(filename, System.currentTimeMillis()+ ":ADDED");
-					}
-					
-					// if the file on client is newer
-					else if (clientDate > serverLastmodify){
-						listIndexToGet.add(filename);
-						coordinatorPropertyAction.put(filename, System.currentTimeMillis() + ":ADDED");
-						clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
-					}
-					
-					// if the file on client is not updated, do nothing
-					
-					mapIndexFromClient.remove(filename);
-				}
-				
-				// if the file only exists on the server
-				else {
-					// delete on server, 
-					if(clientProp.containsKey(filename)){
-						listToDestroyServer.add(filename);
-						coordinatorPropertyAction.put(filename, System.currentTimeMillis() + ":DELETED");
-						System.out.println(filename + " clientProp.containskey: DELETE on server");
-					}
-					
-					// add to client, 
-					else if (!clientProp.containsKey(filename)) {
-						listIndexToGive.add(filename);
-						clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
-						coordinatorPropertyAction.put(filename, System.currentTimeMillis()+ ":ADDED");
-					}	
-				}
-				
-			   
-			}
-			br.close();
-		} catch (NumberFormatException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		// Get master list index and compare to client's file index
 		
-		
+		for(String filename: serverProp.stringPropertyNames())
+		{
+			String[] value = serverProp.getProperty(filename).split("\\|");
+        	Long serverLastmodify = Long.valueOf(value[0]);
+			String status = value[1];
+			String[] listServer = new String[value.length-2];
+			
+			for(int i = 0; i < value.length-2; i++)
+				listServer[i] = value[i+2];
+			
 
+			Long time = System.currentTimeMillis();
+			HashMap<String, Integer> serverportMap;
+			// if the file exists on both client and server
+			if (mapIndexFromClient.containsKey(filename)) {
+				long clientDate = mapIndexFromClient.get(filename);
+				
+				// add to client, if the file on server is newer
+				if (clientDate < serverLastmodify) { 
+					
+					serverportMap = Coordinator.coordinatorMonitor.getServerportMap(listServer);
+					String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
+					String serverports = stringServerport(serverportMap);
+
+					listIndexToGive.add(filename + "|" + serverports);
+					masterlistAction.put(filename, masterAction);
+					clientPropertyAction.put(filename, Long.toString(time));
+				}
+				
+				// add to client, if the file on client is newer
+				else if (clientDate > serverLastmodify){
+					
+					serverportMap = Coordinator.coordinatorMonitor.getServerToGetMap(listServer);
+					String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
+					String serverports = stringServerport(serverportMap);
+					
+					listIndexToGet.add(filename + "|" + serverports);//ok
+					masterlistAction.put(filename, masterAction);//ok
+					clientPropertyAction.put(filename, Long.toString((time)));
+				}
+				
+				// if the file on client is not updated, do nothing
+				
+				mapIndexFromClient.remove(filename);
+			}
+			
+			// if the file only exists on the server
+			else {
+				// delete on server
+				if(clientProp.containsKey(filename)){
+					serverportMap = Coordinator.coordinatorMonitor.getServerportMap(listServer);
+					String masterAction = generateMasterlistAction(time, DELETED, serverportMap);
+					String serverports = stringServerport(serverportMap);
+					
+					
+					listToDestroyServer.add(filename + "|" + serverports);
+					masterlistAction.put(filename, masterAction);
+				}
+				
+				// add to client
+				else if (!clientProp.containsKey(filename)) {
+					serverportMap = Coordinator.coordinatorMonitor.getServerportMap(listServer);
+					String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
+					String serverports = stringServerport(serverportMap);
+
+					listIndexToGive.add(filename + "|" + serverports);
+					masterlistAction.put(filename, masterAction);
+					clientPropertyAction.put(filename, Long.toString(time));
+				}	
+			}
+		}
 		
-		//mapIndexFromClient.remove("LAST_SYNC");
 		
 		// check for files that exist only on the client
 		//TODO use masterlist instead of server properties
@@ -177,13 +179,13 @@ public class FrontSubserver extends Subserver{
 				if(action.equals("DELETED") && serverDate >= clientDate){
 					System.out.println("Destroy on client " + filename );
 					listToDestroyClient.add(filename);
-					coordinatorPropertyAction.put(filename, System.currentTimeMillis() + ":DELETED");
+					masterlistAction.put(filename, System.currentTimeMillis() + ":DELETED");
 				}
 				
 				// add to server, when clientDate is greater than server's file deleted date
 				else{
 					listIndexToGet.add(filename);
-					coordinatorPropertyAction.put(filename, System.currentTimeMillis() + ":ADDED");
+					masterlistAction.put(filename, System.currentTimeMillis() + ":ADDED");
 					clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
 				}
 			}
@@ -191,7 +193,7 @@ public class FrontSubserver extends Subserver{
 			else{
 				listIndexToGet.add(filename);
 				clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
-				coordinatorPropertyAction.put(filename, System.currentTimeMillis() + ":ADDED");
+				masterlistAction.put(filename, System.currentTimeMillis() + ":ADDED");
 			}
 		}
 		
@@ -200,18 +202,18 @@ public class FrontSubserver extends Subserver{
 		// send instructions to client
 		for (String filename : listIndexToGet) {
 			// give client list of requested files "to give" to server
-			sb.append("TO_GIVE:" + filename + "\n");
+			sb.append("TO_GIVE|" + filename + "\n");
 		}
 		for (String filename : listIndexToGive) {
 			// give client list of files "to get" from server
-			sb.append("TO_GET:" + filename + "\n");
+			sb.append("TO_GET|" + filename + "\n");
 		}
 		for (String filename : listToDestroyClient) {
 			// give client list of files "to destroy" on client
-			sb.append("TO_DESTROY:" + filename + "\n");
+			sb.append("TO_DESTROY|" + filename + "\n");
 		}
 		for (String filename : listToDestroyServer) {
-			sb.append("TO_DESTROY_SERVER:" + filename + "\n");
+			sb.append("TO_DESTROY_SERVER|" + filename + "\n");
 		}
 		
 		try {
@@ -225,12 +227,40 @@ public class FrontSubserver extends Subserver{
 		
 		long syncTime = System.currentTimeMillis();
 		
-		coordinatorPropertyAction.put("LAST_SYNC", Long.toString(syncTime));
+		masterlistAction.put("LAST_SYNC", Long.toString(syncTime));
 		clientPropertyAction.put("LAST_SYNC", Long.toString(syncTime));
 		
-		monitor.updateServerProperties(serverPropertiesPath, coordinatorPropertyAction);
-		monitor.updateClientProperties(clientPropertiesPath, clientPropertyAction);
+		//monitor.updateServerProperties(serverPropertiesPath, masterlistAction);
+		//monitor.updateClientProperties(clientPropertiesPath, clientPropertyAction);
 		
+	}
+	
+	private String generateMasterlistAction(Long time, String status, HashMap<String, Integer> serverportMap){
+		StringBuilder action = new StringBuilder();
+		
+		action.append(time + "|" + status);
+		
+		for(Entry<String, Integer> entry: serverportMap.entrySet()){
+			action.append("|" + entry.getKey());
+		}
+		
+		return action.toString();
+	}
+	
+	private String stringServerport(HashMap<String, Integer> serverportMap){
+		StringBuilder action = new StringBuilder();
+		int cnt = 0;
+		
+		for(Entry<String, Integer> entry: serverportMap.entrySet()){
+			action.append(entry.getKey() + ":" + entry.getValue());
+			
+			if(cnt < serverportMap.size()-1)
+				action.append("|");
+			
+			cnt++;
+		}
+		
+		return action.toString();
 	}
 	
 	

@@ -131,7 +131,7 @@ public class BackSubserver extends Subserver{
 			 */
 			
 			
-			File f=new File(Coordinator.FILE_MASTER_LIST);
+			File f=new File(Coordinator.MASTER_LIST);
 			PrintWriter printWriter=null;
 			try {
 				printWriter = new PrintWriter(f);
