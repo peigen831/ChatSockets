@@ -108,7 +108,7 @@ public class ServerToCoordinatorClient extends Thread {
 		}
 		else{
 			long lastModified=0;
-			if(status==MasterlistEntry.STATUS_DELETED)
+			if(status!=MasterlistEntry.STATUS_DELETED)
 			{
 				File file=new File(folderName+"/"+filename);
 				lastModified=file.lastModified();

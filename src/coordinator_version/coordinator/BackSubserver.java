@@ -58,7 +58,7 @@ public class BackSubserver extends Subserver{
 		try {
 			br = new BufferedReader(new FileReader(masterListFile));
 		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
+
 			e1.printStackTrace();
 		}
 		String line;
@@ -90,10 +90,10 @@ public class BackSubserver extends Subserver{
 			}
 			br.close();
 		} catch (NumberFormatException e1) {
-			// TODO Auto-generated catch block
+
 			e1.printStackTrace();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+
 			e1.printStackTrace();
 		}
 	}
