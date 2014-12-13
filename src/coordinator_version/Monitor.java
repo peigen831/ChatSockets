@@ -33,29 +33,6 @@ public class Monitor {
 		return lastSync;
 	}
 	
-	public Properties loadProperties(String path){
-		lock.lock();
-        Properties properties = new Properties();
-        File file = new File(path);
-        try{
-        	if(file.exists())
-        	{
-	        	FileInputStream in = new FileInputStream(file);
-	            properties.load(in);
-	            in.close();
-            }
-        	else properties.setProperty("LAST_SYNC", "0");
-
-        	FileOutputStream fileOut = new FileOutputStream(file);
-            properties.store(fileOut, null);
-            fileOut.close();
-        }catch(Exception e){
-        	e.printStackTrace();
-        }
-		lock.unlock();
-		return properties;
-	}
-	
 	public void updateClientProperties(String path, HashMap<String, String> fileDateAction){
 		lock.lock();
 		try
