@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import coordinator_version.coordinator.MasterlistEntry;
+
 
 /**
  * The socket created by a server in order to communicate with the coordinator.
@@ -32,16 +34,17 @@ public class ServerToCoordinatorClient extends Thread {
 	 * null if client is to send a complete list, otherwise will only send metadata of specified file
 	 */
 	private String filename=null;
-	private boolean deleted;
+	private int status;
+	
 	
 	public ServerToCoordinatorClient(String serverName) {
 		this.serverName = serverName;
 		folderName = serverName + "_Folder/";
 		
 	}
-	public void setFilename(String filename, boolean deleted){
+	public void setFilename(String filename, int status){
 		this.filename=filename;
-		this.deleted=deleted;
+		this.status=status;
 	}
 	
 	@Override
@@ -93,7 +96,7 @@ public class ServerToCoordinatorClient extends Thread {
 			sb.append("NAME:" + serverName + "\n");
 			
 			for(int i = 0; i < fileList.length; i++) {
-				sb.append(fileList[i].getName() + ":" + fileList[i].lastModified() + "\n");
+				sb.append(fileList[i].getName() + "|" + fileList[i].lastModified() + "\n");
 			}
 			
 			try {
@@ -105,7 +108,7 @@ public class ServerToCoordinatorClient extends Thread {
 		}
 		else{
 			long lastModified=0;
-			if(!deleted)
+			if(status!=MasterlistEntry.STATUS_DELETED)
 			{
 				File file=new File(folderName+"/"+filename);
 				lastModified=file.lastModified();
@@ -115,11 +118,24 @@ public class ServerToCoordinatorClient extends Thread {
 				//TODO logic for deleted files
 			}
 				
+				String statusString;
+				switch (status)
+				{
+					case MasterlistEntry.STATUS_DELETED:
+						statusString="DELETED"; break;
+					case MasterlistEntry.STATUS_ADDED:
+						statusString="ADDED";break;
+					case MasterlistEntry.STATUS_UPDATED:
+					default:
+						statusString="UPDATED"; break;
+							
+				}
+					
 				StringBuilder sb = new StringBuilder();
 				sb.append("FILE_CHANGE\n");
 				sb.append("NAME:" + serverName + "\n");
-				sb.append(filename+"|"+lastModified+"\n");
-				//TODO append file status (added, deleted, modified)
+				sb.append(filename+"|"+lastModified+"|"+statusString+"\n");
+				
 				
 				try {
 					sb.append("FILE_CHANGE_DONE");

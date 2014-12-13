@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import coordinator_version.coordinator.MasterlistEntry;
+
 
 /**
  * The socket created by a server in order to send a SINGLE file to another server.
@@ -46,13 +48,14 @@ public class ServerToServerClient extends Thread {
 	 */
 	private List<String> listToDeleteServer;
 	private String filename;
-	private boolean toDelete=false;
+	private int status;
 	
 	
-	public ServerToServerClient(String serverName, String filename, boolean toDelete) {
+	
+	public ServerToServerClient(String serverName, String filename, int status) {
 		this.serverName = serverName;
 		this.filename=filename;
-		this.toDelete=toDelete;
+		this.status=status;
 		folderName = serverName + "_Folder/";
 		
 	}
@@ -83,14 +86,13 @@ public class ServerToServerClient extends Thread {
 	}
 	
 	private void spawnServerToCoordinatorClient() {
-		// TODO Auto-generated method stub
 		ServerToCoordinatorClient serverToCoordinatorClient =new ServerToCoordinatorClient(serverName);
-		serverToCoordinatorClient.setFilename(filename, toDelete);
+		serverToCoordinatorClient.setFilename(filename, status);
 		serverToCoordinatorClient.start();
 		
 	}
 	private void sendFiles(){
-		if(!toDelete)
+		if(status!=MasterlistEntry.STATUS_DELETED)
 			listToGive.add(filename);//we only put the file in a list to avoid modifying ClientSender
 		else
 			listToDeleteServer.add(filename);
@@ -103,7 +105,7 @@ public class ServerToServerClient extends Thread {
 			hostName=server.getKey();
 			portNumber=server.getValue();
 			if (!listToGive.isEmpty()) {
-				ClientSender cs = new ClientSender(hostName, portNumber);
+				ClientSender cs = new ClientSender();
 				cs.setFileList(listToGive);
 				cs.setFolderName(folderName);
 				threads.add(cs);
@@ -123,8 +125,7 @@ public class ServerToServerClient extends Thread {
 				}
 			}
 			
-			//TODO get confirmation of successful sync
-			//TODO pass file status to ServerToCoordinatorClient
+			//TODO get confirmation of successful sync; this may require modifying ClientSender
 		}
 	}
 	

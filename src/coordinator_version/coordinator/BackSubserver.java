@@ -1,8 +1,10 @@
 package coordinator_version.coordinator;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -11,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Map.Entry;
 
 import coordinator_version.Monitor;
 import coordinator_version.Subserver;
@@ -27,7 +28,7 @@ public class BackSubserver extends Subserver{
 	 * Properties of the server that this BackSubserver is connected to
 	 */
 	private String serverProperties; 
-	
+	private List<MasterlistEntry> masterList=new ArrayList<MasterlistEntry>();
 	
 	public BackSubserver(Socket socket, Monitor monitor) {
 		super(socket, monitor);
@@ -48,7 +49,53 @@ public class BackSubserver extends Subserver{
 	}
 	
 
+	private void loadMasterlist()
+	{
 
+		File masterListFile = new File(Coordinator.MASTER_LIST);
+		BufferedReader br=null;
+		try {
+			br = new BufferedReader(new FileReader(masterListFile));
+		} catch (FileNotFoundException e1) {
+
+			e1.printStackTrace();
+		}
+		String line;
+		try {
+			while ((line = br.readLine()) != null) {
+				
+			   String[] results=line.split("|");
+			   MasterlistEntry newFile=new MasterlistEntry();
+			   newFile.setFilename(results[0]);
+			   newFile.setLastUpdate(Long.parseLong(results[1]));
+			   switch(results[2])
+			   {
+			   case "DELETED":
+				   newFile.setStatus(MasterlistEntry.STATUS_DELETED);
+				   break;
+			   case "ADDED":
+				   newFile.setStatus(MasterlistEntry.STATUS_ADDED);
+				   break;
+			   case "UPDATED":
+				   newFile.setStatus(MasterlistEntry.STATUS_UPDATED);
+				   break;
+			   }
+			   for(int i=3;i<results.length;i++)
+			   {
+				   newFile.addServer(results[i]);
+			   }
+			   masterList.add(newFile);
+			   
+			}
+			br.close();
+		} catch (NumberFormatException e1) {
+
+			e1.printStackTrace();
+		} catch (IOException e1) {
+
+			e1.printStackTrace();
+		}
+	}
 	private void receiveServer(String serverName )
 	{
 		//TODO if we use pings instead of constant connections, check if server already has a file before overwriting the existing file? Or is this unnecessary?
@@ -76,7 +123,7 @@ public class BackSubserver extends Subserver{
 	private void receiveFile() {
 		
 		String index = null;
-		
+		Map<String, String> mapIndexFromClient = new HashMap<>();
 		try {
 			index = inputFromClient.readLine();
 		} catch (IOException e) {
@@ -84,10 +131,10 @@ public class BackSubserver extends Subserver{
 		}
 		if (index != null&&!index.equals("FILE_CHANGE_DONE")) {
 			
-			String[] file = index.split(":");
+			String[] file = index.split("|");
 			//TODO find file in masterlist
 			//TODO update file last modified and servers available
-			//mapIndexFromClient.put(file[0], Long.parseLong(file[1]));
+			mapIndexFromClient.put(file[0], file[1].concat(file[2]));
 		}
 		
 	}
@@ -100,7 +147,6 @@ public class BackSubserver extends Subserver{
 	{
 		
 			
-			//TODO for each file to be sent to the client, include the IP + port  of the relevant server
 			String index = null;
 			
 			Map<String, Long> mapIndexFromClient = new HashMap<>();
@@ -116,7 +162,7 @@ public class BackSubserver extends Subserver{
 					if (index.equals("INDEX_DONE")) {
 						break;
 					}
-					String[] file = index.split(":");
+					String[] file = index.split("|");
 					mapIndexFromClient.put(file[0], Long.parseLong(file[1]));
 				}
 			} while (index != null);
@@ -142,7 +188,7 @@ public class BackSubserver extends Subserver{
 	       
 			for(Map.Entry e: mapIndexFromClient.entrySet())
 			{
-				printWriter.println(e.getKey()+":"+e.getValue());
+				printWriter.println(e.getKey()+"|"+e.getValue());
 			}
 			printWriter.close();
 			

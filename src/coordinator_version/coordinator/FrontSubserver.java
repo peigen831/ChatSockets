@@ -109,7 +109,6 @@ public class FrontSubserver extends Subserver{
 				
 				// add to client, if the file on server is newer
 				if (clientDate < serverLastmodify) { 
-					
 					serverportMap = Coordinator.coordinatorMonitor.getServerportMap(listServer);
 					String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
 					String serverports = stringServerport(serverportMap);
