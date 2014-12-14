@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.Map.Entry;
 
 public class CoordinatorMonitor {
 	
@@ -54,7 +55,7 @@ public class CoordinatorMonitor {
 	public synchronized HashMap<String, Integer> getServerToGetMap(String[] hasFileServer){
 		//TODO get servers alive and random from them
 		//if(hasFileServer.length < nThreshold && not all hasFileServers are alive)
-		//	then random
+		//	then getAvailable servers, random up to nThreshold
 		//else just update the list from the hasFileServer
 		
 		//for now just give to server who already has the file
@@ -87,6 +88,47 @@ public class CoordinatorMonitor {
 			e.printStackTrace();
 		}
 		return port;
+	}
+	
+	public synchronized void updateMasterlistProperties(String path, HashMap<String, String> fileDateAction){
+		try
+		{
+			FileInputStream in = new FileInputStream(path);
+            Properties properties = new Properties();
+            properties.load(in);
+            in.close();
+            
+            for(Entry<String, String> entry: fileDateAction.entrySet()){
+            	properties.setProperty(entry.getKey(), entry.getValue());
+            }
+			
+			File file = new File(path);
+	        FileOutputStream fileOut = new FileOutputStream(file);
+	        properties.store(fileOut, null);
+	        fileOut.close();
+	        
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	public synchronized void updateClientProperties(String path, HashMap<String, String> fileDateAction){
+		try
+		{
+            Properties properties = new Properties();
+            
+            for(Entry<String, String> entry: fileDateAction.entrySet()){
+            	properties.setProperty(entry.getKey(), entry.getValue());
+            }
+			
+			File file = new File(path);
+	        FileOutputStream fileOut = new FileOutputStream(file);
+	        properties.store(fileOut, null);
+	        fileOut.close();
+	        
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 }

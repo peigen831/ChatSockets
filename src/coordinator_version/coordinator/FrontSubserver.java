@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.Set;
 
 import coordinator_version.Monitor;
 import coordinator_version.Subserver;
@@ -21,7 +20,6 @@ import coordinator_version.Subserver;
 public class FrontSubserver extends Subserver{
 
 	private String clientPropPath = "src/coordinator_version/Coordinator_Folder/ClientProperties/";
-	private Socket socket;
 	public final String ADDED = "ADDED";
 	public final String DELETED = "DELETED";
 	
@@ -83,22 +81,23 @@ public class FrontSubserver extends Subserver{
 		
 
 		//load server property
-		Properties serverProp = Coordinator.coordinatorMonitor.loadProperties(Coordinator.MASTER_LIST);
+		Properties masterlistProp = Coordinator.coordinatorMonitor.loadProperties(Coordinator.MASTER_LIST);
 		
 		//load client's property
 		Properties clientProp = Coordinator.coordinatorMonitor.loadProperties(clientPropPath);
 		
 		// Get master list index and compare to client's file index
 		
-		for(String filename: serverProp.stringPropertyNames())
+		for(String filename: masterlistProp.stringPropertyNames())
 		{
-			String[] value = serverProp.getProperty(filename).split("\\|");
+			String[] value = masterlistProp.getProperty(filename).split("\\|");
+			//last modify of the file
         	Long serverLastmodify = Long.valueOf(value[0]);
-			String status = value[1];
-			String[] listServer = new String[value.length-2];
+			//servers that has the file
+			String[] hasFileServers = new String[value.length-2];
 			
 			for(int i = 0; i < value.length-2; i++)
-				listServer[i] = value[i+2];
+				hasFileServers[i] = value[i+2];
 			
 
 			Long time = System.currentTimeMillis();
@@ -109,7 +108,7 @@ public class FrontSubserver extends Subserver{
 				
 				// add to client, if the file on server is newer
 				if (clientDate < serverLastmodify) { 
-					serverportMap = Coordinator.coordinatorMonitor.getServerportMap(listServer);
+					serverportMap = Coordinator.coordinatorMonitor.getServerportMap(hasFileServers);
 					String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
 					String serverports = stringServerport(serverportMap);
 
@@ -121,12 +120,12 @@ public class FrontSubserver extends Subserver{
 				// add to client, if the file on client is newer
 				else if (clientDate > serverLastmodify){
 					
-					serverportMap = Coordinator.coordinatorMonitor.getServerToGetMap(listServer);
+					serverportMap = Coordinator.coordinatorMonitor.getServerToGetMap(hasFileServers);
 					String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
 					String serverports = stringServerport(serverportMap);
 					
-					listIndexToGet.add(filename + "|" + serverports);//ok
-					masterlistAction.put(filename, masterAction);//ok
+					listIndexToGet.add(filename + "|" + serverports);
+					masterlistAction.put(filename, masterAction);
 					clientPropertyAction.put(filename, Long.toString((time)));
 				}
 				
@@ -139,7 +138,7 @@ public class FrontSubserver extends Subserver{
 			else {
 				// delete on server
 				if(clientProp.containsKey(filename)){
-					serverportMap = Coordinator.coordinatorMonitor.getServerportMap(listServer);
+					serverportMap = Coordinator.coordinatorMonitor.getServerportMap(hasFileServers);
 					String masterAction = generateMasterlistAction(time, DELETED, serverportMap);
 					String serverports = stringServerport(serverportMap);
 					
@@ -150,7 +149,7 @@ public class FrontSubserver extends Subserver{
 				
 				// add to client
 				else if (!clientProp.containsKey(filename)) {
-					serverportMap = Coordinator.coordinatorMonitor.getServerportMap(listServer);
+					serverportMap = Coordinator.coordinatorMonitor.getServerportMap(hasFileServers);
 					String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
 					String serverports = stringServerport(serverportMap);
 
@@ -163,36 +162,50 @@ public class FrontSubserver extends Subserver{
 		
 		
 		// check for files that exist only on the client
-		//TODO use masterlist instead of server properties
 		for (Entry<String, Long> entry : mapIndexFromClient.entrySet()) {
 			String filename = entry.getKey();
 			long clientDate = entry.getValue();
-			System.out.println("File info: " + filename + " " + clientDate);
 			
-			if(serverProp.containsKey(filename)){
-				String[] arr = serverProp.get(filename).toString().split(":"); 
-				long serverDate = Long.parseLong(arr[0]);
-				String action = arr[1];
+			if(masterlistProp.containsKey(filename)){
+				String[] value = masterlistProp.getProperty(filename).split("\\|");
+	        	Long serverLastmodify = Long.valueOf(value[0]);
+				String status = value[1];
+				String[] hasFileServers = new String[value.length-2];
+				
+				for(int i = 0; i < value.length-2; i++)
+					hasFileServers[i] = value[i+2];
 				
 				// delete on client, if the file previously exist on the server
-				if(action.equals("DELETED") && serverDate >= clientDate){
-					System.out.println("Destroy on client " + filename );
+				if(status.equals(DELETED) && serverLastmodify >= clientDate){
+					
 					listToDestroyClient.add(filename);
-					masterlistAction.put(filename, System.currentTimeMillis() + ":DELETED");
+					//masterlistAction.put(filename, System.currentTimeMillis() + ":DELETED");
 				}
 				
 				// add to server, when clientDate is greater than server's file deleted date
 				else{
-					listIndexToGet.add(filename);
-					masterlistAction.put(filename, System.currentTimeMillis() + ":ADDED");
-					clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
+					HashMap<String, Integer> serverportMap = Coordinator.coordinatorMonitor.getServerportMap(hasFileServers);
+					long time = System.currentTimeMillis();
+					String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
+					String serverports = stringServerport(serverportMap);
+
+					listIndexToGive.add(filename + "|" + serverports);
+					masterlistAction.put(filename, masterAction);
+					clientPropertyAction.put(filename, Long.toString(time));
 				}
 			}
 			//add to server, when server never encounter this file
 			else{
-				listIndexToGet.add(filename);
-				clientPropertyAction.put(filename, Long.toString(System.currentTimeMillis()));
-				masterlistAction.put(filename, System.currentTimeMillis() + ":ADDED");
+				String[] hasFileServers = new String[0];
+				long time = System.currentTimeMillis();
+				
+				HashMap<String, Integer> serverportMap = Coordinator.coordinatorMonitor.getServerToGetMap(hasFileServers);
+				String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
+				String serverports = stringServerport(serverportMap);
+				
+				listIndexToGet.add(filename + "|" + serverports);
+				masterlistAction.put(filename, masterAction);
+				clientPropertyAction.put(filename, Long.toString((time)));
 			}
 		}
 		
@@ -229,8 +242,8 @@ public class FrontSubserver extends Subserver{
 		masterlistAction.put("LAST_SYNC", Long.toString(syncTime));
 		clientPropertyAction.put("LAST_SYNC", Long.toString(syncTime));
 		
-		//monitor.updateServerProperties(serverPropertiesPath, masterlistAction);
-		//monitor.updateClientProperties(clientPropertiesPath, clientPropertyAction);
+		Coordinator.coordinatorMonitor.updateMasterlistProperties(Coordinator.MASTER_LIST, masterlistAction);
+		Coordinator.coordinatorMonitor.updateClientProperties(clientPropPath, clientPropertyAction);
 		
 	}
 	
