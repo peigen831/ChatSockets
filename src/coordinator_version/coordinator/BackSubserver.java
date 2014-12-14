@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Map.Entry;
 
 import coordinator_version.Monitor;
 import coordinator_version.Subserver;
@@ -52,7 +53,7 @@ public class BackSubserver extends Subserver{
 	private void loadMasterlist()
 	{
 
-		File masterListFile = new File(Coordinator.MASTER_LIST);
+		File masterListFile = new File(Coordinator.FILE_MASTER_LIST);
 		BufferedReader br=null;
 		try {
 			br = new BufferedReader(new FileReader(masterListFile));
@@ -65,25 +66,7 @@ public class BackSubserver extends Subserver{
 			while ((line = br.readLine()) != null) {
 				
 			   String[] results=line.split("|");
-			   MasterlistEntry newFile=new MasterlistEntry();
-			   newFile.setFilename(results[0]);
-			   newFile.setLastUpdate(Long.parseLong(results[1]));
-			   switch(results[2])
-			   {
-			   case "DELETED":
-				   newFile.setStatus(MasterlistEntry.STATUS_DELETED);
-				   break;
-			   case "ADDED":
-				   newFile.setStatus(MasterlistEntry.STATUS_ADDED);
-				   break;
-			   case "UPDATED":
-				   newFile.setStatus(MasterlistEntry.STATUS_UPDATED);
-				   break;
-			   }
-			   for(int i=3;i<results.length;i++)
-			   {
-				   newFile.addServer(results[i]);
-			   }
+			   MasterlistEntry newFile=toMasterlistEntry(results);
 			   masterList.add(newFile);
 			   
 			}
@@ -96,6 +79,96 @@ public class BackSubserver extends Subserver{
 			e1.printStackTrace();
 		}
 	}
+	private MasterlistEntry toMasterlistEntry(String [] rawInput)
+	{
+		MasterlistEntry entry=new MasterlistEntry(rawInput[0],Long.parseLong(rawInput[1]));
+		   
+		   switch(rawInput[2])
+		   {
+		   case "DELETED":
+			   entry.setStatus(MasterlistEntry.STATUS_DELETED);
+			   break;
+		   case "ADDED":
+			   entry.setStatus(MasterlistEntry.STATUS_ADDED);
+			   break;
+		   case "UPDATED":
+			   entry.setStatus(MasterlistEntry.STATUS_UPDATED);
+			   break;
+		   }
+		   for(int i=3;i<rawInput.length;i++)
+		   {
+			   entry.addServer(rawInput[i]);
+		   }
+		  return entry;
+	}
+	private void updateMasterlist(MasterlistEntry entry)
+	{
+		
+		
+		//TODO handle file deletion
+		String filename=entry.getFilename();
+		boolean inList=false;
+		MasterlistEntry oldEntry=null;
+		for(MasterlistEntry e:masterList)
+		{
+			if(e.getFilename()==filename)
+			{
+				oldEntry=e;
+				inList=true;
+				break;
+			}
+		}
+		if(!inList)
+		{
+			masterList.add(entry); //current masterlist in memory
+		}
+		else if (oldEntry!=null){
+				oldEntry.setLastUpdate(entry.getLastUpdate());
+				oldEntry.setStatus(entry.getStatus());
+				oldEntry.addServer(entry.getServerList().get(0));	
+		}
+		updateMasterlistFile(); //masterlist on file, so that FrontSubserver can use it. Might need to be in a monitor so that FrontSubserver doesn't read while the file is being written
+		
+		
+		//loadMasterlist();
+	}
+	
+	private void updateMasterlistFile()
+	{
+		//for now, overwrite everything
+				File f=new File(Coordinator.FILE_MASTER_LIST);
+				PrintWriter printWriter=null;
+				try {
+					printWriter = new PrintWriter(f);
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+				
+				for(MasterlistEntry entry: masterList)
+				{
+					StringBuilder sb = new StringBuilder();
+					
+					String statusString;
+					switch (entry.getStatus())
+					{
+						case MasterlistEntry.STATUS_DELETED:
+							statusString="DELETED"; break;
+						case MasterlistEntry.STATUS_ADDED:
+							statusString="ADDED";break;
+						case MasterlistEntry.STATUS_UPDATED:
+						default:
+							statusString="UPDATED"; break;
+								
+					}
+					
+					sb.append(entry.getFilename()+"|"+entry.getLastUpdate()+"|"+statusString);
+					for(String server: entry.getServerList())
+						sb.append("|"+server);
+					printWriter.println(sb.toString());
+				}
+				printWriter.close();
+	}
+	
 	private void receiveServer(String serverName )
 	{
 		//TODO if we use pings instead of constant connections, check if server already has a file before overwriting the existing file? Or is this unnecessary?
@@ -132,9 +205,12 @@ public class BackSubserver extends Subserver{
 		if (index != null&&!index.equals("FILE_CHANGE_DONE")) {
 			
 			String[] file = index.split("|");
-			//TODO find file in masterlist
+			MasterlistEntry entry=toMasterlistEntry(file);
+			
+			String server=socket.getRemoteSocketAddress().toString()+":"+socket.getLocalPort();
+			entry.addServer(server);
+			updateMasterlist(entry);
 			//TODO update file last modified and servers available
-			mapIndexFromClient.put(file[0], file[1].concat(file[2]));
 		}
 		
 	}
@@ -175,23 +251,18 @@ public class BackSubserver extends Subserver{
 			 * 
 			 * 
 			 */
-			
-			
-			File f=new File(Coordinator.MASTER_LIST);
-			PrintWriter printWriter=null;
-			try {
-				printWriter = new PrintWriter(f);
-			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-	       
 			for(Map.Entry e: mapIndexFromClient.entrySet())
 			{
-				printWriter.println(e.getKey()+"|"+e.getValue());
+				String server=socket.getRemoteSocketAddress().toString()+":"+socket.getLocalPort();
+				MasterlistEntry entry=new MasterlistEntry((String)e.getKey(),(Long)e.getValue());
+				entry.addServer(server);
+				updateMasterlist(entry);
 			}
-			printWriter.close();
+			
+			
 			
 		}	
+	
+	
 	
 }

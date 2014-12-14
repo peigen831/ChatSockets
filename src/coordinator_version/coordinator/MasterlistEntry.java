@@ -12,6 +12,14 @@ public class MasterlistEntry {
 	public static final int STATUS_DELETED=0;
 	public static final int STATUS_ADDED=1;
 	public static final int STATUS_UPDATED=2;
+	
+	public MasterlistEntry(String filename, long lastUpdate)
+	{
+		this.filename=filename;
+		this.lastUpdate=lastUpdate;
+		this.status=STATUS_ADDED;
+	}
+	
 	public long getLastUpdate() {
 		return lastUpdate;
 	}
@@ -32,10 +40,30 @@ public class MasterlistEntry {
 	}
 	public void addServer(String server)
 	{
-		servers.add(server);
+		boolean alreadyExists=false;
+		for(String s: servers)
+		{
+			if(s.equals(server))
+			{
+				alreadyExists=true;
+				break;
+			}
+		}
+		if(!alreadyExists)
+			servers.add(server);
 	}
 	public void removeServer(String server)
 	{
-		
+		for(String s: servers)
+		{
+			if(s.equals(server))
+			{
+				servers.remove(s);
+			}
+		}
+	}
+	public List<String> getServerList()
+	{
+		return servers;
 	}
 }
