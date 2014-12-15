@@ -13,10 +13,12 @@ public class Subserver extends Thread {
 	protected PrintWriter outputToClient;
 	protected BufferedReader inputFromClient;
 	
-	
+	protected String serverName;
 	public Subserver(Socket socket, Monitor monitor) {
 		this.socket = socket;
 		this.monitor = monitor;
+		//TODO establish naming convention for servers?
+		serverName=socket.getLocalAddress()+"";
 	}
 	
 	@Override

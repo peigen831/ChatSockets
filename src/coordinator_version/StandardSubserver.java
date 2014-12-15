@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import coordinator_version.coordinator.MasterlistEntry;
+
 /**
  * Subserver of a file server
  * @author Andrew
@@ -25,7 +27,8 @@ public class StandardSubserver extends Subserver {
 		switch (command) {
 			case "GET": giveFile(); break;
 			case "GET_SIZE": getFileSize(); break;
-			case "GIVE": getFile(); break;
+			case "GIVE": getFile(true); break;
+			case "GIVE_BACKUP": getFile(false); break;
 			case "DELETE": deleteFile(); break;
 			//TODO remove
 			//case "INSYNC": monitor.checkAndSetLastSync(serverPropertiesPath,  System.currentTimeMillis()); break;
@@ -33,7 +36,7 @@ public class StandardSubserver extends Subserver {
 		}
 	}
 	
-	private void getFile() {
+	private void getFile(boolean fromClient) {
 		String filedata = null;
 		
 		try {
@@ -43,10 +46,11 @@ public class StandardSubserver extends Subserver {
 		}
 		String[] arrStrFile = filedata.split("|");
 		
-		monitor.updateFile(arrStrFile[0]);
+		String filename=arrStrFile[0];
+		monitor.updateFile(filename);
 		try {
 			InputStream in = socket.getInputStream();
-			FileOutputStream fos = new FileOutputStream("Server_Folder/_" + arrStrFile[0]);
+			FileOutputStream fos = new FileOutputStream("Server_Folder/_" + filename);
 	        int x = 0;
 	        while(true){
 	            x = in.read();
@@ -60,18 +64,32 @@ public class StandardSubserver extends Subserver {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		File file = new File("Server_Folder/_" + arrStrFile[0]);
+		File file = new File("Server_Folder/_" + filename);
 		if (Long.parseLong(arrStrFile[1]) == file.length()) {
 			if (file.exists())
-				file.renameTo(new File("Server_Folder/" + arrStrFile[0]));
+				file.renameTo(new File("Server_Folder/" + filename));
 				file.delete();
 		}
 		
-		monitor.doneUpdatingFile(arrStrFile[0]);
-		
-		String servers = filedata.replace(arrStrFile[0] + "|" + arrStrFile[1] + "|", "");
-		// TODO send to backup servers
-		// provided: String servers = "server2IP:port|server3IP:port|..."
+		monitor.doneUpdatingFile(filename);
+		if(fromClient)
+		{
+			//send file to backup servers
+			String servers = filedata.replace(filename + "|" + arrStrFile[1] + "|", "");
+			String fileDataForServers=filedata.replace(servers,"");
+			//  send to backup servers	//QUESTION: does this send the name of this server as well?
+			// provided: String servers = "server2IP:port|server3IP:port|..."
+			String[] serverList=servers.split("|");
+			
+				
+				ServerToServerClient s2sClient=new ServerToServerClient(serverName,fileDataForServers, serverList,MasterlistEntry.STATUS_UPDATED);
+				s2sClient.start();
+				//TODO: indicate if file has been added instead of updated (if necessary)
+			
+		}
+		else{
+			//TODO notify first server that backup file has been saved
+		}
 	}
 	
 	private void getFileSize() {
@@ -126,6 +144,27 @@ public class StandardSubserver extends Subserver {
 	
 	private void deleteFile() {
 		// TODO Auto-generated method stub
+String filedata = null;
+		
+		try {
+			filedata = inputFromClient.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		String[] arrStrFile = filedata.split("|");
+		
+		String filename=arrStrFile[0];
+		
+		
+		String servers = filedata.replace(filename + "|" + arrStrFile[1] + "|", "");
+		String fileDataForServers=filedata.replace(servers,"");
+		//  send to backup servers
+		//QUESTION: does this send the name of this server as well?
+		// provided: String servers = "server2IP:port|server3IP:port|..."
+		String[] serverList=servers.split("|");
+		
+			ServerToServerClient s2sClient=new ServerToServerClient(serverName,fileDataForServers, serverList,MasterlistEntry.STATUS_DELETED);
+			s2sClient.start();
 		
 	}
 	

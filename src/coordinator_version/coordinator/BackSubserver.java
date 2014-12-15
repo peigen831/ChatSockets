@@ -53,7 +53,7 @@ public class BackSubserver extends Subserver{
 	private void loadMasterlist()
 	{
 
-		File masterListFile = new File(Coordinator.FILE_MASTER_LIST);
+		File masterListFile = new File(Coordinator.MASTER_LIST);
 		BufferedReader br=null;
 		try {
 			br = new BufferedReader(new FileReader(masterListFile));
@@ -136,7 +136,7 @@ public class BackSubserver extends Subserver{
 	private void updateMasterlistFile()
 	{
 		//for now, overwrite everything
-				File f=new File(Coordinator.FILE_MASTER_LIST);
+				File f=new File(Coordinator.MASTER_LIST);
 				PrintWriter printWriter=null;
 				try {
 					printWriter = new PrintWriter(f);
