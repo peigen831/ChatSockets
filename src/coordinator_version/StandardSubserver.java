@@ -156,7 +156,15 @@ public class StandardSubserver extends Subserver {
 		String[] arrStrFile = filedata.split("|");
 		
 		String filename=arrStrFile[0];
-		File file = new File(folderName + arrStrFile[1]); file.delete();
+		
+		monitor.updateFile(arrStrFile[0]);
+		
+		File file = new File(folderName + filename);
+		if (file.exists()) {
+			file.delete();
+		}
+		
+		outputToClient.println("DELETED");
 		
 		if(fromClient)
 		{
@@ -170,6 +178,7 @@ public class StandardSubserver extends Subserver {
 			ServerToServerClient s2sClient=new ServerToServerClient(serverName,fileDataForServers, serverList,MasterlistEntry.STATUS_DELETED);
 			s2sClient.start();
 		}
+		
 		monitor.doneUpdatingFile(arrStrFile[1]);
 	}
 	
