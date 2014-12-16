@@ -31,7 +31,8 @@ public class StandardSubserver extends Subserver {
 			case "GET_SIZE": getFileSize(); break;
 			case "GIVE": getFile(true); break;
 			case "GIVE_BACKUP": getFile(false); break;
-			case "DELETE": deleteFile(); break;
+			case "DELETE": deleteFile(true); break;
+			case "DELETE_BACKUP":deleteFile(false);break;
 			//TODO remove
 			//case "INSYNC": monitor.checkAndSetLastSync(serverPropertiesPath,  System.currentTimeMillis()); break;
 			default: break;
@@ -144,7 +145,7 @@ public class StandardSubserver extends Subserver {
 		}
 	}
 	
-	private void deleteFile() {
+	private void deleteFile(boolean fromClient) {
 		String filedata = null;
 		
 		try {
@@ -165,15 +166,18 @@ public class StandardSubserver extends Subserver {
 		
 		outputToClient.println("DELETED");
 		
-		String servers = filedata.replace(filename + "|" + arrStrFile[1] + "|", "");
-		String fileDataForServers=filedata.replace(servers,"");
-		//  send to backup servers
-		//QUESTION: does this send the name of this server as well?
-		// provided: String servers = "server2IP:port|server3IP:port|..."
-		String[] serverList=servers.split("|");
-		
-		ServerToServerClient s2sClient=new ServerToServerClient(serverName,fileDataForServers, serverList,MasterlistEntry.STATUS_DELETED);
-		s2sClient.start();
+		if(fromClient)
+		{
+			String servers = filedata.replace(filename + "|" + arrStrFile[1] + "|", "");
+			String fileDataForServers=filedata.replace(servers,"");
+			//  send to backup servers
+			//QUESTION: does this send the name of this server as well?
+			// provided: String servers = "server2IP:port|server3IP:port|..."
+			String[] serverList=servers.split("|");
+			
+			ServerToServerClient s2sClient=new ServerToServerClient(serverName,fileDataForServers, serverList,MasterlistEntry.STATUS_DELETED);
+			s2sClient.start();
+		}
 		
 		monitor.doneUpdatingFile(arrStrFile[1]);
 	}

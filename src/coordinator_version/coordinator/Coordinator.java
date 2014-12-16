@@ -20,9 +20,11 @@ public class Coordinator extends Thread {
 	Server backServer;
 	private coordinator_version.Monitor monitor;//should we pass this monitor instead of having separate monitors for front and back servers?
 	static CoordinatorMonitor coordinatorMonitor;
+	static PropertiesMonitor propertiesMonitor;
 	
 	public void run(){
 		coordinatorMonitor = new CoordinatorMonitor();
+		propertiesMonitor = new PropertiesMonitor();
 		startHeartbeatChecks(5); //starts pinging servers for heartbeats every 5 seconds
 		startBackServer();
 		startFrontServer();//open forward server to client connections
