@@ -156,6 +156,7 @@ public class StandardSubserver extends Subserver {
 		String[] arrStrFile = filedata.split("|");
 		
 		String filename=arrStrFile[0];
+		File file = new File(folderName + arrStrFile[1]); file.delete();
 		
 		if(fromClient)
 		{
