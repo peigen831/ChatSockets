@@ -36,6 +36,22 @@ public class BackSubserver extends Subserver{
 	}
 	
 	@Override
+	public void run()
+	{
+		loadMasterlist();
+		
+		setupStream();
+		
+		receiveServer();
+		
+		String command = getCommand();
+		
+		parseAndRunCommand(command);
+		
+		closeEverything();
+	}
+	
+	@Override
 	protected void parseAndRunCommand(String command) {
 		System.out.println("Command: " + command);
 		switch (command) {
@@ -169,18 +185,20 @@ public class BackSubserver extends Subserver{
 				printWriter.close();
 	}
 	
-	private void receiveServer(String serverName )
+	private void receiveServer()
 	{
 		//TODO if we use pings instead of constant connections, check if server already has a file before overwriting the existing file? Or is this unnecessary?
-		
+		String address=socket.getRemoteSocketAddress().toString();
+		String port=Integer.toString(socket.getPort());
+		String serverName=address+":"+port;
 		serverProperties="src/coordinator_version/coordinator/" + serverName + ".properties";
 		
 		long lastHeartbeat = System.currentTimeMillis();
 		try {
 			Properties properties = new Properties();
 			properties.setProperty("LAST_SYNC", Long.toString(lastHeartbeat));
-			properties.setProperty("ADDRESS",socket.getRemoteSocketAddress().toString());
-			properties.setProperty("PORT",Integer.toString(socket.getPort()));
+			properties.setProperty("ADDRESS",address);
+			properties.setProperty("PORT",port);
 			
 			File file = new File(serverProperties);
 			FileOutputStream fileOut = new FileOutputStream(file);
