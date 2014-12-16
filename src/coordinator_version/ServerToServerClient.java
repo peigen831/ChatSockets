@@ -11,9 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import coordinator_version.coordinator.MasterlistEntry;
+
 
 /**
- * The socket created by a server in order to send a SINGLE file to another server.
+ * The socket created by a server in order to send a SINGLE file to another (SINGLE) server.
  * 
  * Sends its name, and a list of files on the server, to the coordinator.
  * 
@@ -30,7 +32,7 @@ public class ServerToServerClient extends Thread {
 	//private long lastSync;
 	private String serverName;
 	
-	Map<String, Integer>backupServers=new HashMap<String, Integer>();
+	//Map<String, Integer>backupServers=new HashMap<String, Integer>();
 	
 	private Socket socket;
 	private PrintWriter outputToServer;
@@ -45,14 +47,16 @@ public class ServerToServerClient extends Thread {
 	 * files to delete on backup server
 	 */
 	private List<String> listToDeleteServer;
-	private String filename;
-	private boolean toDelete=false;
+	private String fileData;
+	private int status;
+	private String [] serverList;
 	
 	
-	public ServerToServerClient(String serverName, String filename, boolean toDelete) {
+	
+	public ServerToServerClient(String serverName, String fileData, String[] serverList,int status) {
 		this.serverName = serverName;
-		this.filename=filename;
-		this.toDelete=toDelete;
+		this.fileData=fileData;
+		this.status=status;
 		folderName = serverName + "_Folder/";
 		
 	}
@@ -61,10 +65,10 @@ public class ServerToServerClient extends Thread {
 	 * @param address
 	 * @param port
 	 */
-	public void addBackupServer(String address, int port)
+	/*public void addBackupServer(String address, int port)
 	{
 		backupServers.put(address,port);
-	}
+	}*/
 	
 	@Override
 	public void run() {
@@ -83,38 +87,35 @@ public class ServerToServerClient extends Thread {
 	}
 	
 	private void spawnServerToCoordinatorClient() {
-		// TODO Auto-generated method stub
 		ServerToCoordinatorClient serverToCoordinatorClient =new ServerToCoordinatorClient(serverName);
-		serverToCoordinatorClient.setFilename(filename, toDelete);
+		serverToCoordinatorClient.setFilename(fileData, status);
 		serverToCoordinatorClient.start();
 		
 	}
 	private void sendFiles(){
-		if(!toDelete)
-			listToGive.add(filename);//we only put the file in a list to avoid modifying ClientSender
-		else
-			listToDeleteServer.add(filename);
 		
 		
 		List<Thread> threads = new ArrayList<>();
 		
-		for(Map.Entry<String, Integer> server: backupServers.entrySet())
+		for(String server: serverList)
 		{
-			hostName=server.getKey();
-			portNumber=server.getValue();
-			if (!listToGive.isEmpty()) {
-				ClientSender cs = new ClientSender(hostName, portNumber);
-				cs.setFileList(listToGive);
+			String [] serverInfo=server.split(":");
+			hostName=serverInfo[0];
+			portNumber=Integer.parseInt(serverInfo[1]);
+			if (status!=MasterlistEntry.STATUS_DELETED) {
+				S2SClientSender cs = new S2SClientSender();
+				
+					cs.setFileData(fileData);//we only put the file in a list to avoid modifying ClientSender
+			
 				cs.setFolderName(folderName);
 				threads.add(cs);
 				cs.run();
 			}
-			
-			if(!listToDeleteServer.isEmpty())
+			else
 			{
 				//TODO notify backup server to delete the file
 			}
-		
+		}
 			for (Thread thread : threads) {
 				try {
 					thread.join();
@@ -123,9 +124,8 @@ public class ServerToServerClient extends Thread {
 				}
 			}
 			
-			//TODO get confirmation of successful sync
-			//TODO pass file status to ServerToCoordinatorClient
-		}
+			//TODO get confirmation of successful sync; this may require modifying ClientSender
+		//}
 	}
 	
 	private void connectToServer() {
