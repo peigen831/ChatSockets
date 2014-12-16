@@ -102,19 +102,18 @@ public class ServerToServerClient extends Thread {
 			String [] serverInfo=server.split(":");
 			hostName=serverInfo[0];
 			portNumber=Integer.parseInt(serverInfo[1]);
-			if (status!=MasterlistEntry.STATUS_DELETED) {
-				S2SClientSender cs = new S2SClientSender();
+			S2SClientSender cs;
+			if (status!=MasterlistEntry.STATUS_DELETED) 
+				cs = new S2SClientSender(false);
+			else  cs = new S2SClientSender(true);
 				
 					cs.setFileData(fileData);//we only put the file in a list to avoid modifying ClientSender
 			
 				cs.setFolderName(folderName);
 				threads.add(cs);
 				cs.run();
-			}
-			else
-			{
-				//TODO notify backup server to delete the file
-			}
+			
+			
 		}
 			for (Thread thread : threads) {
 				try {

@@ -14,16 +14,19 @@ public class S2SClientSender extends Thread {
 	
 	private String fileData;
 	private String folderName;
+	private boolean toDelete=false;
 	
     public S2SClientSender() {}
-    
+    public S2SClientSender(boolean toDelete) {
+    	this.toDelete=toDelete;
+    }
 	@Override
 	public void run() {
 		
 				String[] fileArray = getFileData().split("|");
 				String fileName = fileArray[0];
 				//String servers = fileListItem.replace(fileName + "|", "");
-				Sender sender = new Sender();
+				Sender sender = new Sender(toDelete);
 				sender.setFilepath(folderName + fileName);
 				for (int i = 1; i < fileArray.length; i++) {
 					String[] serverIp = fileArray[i].split(":");
@@ -73,22 +76,28 @@ public class S2SClientSender extends Thread {
 		
 		private File file;
 		private long receivedFileSize;
-		private String servers;
 		private boolean connectionSuccess;
 		
 		private Socket socket;
 	    private PrintWriter outputToServer;
 	    private BufferedReader inputFromServer;
+	    private boolean toDelete=false;
 		
 		public Sender() {
 	    	connectionSuccess = false;
+	    }
+		public Sender(boolean toDelete) {
+	    	connectionSuccess = false;
+	    	this.toDelete=toDelete;
 	    }
 	    
 		@Override
 		public void run() {
 			connectToServer();
 			setupStreams();
-			sendFile();
+			if(!toDelete)
+				sendFile();
+			else notifyDeleteFile();
 			closeConnection();
 			
 			connectToServer();
@@ -138,6 +147,11 @@ public class S2SClientSender extends Thread {
 			catch (Exception e) {
 		    	e.printStackTrace();
 		    }
+		}
+		
+		private void notifyDeleteFile()
+		{
+			outputToServer.println("DELETE_BACKUP\n"+fileData);
 		}
 		
 		private void requestFileSize() {
