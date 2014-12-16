@@ -185,9 +185,7 @@ public class S2SClientSender extends Thread {
 			file = new File(filepath);
 		}
 		
-		public void setBackupServers(String servers) {
-			this.servers = servers;
-		}
+		
 		
 		public boolean isReceivedFileCorrect() {
 			if (file.length() == receivedFileSize)
