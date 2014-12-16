@@ -11,7 +11,7 @@ import java.util.Timer;
 import coordinator_version.Server;
 
 public class Coordinator extends Thread {
-	private int maxServers=3;
+	static final int maxServers=3;
 	private int numServers=0;
 	public static final String MASTER_LIST="src/coordinator_version/Coordinator_Folder/masterlist.properties";
 	public static final String SERVER_FOLDER = "src/coordinator_version/Coordinator_Folder/ServerProperties/";

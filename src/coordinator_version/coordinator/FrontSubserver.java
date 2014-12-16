@@ -100,18 +100,19 @@ public class FrontSubserver extends Subserver{
 			
 
 			Long time = System.currentTimeMillis();
-			HashMap<String, Integer> serverportMap;
+			HashMap<String, String> serverAddressportMap;
+			
 			// if the file exists on both client and server
 			if (mapIndexFromClient.containsKey(filename)) {
 				long clientDate = mapIndexFromClient.get(filename);
 				
 				// add to client, if the file on server is newer
 				if (clientDate < serverLastmodify) { 
-					serverportMap = Coordinator.propertiesMonitor.getServerportMap(hasFileServers);
-					String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
-					String serverports = stringServerport(serverportMap);
-
-					listIndexToGive.add(filename + "|" + serverports);
+					serverAddressportMap = Coordinator.propertiesMonitor.getServerAddressportMap(hasFileServers);
+					String masterAction = generateMasterlistAction(time, ADDED, serverAddressportMap);
+					String addressports = stringAddressport(serverAddressportMap);
+//
+					listIndexToGive.add(filename + "|" + addressports);
 					masterlistAction.put(filename, masterAction);
 					clientPropertyAction.put(filename, Long.toString(time));
 				}
@@ -119,11 +120,11 @@ public class FrontSubserver extends Subserver{
 				// add to client, if the file on client is newer
 				else if (clientDate > serverLastmodify){
 					
-					serverportMap = Coordinator.propertiesMonitor.getServerToGetMap(hasFileServers);
-					String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
-					String serverports = stringServerport(serverportMap);
+					serverAddressportMap = Coordinator.propertiesMonitor.getServerToGetMap(hasFileServers);
+					String masterAction = generateMasterlistAction(time, ADDED, serverAddressportMap);
+					String addressports = stringAddressport(serverAddressportMap);
 					
-					listIndexToGet.add(filename + "|" + serverports);
+					listIndexToGet.add(filename + "|" + addressports);
 					masterlistAction.put(filename, masterAction);
 					clientPropertyAction.put(filename, Long.toString((time)));
 				}
@@ -137,22 +138,22 @@ public class FrontSubserver extends Subserver{
 			else {
 				// delete on server
 				if(clientProp.containsKey(filename)){
-					serverportMap = Coordinator.propertiesMonitor.getServerportMap(hasFileServers);
-					String masterAction = generateMasterlistAction(time, DELETED, serverportMap);
-					String serverports = stringServerport(serverportMap);
+					serverAddressportMap = Coordinator.propertiesMonitor.getServerAddressportMap(hasFileServers);
+					String masterAction = generateMasterlistAction(time, DELETED, serverAddressportMap);
+					String addressports = stringAddressport(serverAddressportMap);
 					
 					
-					listToDestroyServer.add(filename + "|" + serverports);
+					listToDestroyServer.add(filename + "|" + addressports);
 					masterlistAction.put(filename, masterAction);
 				}
 				
 				// add to client
 				else if (!clientProp.containsKey(filename)) {
-					serverportMap = Coordinator.propertiesMonitor.getServerportMap(hasFileServers);
-					String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
-					String serverports = stringServerport(serverportMap);
+					serverAddressportMap = Coordinator.propertiesMonitor.getServerAddressportMap(hasFileServers);
+					String masterAction = generateMasterlistAction(time, ADDED, serverAddressportMap);
+					String addressports = stringAddressport(serverAddressportMap);
 
-					listIndexToGive.add(filename + "|" + serverports);
+					listIndexToGive.add(filename + "|" + addressports);
 					masterlistAction.put(filename, masterAction);
 					clientPropertyAction.put(filename, Long.toString(time));
 				}	
@@ -183,12 +184,12 @@ public class FrontSubserver extends Subserver{
 				
 				// add to server, when clientDate is greater than server's file deleted date
 				else{
-					HashMap<String, Integer> serverportMap = Coordinator.propertiesMonitor.getServerportMap(hasFileServers);
+					HashMap<String, String> serverportMap = Coordinator.propertiesMonitor.getServerAddressportMap(hasFileServers);
 					long time = System.currentTimeMillis();
 					String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
-					String serverports = stringServerport(serverportMap);
+					String addressports = stringAddressport(serverportMap);
 
-					listIndexToGive.add(filename + "|" + serverports);
+					listIndexToGive.add(filename + "|" + addressports);
 					masterlistAction.put(filename, masterAction);
 					clientPropertyAction.put(filename, Long.toString(time));
 				}
@@ -198,11 +199,11 @@ public class FrontSubserver extends Subserver{
 				String[] hasFileServers = new String[0];
 				long time = System.currentTimeMillis();
 				
-				HashMap<String, Integer> serverportMap = Coordinator.propertiesMonitor.getServerToGetMap(hasFileServers);
+				HashMap<String, String> serverportMap = Coordinator.propertiesMonitor.getServerToGetMap(hasFileServers);
 				String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
-				String serverports = stringServerport(serverportMap);
+				String addressports = stringAddressport(serverportMap);
 				
-				listIndexToGet.add(filename + "|" + serverports);
+				listIndexToGet.add(filename + "|" + addressports);
 				masterlistAction.put(filename, masterAction);
 				clientPropertyAction.put(filename, Long.toString((time)));
 			}
@@ -246,24 +247,24 @@ public class FrontSubserver extends Subserver{
 		
 	}
 	
-	private String generateMasterlistAction(Long time, String status, HashMap<String, Integer> serverportMap){
+	private String generateMasterlistAction(Long time, String status, HashMap<String, String> serverAddressportMap){
 		StringBuilder action = new StringBuilder();
 		
 		action.append(time + "|" + status);
 		
-		for(Entry<String, Integer> entry: serverportMap.entrySet()){
+		for(Entry<String, String> entry: serverAddressportMap.entrySet()){
 			action.append("|" + entry.getKey());
 		}
 		
 		return action.toString();
 	}
 	
-	private String stringServerport(HashMap<String, Integer> serverportMap){
+	private String stringAddressport(HashMap<String, String> serverportMap){
 		StringBuilder action = new StringBuilder();
 		int cnt = 0;
 		
-		for(Entry<String, Integer> entry: serverportMap.entrySet()){
-			action.append(entry.getKey() + ":" + entry.getValue());
+		for(Entry<String, String> entry: serverportMap.entrySet()){
+			action.append(entry.getValue());
 			
 			if(cnt < serverportMap.size()-1)
 				action.append("|");
@@ -273,7 +274,4 @@ public class FrontSubserver extends Subserver{
 		
 		return action.toString();
 	}
-	
-	
-
 }
