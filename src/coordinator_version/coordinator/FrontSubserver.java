@@ -43,7 +43,6 @@ public class FrontSubserver extends Subserver{
 
 	private void getIndex() {
 		
-		//TODO for each file to be sent to the client, include the IP + port  of the relevant server
 		String index = null;
 		List<String> listIndexToGet = new ArrayList<>();
 		List<String> listIndexToGive = new ArrayList<>();
@@ -81,10 +80,10 @@ public class FrontSubserver extends Subserver{
 		
 
 		//load server property
-		Properties masterlistProp = Coordinator.coordinatorMonitor.loadProperties(Coordinator.MASTER_LIST);
+		Properties masterlistProp = Coordinator.propertiesMonitor.loadProperties(Coordinator.MASTER_LIST);
 		
 		//load client's property
-		Properties clientProp = Coordinator.coordinatorMonitor.loadProperties(clientPropPath);
+		Properties clientProp = Coordinator.propertiesMonitor.loadProperties(clientPropPath);
 		
 		// Get master list index and compare to client's file index
 		
@@ -108,7 +107,7 @@ public class FrontSubserver extends Subserver{
 				
 				// add to client, if the file on server is newer
 				if (clientDate < serverLastmodify) { 
-					serverportMap = Coordinator.coordinatorMonitor.getServerportMap(hasFileServers);
+					serverportMap = Coordinator.propertiesMonitor.getServerportMap(hasFileServers);
 					String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
 					String serverports = stringServerport(serverportMap);
 
@@ -120,7 +119,7 @@ public class FrontSubserver extends Subserver{
 				// add to client, if the file on client is newer
 				else if (clientDate > serverLastmodify){
 					
-					serverportMap = Coordinator.coordinatorMonitor.getServerToGetMap(hasFileServers);
+					serverportMap = Coordinator.propertiesMonitor.getServerToGetMap(hasFileServers);
 					String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
 					String serverports = stringServerport(serverportMap);
 					
@@ -138,7 +137,7 @@ public class FrontSubserver extends Subserver{
 			else {
 				// delete on server
 				if(clientProp.containsKey(filename)){
-					serverportMap = Coordinator.coordinatorMonitor.getServerportMap(hasFileServers);
+					serverportMap = Coordinator.propertiesMonitor.getServerportMap(hasFileServers);
 					String masterAction = generateMasterlistAction(time, DELETED, serverportMap);
 					String serverports = stringServerport(serverportMap);
 					
@@ -149,7 +148,7 @@ public class FrontSubserver extends Subserver{
 				
 				// add to client
 				else if (!clientProp.containsKey(filename)) {
-					serverportMap = Coordinator.coordinatorMonitor.getServerportMap(hasFileServers);
+					serverportMap = Coordinator.propertiesMonitor.getServerportMap(hasFileServers);
 					String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
 					String serverports = stringServerport(serverportMap);
 
@@ -184,7 +183,7 @@ public class FrontSubserver extends Subserver{
 				
 				// add to server, when clientDate is greater than server's file deleted date
 				else{
-					HashMap<String, Integer> serverportMap = Coordinator.coordinatorMonitor.getServerportMap(hasFileServers);
+					HashMap<String, Integer> serverportMap = Coordinator.propertiesMonitor.getServerportMap(hasFileServers);
 					long time = System.currentTimeMillis();
 					String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
 					String serverports = stringServerport(serverportMap);
@@ -199,7 +198,7 @@ public class FrontSubserver extends Subserver{
 				String[] hasFileServers = new String[0];
 				long time = System.currentTimeMillis();
 				
-				HashMap<String, Integer> serverportMap = Coordinator.coordinatorMonitor.getServerToGetMap(hasFileServers);
+				HashMap<String, Integer> serverportMap = Coordinator.propertiesMonitor.getServerToGetMap(hasFileServers);
 				String masterAction = generateMasterlistAction(time, ADDED, serverportMap);
 				String serverports = stringServerport(serverportMap);
 				
@@ -242,8 +241,8 @@ public class FrontSubserver extends Subserver{
 		masterlistAction.put("LAST_SYNC", Long.toString(syncTime));
 		clientPropertyAction.put("LAST_SYNC", Long.toString(syncTime));
 		
-		Coordinator.coordinatorMonitor.updateMasterlistProperties(Coordinator.MASTER_LIST, masterlistAction);
-		Coordinator.coordinatorMonitor.updateClientProperties(clientPropPath, clientPropertyAction);
+		Coordinator.propertiesMonitor.updateMasterlistProperties(Coordinator.MASTER_LIST, masterlistAction);
+		Coordinator.propertiesMonitor.updateClientProperties(clientPropPath, clientPropertyAction);
 		
 	}
 	
