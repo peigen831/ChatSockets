@@ -121,7 +121,7 @@ public class BackSubserver extends Subserver{
 	{
 		
 		
-		//TODO handle file deletion
+
 		String filename=entry.getFilename();
 		boolean inList=false;
 		MasterlistEntry oldEntry=null;
@@ -187,7 +187,7 @@ public class BackSubserver extends Subserver{
 	
 	private void receiveServer()
 	{
-		//TODO if we use pings instead of constant connections, check if server already has a file before overwriting the existing file? Or is this unnecessary?
+		
 		String address=socket.getRemoteSocketAddress().toString();
 		String port=Integer.toString(socket.getPort());
 		String serverName=address+":"+port;
@@ -228,7 +228,7 @@ public class BackSubserver extends Subserver{
 			String server=socket.getRemoteSocketAddress().toString()+":"+socket.getLocalPort();
 			entry.addServer(server);
 			updateMasterlist(entry);
-			//TODO update file last modified and servers available
+
 		}
 		
 	}
@@ -261,18 +261,11 @@ public class BackSubserver extends Subserver{
 				}
 			} while (index != null);
 			
-			//write master list to file
-			//TODO test if this writes properly; implement checking; this version assumes that the server's list of files is already the master list
-			/*masterlist format:
-			 * file1:6521671231468:added <server1, server2>
-			 * 
-			 * 
-			 * 
-			 */
-			for(Map.Entry e: mapIndexFromClient.entrySet())
+			
+			for(Map.Entry<String, Long> e: mapIndexFromClient.entrySet())
 			{
 				String server=socket.getRemoteSocketAddress().toString()+":"+socket.getLocalPort();
-				MasterlistEntry entry=new MasterlistEntry((String)e.getKey(),(Long)e.getValue());
+				MasterlistEntry entry=new MasterlistEntry(e.getKey(),e.getValue());
 				entry.addServer(server);
 				updateMasterlist(entry);
 			}

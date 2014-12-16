@@ -107,38 +107,14 @@ public class ServerToCoordinatorClient extends Thread {
 			}
 		}
 		else{
-			long lastModified=0;
-			if(status!=MasterlistEntry.STATUS_DELETED)
-			{
-				File file=new File(folderName+"/"+fileData);
-				lastModified=file.lastModified();
-			}
-			else
-			{
-				//TODO logic for deleted files
-			}
-				
+		
+	
 				String [] data=fileData.split("|");
-			
-				String statusString;
-				/*switch (status)
-				{
-					case MasterlistEntry.STATUS_DELETED:
-						statusString="DELETED"; break;
-					case MasterlistEntry.STATUS_ADDED:
-						statusString="ADDED";break;
-					case MasterlistEntry.STATUS_UPDATED:
-					default:
-						statusString="UPDATED"; break;
-							
-				}*/
-				
-				
+	
 				StringBuilder sb = new StringBuilder();
 				sb.append("FILE_CHANGE\n");
 				sb.append("NAME:" + serverName + "\n");
 				sb.append(data[0]+"|"+data[1]+"|"+data[2]+"\n");
-				
 				
 				try {
 					sb.append("FILE_CHANGE_DONE");
