@@ -156,6 +156,14 @@ public class StandardSubserver extends Subserver {
 		
 		String filename=arrStrFile[0];
 		
+		monitor.updateFile(arrStrFile[0]);
+		
+		File file = new File(folderName + filename);
+		if (file.exists()) {
+			file.delete();
+		}
+		
+		outputToClient.println("DELETED");
 		
 		String servers = filedata.replace(filename + "|" + arrStrFile[1] + "|", "");
 		String fileDataForServers=filedata.replace(servers,"");
