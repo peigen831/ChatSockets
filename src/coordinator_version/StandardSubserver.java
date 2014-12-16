@@ -15,6 +15,8 @@ import java.net.Socket;
  */
 public class StandardSubserver extends Subserver {
 	
+	private String folderName = "Server_Folder/";
+	
 	public StandardSubserver(Socket socket, Monitor monitor) {
 		super(socket, monitor);
 	}
@@ -46,7 +48,7 @@ public class StandardSubserver extends Subserver {
 		monitor.updateFile(arrStrFile[0]);
 		try {
 			InputStream in = socket.getInputStream();
-			FileOutputStream fos = new FileOutputStream("Server_Folder/_" + arrStrFile[0]);
+			FileOutputStream fos = new FileOutputStream(folderName + "_" + arrStrFile[0]);
 	        int x = 0;
 	        while(true){
 	            x = in.read();
@@ -60,10 +62,10 @@ public class StandardSubserver extends Subserver {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		File file = new File("Server_Folder/_" + arrStrFile[0]);
+		File file = new File(folderName + "_" + arrStrFile[0]);
 		if (Long.parseLong(arrStrFile[1]) == file.length()) {
 			if (file.exists())
-				file.renameTo(new File("Server_Folder/" + arrStrFile[0]));
+				file.renameTo(new File(folderName + arrStrFile[0]));
 				file.delete();
 		}
 		
@@ -83,9 +85,9 @@ public class StandardSubserver extends Subserver {
 			e.printStackTrace();
 		}
 		
-		File file = new File("Server_Folder/_" + filename);
+		File file = new File(folderName + "_" + filename);
 		if (!file.exists()) {
-			file = new File("Server_Folder/" + filename);
+			file = new File(folderName + filename);
 		}
 		outputToClient.println(file.length());
 	}
@@ -97,7 +99,7 @@ public class StandardSubserver extends Subserver {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		File file = new File("Server_Folder/" + filedata);
+		File file = new File(folderName + filedata);
 		
 		if(!file.exists())
 			outputToClient.println("NOT_FOUND");
@@ -125,8 +127,23 @@ public class StandardSubserver extends Subserver {
 	}
 	
 	private void deleteFile() {
-		// TODO Auto-generated method stub
+		String filename = null;
 		
+		try {
+			filename = inputFromClient.readLine();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		String[] arrStrFile = filename.split("|");
+		
+		monitor.updateFile(arrStrFile[0]);
+		
+		File file = new File(folderName + filename);
+		if (file.exists()) {
+			file.delete();
+		}
+		
+		monitor.doneUpdatingFile(arrStrFile[1]);
 	}
 	
 	protected void closeEverything(){
