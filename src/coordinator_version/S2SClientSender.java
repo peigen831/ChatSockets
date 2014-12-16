@@ -82,6 +82,7 @@ public class S2SClientSender extends Thread {
 	    private PrintWriter outputToServer;
 	    private BufferedReader inputFromServer;
 	    private boolean toDelete=false;
+	    private boolean isFileDeleted=false;
 		
 		public Sender() {
 	    	connectionSuccess = false;
@@ -151,7 +152,17 @@ public class S2SClientSender extends Thread {
 		
 		private void notifyDeleteFile()
 		{
-			outputToServer.println("DELETE_BACKUP\n"+fileData);
+		
+				outputToServer.println("DELETE_BACKUP\n" + file.getName() + "|" + file.length() );
+				try {
+					String reply = inputFromServer.readLine();
+					if (reply.equals("DELETED")) {
+						isFileDeleted = true;
+					}
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
 		}
 		
 		private void requestFileSize() {
