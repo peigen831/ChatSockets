@@ -88,7 +88,7 @@ public class ServerToServerClient extends Thread {
 	
 	private void spawnServerToCoordinatorClient() {
 		ServerToCoordinatorClient serverToCoordinatorClient =new ServerToCoordinatorClient(serverName);
-		serverToCoordinatorClient.setFilename(fileData, status);
+		serverToCoordinatorClient.setFileData(fileData);
 		serverToCoordinatorClient.start();
 		
 	}

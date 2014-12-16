@@ -33,7 +33,7 @@ public class ServerToCoordinatorClient extends Thread {
 	/**
 	 * null if client is to send a complete list, otherwise will only send metadata of specified file
 	 */
-	private String filename=null;
+	private String fileData=null;
 	private int status;
 	
 	
@@ -42,9 +42,9 @@ public class ServerToCoordinatorClient extends Thread {
 		folderName = serverName + "_Folder/";
 		
 	}
-	public void setFilename(String filename, int status){
-		this.filename=filename;
-		this.status=status;
+	public void setFileData(String fileData){
+		this.fileData=fileData;
+		//this.status=status;
 	}
 	
 	@Override
@@ -85,7 +85,7 @@ public class ServerToCoordinatorClient extends Thread {
 	}
 	
 	private void sendFileDetails() {
-		if(filename==null)
+		if(fileData==null)//first-time connection to coordinator
 		{
 			File folder = new File(folderName);
 			File[] fileList = folder.listFiles();
@@ -110,7 +110,7 @@ public class ServerToCoordinatorClient extends Thread {
 			long lastModified=0;
 			if(status!=MasterlistEntry.STATUS_DELETED)
 			{
-				File file=new File(folderName+"/"+filename);
+				File file=new File(folderName+"/"+fileData);
 				lastModified=file.lastModified();
 			}
 			else
@@ -118,8 +118,10 @@ public class ServerToCoordinatorClient extends Thread {
 				//TODO logic for deleted files
 			}
 				
+				String [] data=fileData.split("|");
+			
 				String statusString;
-				switch (status)
+				/*switch (status)
 				{
 					case MasterlistEntry.STATUS_DELETED:
 						statusString="DELETED"; break;
@@ -129,12 +131,13 @@ public class ServerToCoordinatorClient extends Thread {
 					default:
 						statusString="UPDATED"; break;
 							
-				}
-					
+				}*/
+				
+				
 				StringBuilder sb = new StringBuilder();
 				sb.append("FILE_CHANGE\n");
 				sb.append("NAME:" + serverName + "\n");
-				sb.append(filename+"|"+lastModified+"|"+statusString+"\n");
+				sb.append(data[0]+"|"+data[1]+"|"+data[2]+"\n");
 				
 				
 				try {
