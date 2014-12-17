@@ -111,12 +111,28 @@ public class ServerToCoordinatorClient extends Thread {
 		else{
 		
 	
-				String [] data=fileData.split("|");
-	
+				String [] data=fileData.split("\\|");
+				System.out.println("FILE DATA in S2CC: "+fileData);
+				for(String s: data)
+				{
+					System.out.println(s);
+				}
 				StringBuilder sb = new StringBuilder();
 				sb.append("FILE_CHANGE\n");
 				sb.append("NAME:" + serverName + "\n");
-				sb.append(data[0]+"|"+data[1]+"|"+data[2]+"\n");
+				sb.append(data[0]+"|"+data[1]+"|");
+				switch(status)
+				{
+					case MasterlistEntry.STATUS_ADDED:
+						sb.append("ADDED\n");
+						break;
+					case MasterlistEntry.STATUS_DELETED:
+						sb.append("DELETED\n");
+						break;
+					case MasterlistEntry.STATUS_UPDATED:
+						sb.append("UPDATED\n");
+						break;
+				}
 				
 				try {
 					sb.append("FILE_CHANGE_DONE");

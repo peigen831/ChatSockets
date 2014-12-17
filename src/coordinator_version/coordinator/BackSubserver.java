@@ -215,7 +215,7 @@ public class BackSubserver extends Subserver{
 			Properties properties = new Properties();
 			properties.setProperty("LAST_SYNC", Long.toString(lastHeartbeat));
 			String [] serverAddressData = remoteServerName.split("-");
-		
+			System.out.println("REMOTE SERVER: "+remoteServerName);
 			properties.setProperty("ADDRESS",serverAddressData[0]);
 			properties.setProperty("PORT",serverAddressData[1]);
 			
@@ -249,7 +249,7 @@ public class BackSubserver extends Subserver{
 		}
 		
 		if (index != null&&!index.equals("FILE_CHANGE_DONE")) {
-			
+			System.out.println(index);
 			String[] file = index.split("\\|");
 			MasterlistEntry entry=toMasterlistEntry(file);
 			
