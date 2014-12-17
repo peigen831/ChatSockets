@@ -1,5 +1,6 @@
 package coordinator_version.coordinator;
 
+import coordinator_version.Client;
 import coordinator_version.Server;
 
 public class CoordinatorLauncher {
@@ -27,6 +28,14 @@ public class CoordinatorLauncher {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
+		
+		(new Client("Client1")).start();
+		try{
+			Thread.sleep(1000);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		(new Client("Client2")).start();
 	}
 
 }

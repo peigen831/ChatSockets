@@ -85,16 +85,19 @@ public class BackSubserver extends Subserver{
 		try {
 			while ((line = br.readLine()) != null) {
 				System.out.println(line);
-				String [] entry=line.split(":");
-				String tempSplit[]=entry[1].split("\\|");
-				String [] results=new String[tempSplit.length+1];
-				results[0]=entry[0];
-				for(int i=0;i<tempSplit.length;i++)
+				if(!line.contains("#"))
 				{
-					results[i+1]=tempSplit[i];
+					String [] entry=line.split("=");
+					String tempSplit[]=entry[1].split("\\|");
+					String [] results=new String[tempSplit.length+1];
+					results[0]=entry[0];
+					for(int i=0;i<tempSplit.length;i++)
+					{
+						results[i+1]=tempSplit[i];
+					}
+				   MasterlistEntry newFile=toMasterlistEntry(results);
+				   masterList.add(newFile);
 				}
-			   MasterlistEntry newFile=toMasterlistEntry(results);
-			   masterList.add(newFile);
 			   
 			}
 			br.close();
@@ -110,22 +113,26 @@ public class BackSubserver extends Subserver{
 	{
 		MasterlistEntry entry=new MasterlistEntry(rawInput[0],Long.parseLong(rawInput[1]));
 		   
-		   switch(rawInput[2])
+		   if(rawInput.length>2)
 		   {
-		   case "DELETED":
-			   entry.setStatus(MasterlistEntry.STATUS_DELETED);
-			   break;
-		   case "ADDED":
-			   entry.setStatus(MasterlistEntry.STATUS_ADDED);
-			   break;
-		   case "UPDATED":
-			   entry.setStatus(MasterlistEntry.STATUS_UPDATED);
-			   break;
+				switch(rawInput[2])
+			   {
+			   case "DELETED":
+				   entry.setStatus(MasterlistEntry.STATUS_DELETED);
+				   break;
+			   case "ADDED":
+				   entry.setStatus(MasterlistEntry.STATUS_ADDED);
+				   break;
+			   case "UPDATED":
+				   entry.setStatus(MasterlistEntry.STATUS_UPDATED);
+				   break;
+			   }
+			   for(int i=3;i<rawInput.length;i++)
+			   {
+				   entry.addServer(rawInput[i]);
+			   }
 		   }
-		   for(int i=3;i<rawInput.length;i++)
-		   {
-			   entry.addServer(rawInput[i]);
-		   }
+		   else entry.addServer(remoteServerName);
 		  return entry;
 	}
 	private void updateMasterlist(MasterlistEntry entry)
