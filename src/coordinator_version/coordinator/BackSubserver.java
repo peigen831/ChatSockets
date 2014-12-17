@@ -195,7 +195,7 @@ public class BackSubserver extends Subserver{
 								
 					}
 					
-					sb.append(entry.getFilename()+":"+entry.getLastUpdate()+"|"+statusString);
+					sb.append(entry.getFilename()+"="+entry.getLastUpdate()+"|"+statusString);
 					for(String server: entry.getServerList())
 						sb.append("|"+server);
 					printWriter.println(sb.toString());

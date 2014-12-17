@@ -21,13 +21,13 @@ public class CoordinatorLauncher {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		/*new Server(60,Server.SERVER_TO_CLIENT).start();
+		new Server(60,Server.SERVER_TO_CLIENT).start();
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 		
 		(new Client("Client1")).start();
 		try{
