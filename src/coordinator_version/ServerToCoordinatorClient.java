@@ -113,10 +113,10 @@ public class ServerToCoordinatorClient extends Thread {
 	
 				String [] data=fileData.split("\\|");
 				System.out.println("S2CC | FILE DATA: "+fileData);
-				/*for(String s: data)
+				for(String s: data)
 				{
 					System.out.println(s);
-				}*/
+				}
 				StringBuilder sb = new StringBuilder();
 				sb.append("FILE_CHANGE\n");
 				sb.append("NAME:" + serverName + "\n");

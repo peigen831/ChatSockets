@@ -197,7 +197,8 @@ public class BackSubserver extends Subserver{
 					
 					sb.append(entry.getFilename()+"="+entry.getLastUpdate()+"|"+statusString);
 					for(String server: entry.getServerList())
-						sb.append("|"+server);
+						if(server!=null)
+							sb.append("|"+server);
 					printWriter.println(sb.toString());
 				}
 				printWriter.close();
@@ -249,7 +250,7 @@ public class BackSubserver extends Subserver{
 		}
 		
 		if (index != null&&!index.equals("FILE_CHANGE_DONE")) {
-			//System.out.println(index);
+			System.out.println("BACKSUBSERVER | Received file change from server: "+index);
 			String[] file = index.split("\\|");
 			MasterlistEntry entry=toMasterlistEntry(file);
 			

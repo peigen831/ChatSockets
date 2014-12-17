@@ -91,7 +91,7 @@ public class StandardSubserver extends Subserver {
 		{
 			//send file to backup servers
 			String servers = filedata.replace(filename + "|" + arrStrFile[1] + "|", "");
-			String fileDataForServers=filedata.replace(servers,"");
+			String fileDataForServers=filedata.replace(servers,"").split("\\|")[0]+"|"+System.currentTimeMillis();
 			//  send to backup servers	//QUESTION: does this send the name of this server as well?
 			// provided: String servers = "server2IP:port|server3IP:port|..."
 			String[] serverList=servers.split("\\|");
