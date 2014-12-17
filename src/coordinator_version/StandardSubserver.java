@@ -72,11 +72,17 @@ public class StandardSubserver extends Subserver {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		File file = new File(folderName + "_" + arrStrFile[0]);
-		if (Long.parseLong(arrStrFile[1]) == file.length()) {
-			if (file.exists())
-				file.renameTo(new File(folderName + arrStrFile[0]));
+		
+		File file = new File(folderName + "_" + filename);
+		if (file.exists()) {
+			if (Long.parseLong(arrStrFile[1]) == file.length()) {
+				File newFile = new File(folderName + filename);
+				if (newFile.exists()) {
+					newFile.delete();
+				}
+				file.renameTo(newFile);
 				file.delete();
+			}
 		}
 		
 		monitor.doneUpdatingFile(filename);

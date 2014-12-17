@@ -114,7 +114,7 @@ public class ClientReceiver extends Thread {
 			
 			try {
 				InputStream in = socket.getInputStream();
-				FileOutputStream fos = new FileOutputStream(folderName + "_" + arrStrFile[0]);
+				FileOutputStream fos = new FileOutputStream(folderName + "_" + filename);
 		        int x = 0;
 		        while(true){
 		            x = in.read();
@@ -129,11 +129,15 @@ public class ClientReceiver extends Thread {
 				e.printStackTrace();
 			}
 			File file = new File(folderName + "_" + filename);
-			System.out.println("Received file size " + file.length());
-			if (isReceivedFileCorrect()) {
-				if (file.exists())
-					file.renameTo(new File(folderName + arrStrFile[0]));
+			if (file.exists()) {
+				if (file.length() == fileSizeToReceive) {
+					File newFile = new File(folderName + filename);
+					if (newFile.exists()) {
+						newFile.delete();
+					}
+					file.renameTo(newFile);
 					file.delete();
+				}
 			}
 		}
 		
@@ -170,10 +174,7 @@ public class ClientReceiver extends Thread {
 		}
 		
 		public boolean isReceivedFileCorrect() {
-			File file = new File(folderName + "_" + filename);
-			if (!file.exists()) {
-				file = new File(folderName + filename);
-			}
+			File file = new File(folderName + filename);
 			if (file.length() == fileSizeToReceive)
 				return true;
 			return false;
