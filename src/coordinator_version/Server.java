@@ -32,6 +32,7 @@ public class Server extends Thread{
 	
 	public void run() {
 		try {
+			address=InetAddress.getByName("localhost").toString().split("/")[1];
 			server = new ServerSocket(port, 1000, InetAddress.getByName("localhost"));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -39,7 +40,7 @@ public class Server extends Thread{
 		monitor = new Monitor();
 		if(subserverType==SERVER_TO_CLIENT)
 		{
-			ServerToCoordinatorClient s2cClient=new ServerToCoordinatorClient(address+":"+port);
+			ServerToCoordinatorClient s2cClient=new ServerToCoordinatorClient(address+"-"+port);
 			s2cClient.start();
 		}
 		while(true) {

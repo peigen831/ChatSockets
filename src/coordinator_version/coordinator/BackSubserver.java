@@ -253,7 +253,13 @@ public class BackSubserver extends Subserver{
 			String index = null;
 			
 			Map<String, Long> mapIndexFromClient = new HashMap<>();
-			
+			try {
+				String serverName=inputFromClient.readLine().split(":")[1];
+				System.out.println(serverName);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			// Get server's file index
 			do {
 				try {
@@ -265,6 +271,7 @@ public class BackSubserver extends Subserver{
 					if (index.equals("INDEX_DONE")) {
 						break;
 					}
+					System.out.println("Index received: "+index);
 					String[] file = index.split("|");
 					mapIndexFromClient.put(file[0], Long.parseLong(file[1]));
 				}
