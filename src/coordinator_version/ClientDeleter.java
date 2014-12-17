@@ -137,7 +137,7 @@ public class ClientDeleter extends Thread {
 		}
 		
 		public void setBackupServers(String servers) {
-			this.servers = servers;
+			this.servers = servers.replace(":", "-");
 		}
 		
 		public boolean isFileDeleted() {
