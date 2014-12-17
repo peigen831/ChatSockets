@@ -64,7 +64,7 @@ public class PropertiesMonitor {
 		return serverAddressportMap;
 	}
 	
-	public static HashMap<String, String> loadServerProperties(){
+	public synchronized HashMap<String, String> loadServerProperties(){
 		HashMap<String, String> result = new HashMap<String, String>();
 		File folder = new File(Coordinator.SERVER_FOLDER);
 		File[] fileList = folder.listFiles();
@@ -77,7 +77,7 @@ public class PropertiesMonitor {
 		return result;
 	}
 	
-	public static String removeExtension (String str) {
+	public String removeExtension (String str) {
 
         if (str == null) return null;
 
@@ -98,7 +98,7 @@ public class PropertiesMonitor {
 		return serverPortMap;
 	}
 	
-	public static String getAddressPort(String serverName){
+	public String getAddressPort(String serverName){
 		StringBuilder sb = new StringBuilder();
 		try
 		{
