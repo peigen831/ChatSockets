@@ -42,7 +42,7 @@ public class ClientDeleter extends Thread {
 						break;
 					}
 				}
-				if (deleter.isFileDeleted()) {
+				if (deleter.isFileDeleted() || servers.equals("")) {
 					fileList.remove(fileListItem);
 				}
 			}

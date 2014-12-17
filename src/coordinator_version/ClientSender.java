@@ -42,11 +42,11 @@ public class ClientSender extends Thread {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					if (!sender.isConnectionSuccessful()) {
+					if (sender.isConnectionSuccessful()) {
 						break;
 					}
 				}
-				if (sender.isReceivedFileCorrect()) {
+				if (sender.isReceivedFileCorrect() || servers.equals("")) {
 					fileList.remove(fileListItem);
 				}
 			}
