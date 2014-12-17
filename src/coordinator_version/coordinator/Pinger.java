@@ -44,9 +44,11 @@ public class Pinger extends TimerTask {
 		try {
 			socket = new Socket(hostName, portNumber);
 			connectionSuccess = true;
-		}catch(Exception e) {
+			System.out.println("HOST " + hostName + ":" + portNumber + " FOUND");
+		} catch(Exception e) {
 			connectionSuccess = false;
-			e.printStackTrace();
+			System.out.println("ERROR: HOST " + hostName + ":" + portNumber + " DOES NOT EXIST");
+			// e.printStackTrace();
 		}
 	}
 	
