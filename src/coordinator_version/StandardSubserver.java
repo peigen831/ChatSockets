@@ -25,6 +25,7 @@ public class StandardSubserver extends Subserver {
 	}
 	
 	public void setServerName(String serverName) {
+		this.serverName=serverName;
 		folderName = serverName + "_Folder/";
 	}
 	

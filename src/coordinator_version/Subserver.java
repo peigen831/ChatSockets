@@ -18,7 +18,6 @@ public class Subserver extends Thread {
 		this.socket = socket;
 		this.monitor = monitor;
 		//TODO establish naming convention for servers?
-		serverName=socket.getLocalAddress()+"";
 	}
 	
 	@Override
