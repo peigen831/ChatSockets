@@ -61,24 +61,24 @@ public class Client extends Thread {
 			cr.setFileList(listToGet);
 			cr.setFolderName(folderName);
 			threads.add(cr);
-			cr.run();
+			cr.start();
 		}
 		
-		if (!listToGive.isEmpty()) {
+		/*if (!listToGive.isEmpty()) {
 			ClientSender cs = new ClientSender();
 			cs.setFileList(listToGive);
 			cs.setFolderName(folderName);
 			threads.add(cs);
-			cs.run();
-		}
+			cs.start();
+		}*/
 		
-		if (!listToDeleteServer.isEmpty()) {
+		/*if (!listToDeleteServer.isEmpty()) {
 			ClientDeleter cd = new ClientDeleter();
 			cd.setFileList(listToDeleteServer);
 			cd.setFolderName(folderName);
 			threads.add(cd);
-			cd.run();
-		}
+			cd.start();
+		}*/
 		
 		for (Thread thread : threads) {
 			try {
@@ -146,16 +146,19 @@ public class Client extends Thread {
 			}
 			if (index != null) {
 				System.out.println(index);
-				String[] arr = index.split(":");
+				String[] arr = index.split("\\|");
+				String toSave = index.replace(arr[0] + "|", "");
+				System.out.println(toSave);
 				switch (arr[0]) {
-					case "TO_GET": listToGet.add(arr[1]); break;
-					case "TO_GIVE": listToGive.add(arr[1]); break;
+					case "TO_GET": listToGet.add(toSave); break;
+					case "TO_GIVE": listToGive.add(toSave); break;
 					case "TO_DESTROY": File file = new File(folderName + arr[1]); file.delete(); break;
-					case "TO_DESTROY_SERVER": listToDeleteServer.add(arr[1]);break;
+					case "TO_DESTROY_SERVER": listToDeleteServer.add(toSave);break;
 					case "INDEX_DONE": disconnect = true; break;
 				}
 			}
 		} while (index != null || !disconnect);
+		System.out.println("DISCONNECTED");
 	}
 	
 	private void closeConnection() {

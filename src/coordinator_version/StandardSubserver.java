@@ -19,8 +19,13 @@ public class StandardSubserver extends Subserver {
 	
 	private String folderName = "Server_Folder/";
 	
-	public StandardSubserver(Socket socket, Monitor monitor) {
+	public StandardSubserver(String serverName, Socket socket, Monitor monitor) {
 		super(socket, monitor);
+		setServerName(serverName);
+	}
+	
+	public void setServerName(String serverName) {
+		folderName = serverName + "_Folder/";
 	}
 	
 	@Override

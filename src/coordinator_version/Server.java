@@ -57,11 +57,8 @@ public class Server extends Thread{
 				case COORDINATOR_TO_SERVER:
 					subserver=new BackSubserver(clientSocket, monitor); break;
 				case SERVER_TO_CLIENT:
-					subserver = new StandardSubserver(clientSocket, monitor); break;
-					
-					
 				default:
-					subserver = new StandardSubserver(clientSocket, monitor); break;
+					subserver = new StandardSubserver(address + "-" + port, clientSocket, monitor); break;
 				}
 				subserver.start();
 				

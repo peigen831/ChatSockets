@@ -23,10 +23,12 @@ public class ClientReceiver extends Thread {
 		while (!fileList.isEmpty()) {
 			List<String> tempFileList = new ArrayList<>(fileList);
 			for (String fileListItem : tempFileList) {
-				String[] fileArray = fileListItem.split("|");
+				String[] fileArray = fileListItem.split("\\|");
 				String fileName = fileArray[0];
 				Receiver receiver = new Receiver();
 				receiver.setFilepath(folderName, fileName);
+				System.out.println(fileListItem);
+				System.out.println("File Name: " + fileName);
 				for (int i = 1; i < fileArray.length; i++) {
 					String[] serverIp = fileArray[i].split(":");
 					String hostName = serverIp[0];
@@ -40,7 +42,7 @@ public class ClientReceiver extends Thread {
 					}
 				}
 				if (receiver.isReceivedFileCorrect()) {
-					fileList.remove(fileName);
+					fileList.remove(fileListItem);
 				}
 			}
 		}
@@ -82,6 +84,7 @@ public class ClientReceiver extends Thread {
 		
 		private void connectToServer() {
 			try {
+				System.out.println("Connecting to " + hostName + ":" + portNumber);
 				socket = new Socket(hostName, portNumber);
 			}catch(Exception e) {
 				e.printStackTrace();
@@ -89,6 +92,7 @@ public class ClientReceiver extends Thread {
 		}
 		
 		private void requestFile() {
+			System.out.println("GET: " + filename);
 			outputToServer.println("GET\n" + filename);
 			
 			String filedata = null;
@@ -98,12 +102,13 @@ public class ClientReceiver extends Thread {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			System.out.println(filedata);
 			if(!filedata.equals("NOT_FOUND"))
 				receiveFile(filedata);
 		}
 		
 		private void receiveFile(String filedata){
-			String[] arrStrFile = filedata.split("|");
+			String[] arrStrFile = filedata.split("\\|");
 			System.out.println("Receive " + filedata);
 			fileSizeToReceive = Long.parseLong(arrStrFile[1]);
 			
