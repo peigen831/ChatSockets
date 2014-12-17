@@ -30,7 +30,7 @@ public class FrontSubserver extends Subserver{
 	
 	@Override
 	protected void parseAndRunCommand(String command) {
-		System.out.println("Command: " + command);
+		System.out.println("FRONTSUBSERVER | Command: " + command);
 		switch (command) {
 			case "INDEX": getIndex(); break;
 			/*case "GET": giveFile(); break;

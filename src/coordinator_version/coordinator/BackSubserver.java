@@ -44,7 +44,7 @@ public class BackSubserver extends Subserver{
 		setupStream();
 		
 		String command = getCommand();
-		System.out.println(command);
+		System.out.println("BACKSUBSERVER | "+command);
 		
 		
 		parseAndRunCommand(command);
@@ -55,7 +55,7 @@ public class BackSubserver extends Subserver{
 	
 	@Override
 	protected void parseAndRunCommand(String command) {
-		System.out.println("Command: " + command);
+		System.out.println("BACKSUBSERVER | Command: " + command);
 		switch (command) {
 			case "INDEX": receiveFileList(); break;
 			case "FILE_CHANGE":receiveFile();break;
@@ -84,7 +84,7 @@ public class BackSubserver extends Subserver{
 		String line;
 		try {
 			while ((line = br.readLine()) != null) {
-				System.out.println(line);
+				System.out.println("BACKSUBSERVER | Masterlist load line: "+line);
 				if(!line.contains("#"))
 				{
 					String [] entry=line.split("=");
@@ -205,7 +205,7 @@ public class BackSubserver extends Subserver{
 	
 	private void receiveServer()
 	{
-		System.out.println("server connected: ");
+		System.out.println("BACKSUBSERVER | server connected: "+remoteServerName);
 		//String address=socket.getRemoteSocketAddress().toString().split(":")[0];
 		
 		serverProperties=Coordinator.SERVER_FOLDER + remoteServerName + ".properties";
@@ -215,7 +215,7 @@ public class BackSubserver extends Subserver{
 			Properties properties = new Properties();
 			properties.setProperty("LAST_SYNC", Long.toString(lastHeartbeat));
 			String [] serverAddressData = remoteServerName.split("-");
-			System.out.println("REMOTE SERVER: "+remoteServerName);
+			
 			properties.setProperty("ADDRESS",serverAddressData[0]);
 			properties.setProperty("PORT",serverAddressData[1]);
 			
@@ -236,7 +236,7 @@ public class BackSubserver extends Subserver{
 		Map<String, String> mapIndexFromClient = new HashMap<>();
 		try {
 			String serverName=inputFromClient.readLine().split(":")[1];
-			System.out.println(serverName);
+			//System.out.println(serverName);
 			remoteServerName=serverName;
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -249,7 +249,7 @@ public class BackSubserver extends Subserver{
 		}
 		
 		if (index != null&&!index.equals("FILE_CHANGE_DONE")) {
-			System.out.println(index);
+			//System.out.println(index);
 			String[] file = index.split("\\|");
 			MasterlistEntry entry=toMasterlistEntry(file);
 			
@@ -291,7 +291,7 @@ public class BackSubserver extends Subserver{
 					if (index.equals("INDEX_DONE")) {
 						break;
 					}
-					System.out.println("Index received: "+index);
+					System.out.println("BACKSUBSERVER | Index received: "+index);
 					String[] file = index.split("\\|");
 					mapIndexFromClient.put(file[0], Long.parseLong(file[1]));
 				}
