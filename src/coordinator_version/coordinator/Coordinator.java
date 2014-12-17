@@ -3,9 +3,10 @@ package coordinator_version.coordinator;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 import java.util.Timer;
 
 import coordinator_version.Server;
@@ -65,21 +66,23 @@ public class Coordinator extends Thread {
 				catch (Exception e) {
 					e.printStackTrace();
 				}
-				@SuppressWarnings("rawtypes")
-				Enumeration enuKeys = properties.keys();
+				
+				Set<Entry<Object, Object>> propertiesSet = properties.entrySet();
+				
 				String hostName = null;
 				int portNumber = 0;
-				while (enuKeys.hasMoreElements()) {
-					String key = (String) enuKeys.nextElement();
-					String value = properties.getProperty(key);
-					if (key == "ADDRESS") {
-						hostName = value;
+				
+				for (Entry<Object, Object> entry : propertiesSet) {
+					if (entry.getKey().equals("ADDRESS")) {
+						hostName = entry.getValue().toString();
 					}
-					if (key == "PORT") {
-						portNumber = Integer.parseInt(value);
-						break;
+					else if (entry.getKey().equals("PORT")) {
+						portNumber = Integer.parseInt(entry.getValue().toString());
 					}
 				}
+				
+				System.out.print(file.getName() + ":: ");
+				System.out.println(hostName + ":" + portNumber);
 				existingServers.add(hostName + ":" + portNumber);
 			}
 		}
