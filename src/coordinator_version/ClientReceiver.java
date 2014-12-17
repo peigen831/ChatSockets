@@ -30,6 +30,7 @@ public class ClientReceiver extends Thread {
 				System.out.println(fileListItem);
 				System.out.println("File Name: " + fileName);
 				for (int i = 1; i < fileArray.length; i++) {
+					System.out.println(fileArray[i]);
 					String[] serverIp = fileArray[i].split(":");
 					String hostName = serverIp[0];
 					int portNumber = Integer.parseInt(serverIp[1]);

@@ -54,6 +54,7 @@ public class ServerToServerClient extends Thread {
 	
 	
 	public ServerToServerClient(String serverName, String fileData, String[] serverList,int status) {
+		System.out.println("S2SClient's server name:"+serverName);
 		this.serverName = serverName;
 		this.fileData=fileData;
 		this.status=status;
