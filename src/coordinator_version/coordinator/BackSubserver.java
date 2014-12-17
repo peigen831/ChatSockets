@@ -29,6 +29,7 @@ public class BackSubserver extends Subserver{
 	 * Properties of the server that this BackSubserver is connected to
 	 */
 	private String serverProperties; 
+	private String remoteServerName;
 	private List<MasterlistEntry> masterList=new ArrayList<MasterlistEntry>();
 	
 	public BackSubserver(Socket socket, Monitor monitor) {
@@ -44,9 +45,10 @@ public class BackSubserver extends Subserver{
 		
 		String command = getCommand();
 		System.out.println(command);
-		receiveServer();
+		
 		
 		parseAndRunCommand(command);
+		receiveServer();
 		
 		closeEverything();
 	}
@@ -136,7 +138,7 @@ public class BackSubserver extends Subserver{
 		MasterlistEntry oldEntry=null;
 		for(MasterlistEntry e:masterList)
 		{
-			if(e.getFilename()==filename)
+			if(e.getFilename().equals(filename))
 			{
 				oldEntry=e;
 				inList=true;
@@ -186,7 +188,7 @@ public class BackSubserver extends Subserver{
 								
 					}
 					
-					sb.append(entry.getFilename()+"|"+entry.getLastUpdate()+"|"+statusString);
+					sb.append(entry.getFilename()+":"+entry.getLastUpdate()+"|"+statusString);
 					for(String server: entry.getServerList())
 						sb.append("|"+server);
 					printWriter.println(sb.toString());
@@ -197,17 +199,18 @@ public class BackSubserver extends Subserver{
 	private void receiveServer()
 	{
 		System.out.println("server connected: ");
-		String address=socket.getRemoteSocketAddress().toString();
-		String port=Integer.toString(socket.getPort());
-		String serverName=address.replace(":","-");
-		serverProperties=Coordinator.SERVER_FOLDER + serverName + ".properties";
+		//String address=socket.getRemoteSocketAddress().toString().split(":")[0];
+		
+		serverProperties=Coordinator.SERVER_FOLDER + remoteServerName + ".properties";
 		
 		long lastHeartbeat = System.currentTimeMillis();
 		try {
 			Properties properties = new Properties();
 			properties.setProperty("LAST_SYNC", Long.toString(lastHeartbeat));
-			properties.setProperty("ADDRESS",address);
-			properties.setProperty("PORT",port);
+			String [] serverAddressData = remoteServerName.split("-");
+		
+			properties.setProperty("ADDRESS",serverAddressData[0]);
+			properties.setProperty("PORT",serverAddressData[1]);
 			
 			File file = new File(serverProperties);
 			FileOutputStream fileOut = new FileOutputStream(file);
@@ -256,6 +259,7 @@ public class BackSubserver extends Subserver{
 			try {
 				String serverName=inputFromClient.readLine().split(":")[1];
 				System.out.println(serverName);
+				remoteServerName=serverName;
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -272,7 +276,7 @@ public class BackSubserver extends Subserver{
 						break;
 					}
 					System.out.println("Index received: "+index);
-					String[] file = index.split("|");
+					String[] file = index.split("\\|");
 					mapIndexFromClient.put(file[0], Long.parseLong(file[1]));
 				}
 			} while (index != null);
@@ -280,9 +284,9 @@ public class BackSubserver extends Subserver{
 			
 			for(Map.Entry<String, Long> e: mapIndexFromClient.entrySet())
 			{
-				String server=socket.getRemoteSocketAddress().toString()+":"+socket.getLocalPort();
+				//String server=socket.getRemoteSocketAddress().toString()+":"+socket.getLocalPort();
 				MasterlistEntry entry=new MasterlistEntry(e.getKey(),e.getValue());
-				entry.addServer(server);
+				entry.addServer(remoteServerName);
 				updateMasterlist(entry);
 			}
 			
