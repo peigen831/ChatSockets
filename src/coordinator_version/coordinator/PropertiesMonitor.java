@@ -22,7 +22,8 @@ public class PropertiesMonitor {
 	            properties.load(in);
 	            in.close();
             }
-        	else properties.setProperty("LAST_SYNC", "0");
+        	else if(path.contains(Coordinator.CLIENT_FOLDER))
+        		properties.setProperty("LAST_SYNC", "0");
 
         	FileOutputStream fileOut = new FileOutputStream(file);
             properties.store(fileOut, null);

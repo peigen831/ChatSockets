@@ -19,7 +19,7 @@ import coordinator_version.Subserver;
  */
 public class FrontSubserver extends Subserver{
 
-	private String clientPropPath = "src/coordinator_version/Coordinator_Folder/ClientProperties/";
+	private String clientPropPath = Coordinator.ClientFolder;
 	public final String ADDED = "ADDED";
 	public final String DELETED = "DELETED";
 	
