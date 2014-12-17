@@ -235,17 +235,26 @@ public class BackSubserver extends Subserver{
 		String index = null;
 		Map<String, String> mapIndexFromClient = new HashMap<>();
 		try {
+			String serverName=inputFromClient.readLine().split(":")[1];
+			System.out.println(serverName);
+			remoteServerName=serverName;
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
 			index = inputFromClient.readLine();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		if (index != null&&!index.equals("FILE_CHANGE_DONE")) {
 			
-			String[] file = index.split("|");
+			String[] file = index.split("\\|");
 			MasterlistEntry entry=toMasterlistEntry(file);
 			
-			String server=socket.getRemoteSocketAddress().toString()+":"+socket.getLocalPort();
-			entry.addServer(server);
+			//String server=socket.getRemoteSocketAddress().toString()+":"+socket.getLocalPort();
+			entry.addServer(serverName);
 			updateMasterlist(entry);
 
 		}
