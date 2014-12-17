@@ -52,7 +52,7 @@ public class StandardSubserver extends Subserver {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		String[] arrStrFile = filedata.split("|");
+		String[] arrStrFile = filedata.split("\\|");
 		
 		String filename=arrStrFile[0];
 		monitor.updateFile(filename);
@@ -87,7 +87,7 @@ public class StandardSubserver extends Subserver {
 			String fileDataForServers=filedata.replace(servers,"");
 			//  send to backup servers	//QUESTION: does this send the name of this server as well?
 			// provided: String servers = "server2IP:port|server3IP:port|..."
-			String[] serverList=servers.split("|");
+			String[] serverList=servers.split("\\|");
 			
 				
 				ServerToServerClient s2sClient=new ServerToServerClient(serverName,fileDataForServers, serverList,MasterlistEntry.STATUS_UPDATED);
@@ -158,7 +158,7 @@ public class StandardSubserver extends Subserver {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		String[] arrStrFile = filedata.split("|");
+		String[] arrStrFile = filedata.split("\\|");
 		
 		String filename=arrStrFile[0];
 		
@@ -178,7 +178,7 @@ public class StandardSubserver extends Subserver {
 			//  send to backup servers
 			//QUESTION: does this send the name of this server as well?
 			// provided: String servers = "server2IP:port|server3IP:port|..."
-			String[] serverList=servers.split("|");
+			String[] serverList=servers.split("\\|");
 			
 			ServerToServerClient s2sClient=new ServerToServerClient(serverName,fileDataForServers, serverList,MasterlistEntry.STATUS_DELETED);
 			s2sClient.start();

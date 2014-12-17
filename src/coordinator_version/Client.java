@@ -64,13 +64,13 @@ public class Client extends Thread {
 			cr.start();
 		}
 		
-		/*if (!listToGive.isEmpty()) {
+		if (!listToGive.isEmpty()) {
 			ClientSender cs = new ClientSender();
 			cs.setFileList(listToGive);
 			cs.setFolderName(folderName);
 			threads.add(cs);
 			cs.start();
-		}*/
+		}
 		
 		/*if (!listToDeleteServer.isEmpty()) {
 			ClientDeleter cd = new ClientDeleter();
