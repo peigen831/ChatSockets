@@ -198,6 +198,7 @@ public class BackSubserver extends Subserver{
 	{
 		System.out.println("server connected: ");
 		String address=socket.getRemoteSocketAddress().toString();
+		String port=Integer.toString(socket.getPort());
 		String serverName=address.replace(":","-");
 		serverProperties=Coordinator.SERVER_FOLDER + serverName + ".properties";
 		
