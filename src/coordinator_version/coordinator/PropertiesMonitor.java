@@ -38,7 +38,11 @@ public class PropertiesMonitor {
 		
 		List<String> activeAddressport = Coordinator.coordinatorMonitor.getAvailableServers();
 		int nChoosen = 0;
-		int nLimit = (2 / Coordinator.maxServers);
+		int nLimit = 2;
+		
+		//System.out.println("List active servers");
+		//for(String a : activeAddressport)
+		//	System.out.println(a);
 		
 		HashMap<String, String> serverAddressportMap = new HashMap<String, String>();
 		
@@ -58,9 +62,13 @@ public class PropertiesMonitor {
 			{
 				if(nChoosen >= nLimit)
 					break;
-				serverAddressProperties.put(serverAddressProperties.get(activeAddressport.get(i)), activeAddressport.get(i));
+				serverAddressportMap.put(serverAddressProperties.get(activeAddressport.get(i)), activeAddressport.get(i));
 				nChoosen++;
 			}
+		}
+		System.out.println("Servers to give ");
+		for(Entry<String, String> entry: serverAddressportMap.entrySet()){
+			System.out.println(entry.getKey() +":"+entry.getValue());
 		}
 		return serverAddressportMap;
 	}

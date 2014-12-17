@@ -19,7 +19,7 @@ import coordinator_version.Subserver;
  */
 public class FrontSubserver extends Subserver{
 
-	private String clientPropPath = Coordinator.ClientFolder;
+	private String clientPropPath = Coordinator.CLIENT_FOLDER;
 	public final String ADDED = "ADDED";
 	public final String DELETED = "DELETED";
 	
@@ -52,7 +52,7 @@ public class FrontSubserver extends Subserver{
 		Map<String, Long> mapIndexFromClient = new HashMap<>();
 		
 		//for property file
-		HashMap<String, String> masterlistAction = new HashMap<>();
+		//HashMap<String, String> masterlistAction = new HashMap<>();
 		HashMap<String, String> clientPropertyAction = new HashMap<>();
 		
 		//Get client's file index
@@ -113,7 +113,7 @@ public class FrontSubserver extends Subserver{
 					String addressports = stringAddressport(serverAddressportMap);
 //
 					listIndexToGive.add(filename + "|" + addressports);
-					masterlistAction.put(filename, masterAction);
+					//masterlistAction.put(filename, masterAction);
 					clientPropertyAction.put(filename, Long.toString(time));
 				}
 				
@@ -125,7 +125,7 @@ public class FrontSubserver extends Subserver{
 					String addressports = stringAddressport(serverAddressportMap);
 					
 					listIndexToGet.add(filename + "|" + addressports);
-					masterlistAction.put(filename, masterAction);
+					//masterlistAction.put(filename, masterAction);
 					clientPropertyAction.put(filename, Long.toString((time)));
 				}
 				
@@ -139,22 +139,22 @@ public class FrontSubserver extends Subserver{
 				// delete on server
 				if(clientProp.containsKey(filename)){
 					serverAddressportMap = Coordinator.propertiesMonitor.getServerAddressportMap(hasFileServers);
-					String masterAction = generateMasterlistAction(time, DELETED, serverAddressportMap);
+					//String masterAction = generateMasterlistAction(time, DELETED, serverAddressportMap);
 					String addressports = stringAddressport(serverAddressportMap);
 					
 					
 					listToDestroyServer.add(filename + "|" + addressports);
-					masterlistAction.put(filename, masterAction);
+					//masterlistAction.put(filename, masterAction);
 				}
 				
 				// add to client
 				else if (!clientProp.containsKey(filename)) {
 					serverAddressportMap = Coordinator.propertiesMonitor.getServerAddressportMap(hasFileServers);
-					String masterAction = generateMasterlistAction(time, ADDED, serverAddressportMap);
+					//String masterAction = generateMasterlistAction(time, ADDED, serverAddressportMap);
 					String addressports = stringAddressport(serverAddressportMap);
 
 					listIndexToGive.add(filename + "|" + addressports);
-					masterlistAction.put(filename, masterAction);
+					//masterlistAction.put(filename, masterAction);
 					clientPropertyAction.put(filename, Long.toString(time));
 				}	
 			}
@@ -190,7 +190,7 @@ public class FrontSubserver extends Subserver{
 					String addressports = stringAddressport(serverportMap);
 
 					listIndexToGive.add(filename + "|" + addressports);
-					masterlistAction.put(filename, masterAction);
+					//masterlistAction.put(filename, masterAction);
 					clientPropertyAction.put(filename, Long.toString(time));
 				}
 			}
@@ -204,7 +204,7 @@ public class FrontSubserver extends Subserver{
 				String addressports = stringAddressport(serverportMap);
 				
 				listIndexToGet.add(filename + "|" + addressports);
-				masterlistAction.put(filename, masterAction);
+				//masterlistAction.put(filename, masterAction);
 				clientPropertyAction.put(filename, Long.toString((time)));
 			}
 		}
@@ -239,10 +239,10 @@ public class FrontSubserver extends Subserver{
 		
 		long syncTime = System.currentTimeMillis();
 		
-		masterlistAction.put("LAST_SYNC", Long.toString(syncTime));
+		//masterlistAction.put("LAST_SYNC", Long.toString(syncTime));
 		clientPropertyAction.put("LAST_SYNC", Long.toString(syncTime));
 		
-		Coordinator.propertiesMonitor.updateMasterlistProperties(Coordinator.MASTER_LIST, masterlistAction);
+		//Coordinator.propertiesMonitor.updateMasterlistProperties(Coordinator.MASTER_LIST, masterlistAction);
 		Coordinator.propertiesMonitor.updateClientProperties(clientPropPath, clientPropertyAction);
 		
 	}

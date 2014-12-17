@@ -22,7 +22,7 @@ import java.util.List;
 public class Client extends Thread {
 	
 	private String hostName = "localhost";
-	private int portNumber = 80;
+	private int portNumber = 101;
 	private String folderName;
 	//private String clientProperties;
 	//private long lastSync;
@@ -137,6 +137,7 @@ public class Client extends Thread {
 		boolean disconnect = false;
 		listToGet = new ArrayList<>();
 		listToGive = new ArrayList<>();
+		listToDeleteServer = new ArrayList<>();
 		do {
 			try {
 				index = inputFromServer.readLine();
@@ -144,6 +145,7 @@ public class Client extends Thread {
 				e.printStackTrace();
 			}
 			if (index != null) {
+				System.out.println(index);
 				String[] arr = index.split(":");
 				switch (arr[0]) {
 					case "TO_GET": listToGet.add(arr[1]); break;

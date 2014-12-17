@@ -16,7 +16,7 @@ public class CoordinatorLauncher {
 		}
 		new Server(50,Server.SERVER_TO_CLIENT).start();
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -35,7 +35,7 @@ public class CoordinatorLauncher {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		(new Client("Client2")).start();
+		//(new Client("Client2")).start();
 	}
 
 }
