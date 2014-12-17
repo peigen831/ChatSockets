@@ -42,9 +42,9 @@ public class BackSubserver extends Subserver{
 		
 		setupStream();
 		
-		receiveServer();
-		
 		String command = getCommand();
+		System.out.println(command);
+		receiveServer();
 		
 		parseAndRunCommand(command);
 		
@@ -70,6 +70,7 @@ public class BackSubserver extends Subserver{
 	{
 
 		File masterListFile = new File(Coordinator.MASTER_LIST);
+		
 		BufferedReader br=null;
 		try {
 			br = new BufferedReader(new FileReader(masterListFile));
@@ -77,11 +78,19 @@ public class BackSubserver extends Subserver{
 
 			e1.printStackTrace();
 		}
+		
 		String line;
 		try {
 			while ((line = br.readLine()) != null) {
-				
-			   String[] results=line.split("|");
+				System.out.println(line);
+				String [] entry=line.split(":");
+				String tempSplit[]=entry[1].split("\\|");
+				String [] results=new String[tempSplit.length+1];
+				results[0]=entry[0];
+				for(int i=0;i<tempSplit.length;i++)
+				{
+					results[i+1]=tempSplit[i];
+				}
 			   MasterlistEntry newFile=toMasterlistEntry(results);
 			   masterList.add(newFile);
 			   
@@ -187,11 +196,11 @@ public class BackSubserver extends Subserver{
 	
 	private void receiveServer()
 	{
-		
+		System.out.println("server connected: ");
 		String address=socket.getRemoteSocketAddress().toString();
 		String port=Integer.toString(socket.getPort());
 		String serverName=address+":"+port;
-		serverProperties="src/coordinator_version/coordinator/" + serverName + ".properties";
+		serverProperties=Coordinator.SERVER_FOLDER + serverName + ".properties";
 		
 		long lastHeartbeat = System.currentTimeMillis();
 		try {

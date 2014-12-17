@@ -32,11 +32,11 @@ public class Coordinator extends Thread {
 	}
 
 	private void startBackServer(){
-		backServer=new Server(1);
+		backServer=new Server(100,Server.COORDINATOR_TO_SERVER);
 		backServer.start();
 	}
 	private void startFrontServer(){
-		frontServer=new Server(0);
+		frontServer=new Server(101,Server.COORDINATOR_TO_CLIENT);
 		frontServer.start();
 	}
 
@@ -52,33 +52,36 @@ public class Coordinator extends Thread {
 	private void startHeartbeatChecks(int seconds) {
 		List<String> existingServers = new ArrayList<>();
 		
-		File fileDirector = new File("ServerProperties/");
-		for (File file : fileDirector.listFiles()) {
-			Properties properties = new Properties();
-			try {
-				FileInputStream fileInput = new FileInputStream(file);
-				properties.load(fileInput);
-				fileInput.close();
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-			@SuppressWarnings("rawtypes")
-			Enumeration enuKeys = properties.keys();
-			String hostName = null;
-			int portNumber = 0;
-			while (enuKeys.hasMoreElements()) {
-				String key = (String) enuKeys.nextElement();
-				String value = properties.getProperty(key);
-				if (key == "ADDRESS") {
-					hostName = value;
+		File fileDirectory = new File(Coordinator.SERVER_FOLDER);
+		if(fileDirectory.exists())
+		{
+			for (File file : fileDirectory.listFiles()) {
+				Properties properties = new Properties();
+				try {
+					FileInputStream fileInput = new FileInputStream(file);
+					properties.load(fileInput);
+					fileInput.close();
 				}
-				if (key == "PORT") {
-					portNumber = Integer.parseInt(value);
-					break;
+				catch (Exception e) {
+					e.printStackTrace();
 				}
+				@SuppressWarnings("rawtypes")
+				Enumeration enuKeys = properties.keys();
+				String hostName = null;
+				int portNumber = 0;
+				while (enuKeys.hasMoreElements()) {
+					String key = (String) enuKeys.nextElement();
+					String value = properties.getProperty(key);
+					if (key == "ADDRESS") {
+						hostName = value;
+					}
+					if (key == "PORT") {
+						portNumber = Integer.parseInt(value);
+						break;
+					}
+				}
+				existingServers.add(hostName + ":" + portNumber);
 			}
-			existingServers.add(hostName + ":" + portNumber);
 		}
 		
 		for (String serverAddress : existingServers) {

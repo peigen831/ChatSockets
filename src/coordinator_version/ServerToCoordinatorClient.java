@@ -21,7 +21,7 @@ import coordinator_version.coordinator.MasterlistEntry;
  */
 public class ServerToCoordinatorClient extends Thread {
 	private String hostName = "localhost";
-	private int portNumber = 80;
+	private int portNumber = 100;
 	private String folderName;
 	//private String clientProperties;
 	//private long lastSync;
@@ -94,9 +94,11 @@ public class ServerToCoordinatorClient extends Thread {
 			sb.append("INDEX\n");
 			
 			sb.append("NAME:" + serverName + "\n");
-			
-			for(int i = 0; i < fileList.length; i++) {
-				sb.append(fileList[i].getName() + "|" + fileList[i].lastModified() + "\n");
+			if(fileList!=null)
+			{
+				for(int i = 0; i < fileList.length; i++) {
+					sb.append(fileList[i].getName() + "|" + fileList[i].lastModified() + "\n");
+				}
 			}
 			
 			try {
