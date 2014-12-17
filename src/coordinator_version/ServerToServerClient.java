@@ -72,15 +72,9 @@ public class ServerToServerClient extends Thread {
 	
 	@Override
 	public void run() {
-		connectToServer();
-		
-		setupStreams();
-		
+
 		sendFiles();
 		
-		//getResponse();
-		
-		closeConnection();
 		
 		spawnServerToCoordinatorClient();
 	
@@ -127,35 +121,5 @@ public class ServerToServerClient extends Thread {
 		//}
 	}
 	
-	private void connectToServer() {
-		try {
-			socket = new Socket(hostName, portNumber);
-			
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private void setupStreams() {
-		try {
-			outputToServer = new PrintWriter(socket.getOutputStream(), true);
-			outputToServer.flush();
-			
-			inputFromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private void closeConnection() {
-		try {
-			inputFromServer.close();
-			outputToServer.close();
-			socket.close();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 	
 }
