@@ -18,21 +18,31 @@ public class Server extends Thread{
 	public static final int COORDINATOR_TO_SERVER=1;
 	public static final int SERVER_TO_CLIENT=2;
 	
+	private String address;
+	private int port=80;
+	
 	//public static int CLIENT_TO_SERVER=3; //unused; client has no subservers
 	
-	public Server(int subserverType)
+	public Server(int port,int subserverType)
 	{
 		this.subserverType=subserverType;
+		//this.address=address;
+		this.port=port;
 	}
 	
 	public void run() {
 		try {
-			server = new ServerSocket(80, 1000, InetAddress.getByName("localhost"));
+			address=InetAddress.getByName("localhost").toString().split("/")[1];
+			server = new ServerSocket(port, 1000, InetAddress.getByName("localhost"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		monitor = new Monitor();
-		
+		if(subserverType==SERVER_TO_CLIENT)
+		{
+			ServerToCoordinatorClient s2cClient=new ServerToCoordinatorClient(address+"-"+port);
+			s2cClient.start();
+		}
 		while(true) {
 			try {
 				System.out.println("SERVER: Wait connected");
@@ -48,10 +58,13 @@ public class Server extends Thread{
 					subserver=new BackSubserver(clientSocket, monitor); break;
 				case SERVER_TO_CLIENT:
 					subserver = new StandardSubserver(clientSocket, monitor); break;
+					
+					
 				default:
 					subserver = new StandardSubserver(clientSocket, monitor); break;
 				}
 				subserver.start();
+				
 				
 			} catch(Exception e) {
 				System.out.println("Error occure wait for connection and setup streams.");
@@ -60,7 +73,7 @@ public class Server extends Thread{
 	}
 
 	public static void main(String[] args) {
-		Server server = new Server(2);
+		Server server = new Server(80,2);
 		server.start();
 	}
 	

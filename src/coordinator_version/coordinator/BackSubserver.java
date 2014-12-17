@@ -29,6 +29,7 @@ public class BackSubserver extends Subserver{
 	 * Properties of the server that this BackSubserver is connected to
 	 */
 	private String serverProperties; 
+	private String remoteServerName;
 	private List<MasterlistEntry> masterList=new ArrayList<MasterlistEntry>();
 	
 	public BackSubserver(Socket socket, Monitor monitor) {
@@ -42,11 +43,12 @@ public class BackSubserver extends Subserver{
 		
 		setupStream();
 		
-		receiveServer();
-		
 		String command = getCommand();
+		System.out.println(command);
+		
 		
 		parseAndRunCommand(command);
+		receiveServer();
 		
 		closeEverything();
 	}
@@ -70,6 +72,7 @@ public class BackSubserver extends Subserver{
 	{
 
 		File masterListFile = new File(Coordinator.MASTER_LIST);
+		
 		BufferedReader br=null;
 		try {
 			br = new BufferedReader(new FileReader(masterListFile));
@@ -77,11 +80,19 @@ public class BackSubserver extends Subserver{
 
 			e1.printStackTrace();
 		}
+		
 		String line;
 		try {
 			while ((line = br.readLine()) != null) {
-				
-			   String[] results=line.split("|");
+				System.out.println(line);
+				String [] entry=line.split(":");
+				String tempSplit[]=entry[1].split("\\|");
+				String [] results=new String[tempSplit.length+1];
+				results[0]=entry[0];
+				for(int i=0;i<tempSplit.length;i++)
+				{
+					results[i+1]=tempSplit[i];
+				}
 			   MasterlistEntry newFile=toMasterlistEntry(results);
 			   masterList.add(newFile);
 			   
@@ -127,7 +138,7 @@ public class BackSubserver extends Subserver{
 		MasterlistEntry oldEntry=null;
 		for(MasterlistEntry e:masterList)
 		{
-			if(e.getFilename()==filename)
+			if(e.getFilename().equals(filename))
 			{
 				oldEntry=e;
 				inList=true;
@@ -177,7 +188,7 @@ public class BackSubserver extends Subserver{
 								
 					}
 					
-					sb.append(entry.getFilename()+"|"+entry.getLastUpdate()+"|"+statusString);
+					sb.append(entry.getFilename()+":"+entry.getLastUpdate()+"|"+statusString);
 					for(String server: entry.getServerList())
 						sb.append("|"+server);
 					printWriter.println(sb.toString());
@@ -187,18 +198,19 @@ public class BackSubserver extends Subserver{
 	
 	private void receiveServer()
 	{
+		System.out.println("server connected: ");
+		//String address=socket.getRemoteSocketAddress().toString().split(":")[0];
 		
-		String address=socket.getRemoteSocketAddress().toString();
-		String port=Integer.toString(socket.getPort());
-		String serverName=address+":"+port;
-		serverProperties="src/coordinator_version/coordinator/" + serverName + ".properties";
+		serverProperties=Coordinator.SERVER_FOLDER + remoteServerName + ".properties";
 		
 		long lastHeartbeat = System.currentTimeMillis();
 		try {
 			Properties properties = new Properties();
 			properties.setProperty("LAST_SYNC", Long.toString(lastHeartbeat));
-			properties.setProperty("ADDRESS",address);
-			properties.setProperty("PORT",port);
+			String [] serverAddressData = remoteServerName.split("-");
+		
+			properties.setProperty("ADDRESS",serverAddressData[0]);
+			properties.setProperty("PORT",serverAddressData[1]);
 			
 			File file = new File(serverProperties);
 			FileOutputStream fileOut = new FileOutputStream(file);
@@ -244,7 +256,14 @@ public class BackSubserver extends Subserver{
 			String index = null;
 			
 			Map<String, Long> mapIndexFromClient = new HashMap<>();
-			
+			try {
+				String serverName=inputFromClient.readLine().split(":")[1];
+				System.out.println(serverName);
+				remoteServerName=serverName;
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			// Get server's file index
 			do {
 				try {
@@ -256,7 +275,8 @@ public class BackSubserver extends Subserver{
 					if (index.equals("INDEX_DONE")) {
 						break;
 					}
-					String[] file = index.split("|");
+					System.out.println("Index received: "+index);
+					String[] file = index.split("\\|");
 					mapIndexFromClient.put(file[0], Long.parseLong(file[1]));
 				}
 			} while (index != null);
@@ -264,9 +284,9 @@ public class BackSubserver extends Subserver{
 			
 			for(Map.Entry<String, Long> e: mapIndexFromClient.entrySet())
 			{
-				String server=socket.getRemoteSocketAddress().toString()+":"+socket.getLocalPort();
+				//String server=socket.getRemoteSocketAddress().toString()+":"+socket.getLocalPort();
 				MasterlistEntry entry=new MasterlistEntry(e.getKey(),e.getValue());
-				entry.addServer(server);
+				entry.addServer(remoteServerName);
 				updateMasterlist(entry);
 			}
 			
