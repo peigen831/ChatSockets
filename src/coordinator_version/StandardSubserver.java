@@ -173,7 +173,7 @@ public class StandardSubserver extends Subserver {
 		
 		if(fromClient)
 		{
-			String servers = filedata.replace(filename + "|" + arrStrFile[1] + "|", "");
+			String servers = filedata.replace(filename + "|", "");
 			String fileDataForServers=filedata.replace(servers,"");
 			//  send to backup servers
 			//QUESTION: does this send the name of this server as well?

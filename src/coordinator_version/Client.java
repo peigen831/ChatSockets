@@ -72,13 +72,12 @@ public class Client extends Thread {
 			cs.start();
 		}
 		
-		/*if (!listToDeleteServer.isEmpty()) {
+		if (!listToDeleteServer.isEmpty()) {
 			ClientDeleter cd = new ClientDeleter();
 			cd.setFileList(listToDeleteServer);
-			cd.setFolderName(folderName);
 			threads.add(cd);
 			cd.start();
-		}*/
+		}
 		
 		for (Thread thread : threads) {
 			try {
