@@ -90,33 +90,34 @@ public class ServerToServerClient extends Thread {
 		
 		
 		List<Thread> threads = new ArrayList<>();
-		
-		for(String server: serverList)
+		if(serverList!=null)
 		{
-			String [] serverInfo=server.split(":");
-			hostName=serverInfo[0];
-			portNumber=Integer.parseInt(serverInfo[1]);
-			S2SClientSender cs;
-			if (status!=MasterlistEntry.STATUS_DELETED) 
-				cs = new S2SClientSender(false);
-			else  cs = new S2SClientSender(true);
+			for(String server: serverList)
+			{
+				String [] serverInfo=server.split(":");
+				hostName=serverInfo[0];
+				portNumber=Integer.parseInt(serverInfo[1]);
+				S2SClientSender cs;
+				if (status!=MasterlistEntry.STATUS_DELETED) 
+					cs = new S2SClientSender(false);
+				else  cs = new S2SClientSender(true);
+					
+						cs.setFileData(fileData);//we only put the file in a list to avoid modifying ClientSender
 				
-					cs.setFileData(fileData);//we only put the file in a list to avoid modifying ClientSender
-			
-				cs.setFolderName(folderName);
-				threads.add(cs);
-				cs.run();
-			
-			
-		}
-			for (Thread thread : threads) {
-				try {
-					thread.join();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+					cs.setFolderName(folderName);
+					threads.add(cs);
+					cs.run();
+				
+				
 			}
-			
+				for (Thread thread : threads) {
+					try {
+						thread.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+		}
 			//TODO get confirmation of successful sync; this may require modifying ClientSender
 		//}
 	}

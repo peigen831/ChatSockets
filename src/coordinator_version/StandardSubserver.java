@@ -179,9 +179,11 @@ public class StandardSubserver extends Subserver {
 			//QUESTION: does this send the name of this server as well?
 			// provided: String servers = "server2IP:port|server3IP:port|..."
 			String[] serverList=servers.split("\\|");
-			
+			if(servers.length()>0)
+			{
 			ServerToServerClient s2sClient=new ServerToServerClient(serverName,fileDataForServers, serverList,MasterlistEntry.STATUS_DELETED);
 			s2sClient.start();
+			}
 		}
 		
 		monitor.doneUpdatingFile(arrStrFile[1]);
