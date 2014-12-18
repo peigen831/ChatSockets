@@ -27,8 +27,8 @@ public class ClientReceiver extends Thread {
 				String fileName = fileArray[0];
 				Receiver receiver = new Receiver();
 				receiver.setFilepath(folderName, fileName);
-				System.out.println(fileListItem);
-				System.out.println("File Name: " + fileName);
+				System.out.println("RECEIVER: " + fileListItem);
+				System.out.println("RECEIVER: File Name: " + fileName);
 				for (int i = 1; i < fileArray.length; i++) {
 					System.out.println(fileArray[i]);
 					String[] serverIp = fileArray[i].split(":");
@@ -37,7 +37,7 @@ public class ClientReceiver extends Thread {
 					receiver.setServerAddress(hostName, portNumber);
 					receiver.run();
 				}
-				if (receiver.isReceivedFileCorrect()) {
+				if (receiver.isReceivedFileCorrect() || fileArray.length == 1) {
 					fileList.remove(fileListItem);
 				}
 			}
@@ -79,7 +79,7 @@ public class ClientReceiver extends Thread {
 		
 		private void connectToServer() {
 			try {
-				System.out.println("Connecting to " + hostName + ":" + portNumber);
+				System.out.println("RECEIVER: Connecting to " + hostName + ":" + portNumber);
 				socket = new Socket(hostName, portNumber);
 			}catch(Exception e) {
 				e.printStackTrace();
@@ -87,7 +87,7 @@ public class ClientReceiver extends Thread {
 		}
 		
 		private void requestFile() {
-			System.out.println("GET: " + filename);
+			System.out.println("RECEIVER: GET: " + filename);
 			outputToServer.println("GET\n" + filename);
 			
 			String filedata = null;
@@ -104,7 +104,7 @@ public class ClientReceiver extends Thread {
 		
 		private void receiveFile(String filedata){
 			String[] arrStrFile = filedata.split("\\|");
-			System.out.println("Receive " + filedata);
+			System.out.println("RECEIVER: Receive " + filedata);
 			fileSizeToReceive = Long.parseLong(arrStrFile[1]);
 			
 			try {
@@ -131,8 +131,8 @@ public class ClientReceiver extends Thread {
 						newFile.delete();
 					}
 					file.renameTo(newFile);
-					file.delete();
 				}
+				file.delete();
 			}
 		}
 		
