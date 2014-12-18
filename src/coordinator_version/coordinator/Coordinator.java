@@ -13,14 +13,12 @@ import coordinator_version.Server;
 
 public class Coordinator extends Thread {
 	static final int maxServers=3;
-	private int numServers=0;
 	public static final String MASTER_LIST="src/coordinator_version/Coordinator_Folder/masterlist.properties";
 	public static final String SERVER_FOLDER = "src/coordinator_version/Coordinator_Folder/ServerProperties/";
 	public static final String CLIENT_FOLDER = "src/coordinator_version/Coordinator_Folder/ClientProperties/";
 	
 	Server frontServer;
 	Server backServer;
-	private coordinator_version.Monitor monitor;//should we pass this monitor instead of having separate monitors for front and back servers?
 	static CoordinatorMonitor coordinatorMonitor;
 	static PropertiesMonitor propertiesMonitor;
 	
@@ -40,15 +38,6 @@ public class Coordinator extends Thread {
 	private void startFrontServer(){
 		frontServer=new Server(101,Server.COORDINATOR_TO_CLIENT);
 		frontServer.start();
-	}
-
-	private void distributeFiles()
-	{
-		
-	}
-	
-	private void startHeartBeatChecks() {
-		startHeartbeatChecks(5);
 	}
 	
 	private void startHeartbeatChecks(int seconds) {

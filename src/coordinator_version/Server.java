@@ -5,7 +5,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import coordinator_version.coordinator.BackSubserver;
-import coordinator_version.coordinator.CoordinatorMonitor;
 import coordinator_version.coordinator.FrontSubserver;
 
 public class Server extends Thread{
