@@ -30,13 +30,31 @@ public class CoordinatorLauncher {
 			e.printStackTrace();
 		}
 		
-		(new Client("Client1")).start();
+		Thread thread1 = (new Client("Client1"));
+		thread1.start();
 		try{
 			Thread.sleep(1000);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		(new Client("Client2")).start();
+		Thread thread2 = (new Client("Client2"));
+		thread2.start();
+		try {
+			thread1.join();
+		thread2.join();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		/*thread1 = (new Client("Client1"));
+		thread1.start();
+		try{
+			Thread.sleep(1000);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		thread2 = (new Client("Client2"));
+		thread2.start();*/
+		
 	}
 
 }

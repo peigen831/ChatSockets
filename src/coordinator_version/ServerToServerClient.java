@@ -1,11 +1,5 @@
 package coordinator_version;
 
-import java.io.BufferedReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
-
 import coordinator_version.coordinator.MasterlistEntry;
 
 
@@ -20,8 +14,8 @@ import coordinator_version.coordinator.MasterlistEntry;
  *
  */
 public class ServerToServerClient extends Thread {
-	private String hostName = "localhost";
-	private int portNumber = 80;
+	/*private String hostName = "localhost";
+	private int portNumber = 80;*/
 	private String folderName;
 	//private String clientProperties;
 	//private long lastSync;
@@ -29,19 +23,6 @@ public class ServerToServerClient extends Thread {
 	
 	//Map<String, Integer>backupServers=new HashMap<String, Integer>();
 	
-	private Socket socket;
-	private PrintWriter outputToServer;
-	private BufferedReader inputFromServer;
-
-	
-	/**files to send to backup server
-	 * 
-	 */
-	private List<String> listToGive;
-	/**
-	 * files to delete on backup server
-	 */
-	private List<String> listToDeleteServer;
 	private String fileData;
 	private int status;
 	private String [] serverList;
@@ -54,7 +35,7 @@ public class ServerToServerClient extends Thread {
 		this.fileData=fileData;
 		this.status=status;
 		folderName = serverName + "_Folder/";
-		
+		this.serverList = serverList;
 	}
 	/**
 	 * To be called by the StandardSubserver when a file has been received, before running the ServerToServerClient
@@ -68,12 +49,8 @@ public class ServerToServerClient extends Thread {
 	
 	@Override
 	public void run() {
-
 		sendFiles();
-		
-		
 		spawnServerToCoordinatorClient();
-	
 	}
 	
 	private void spawnServerToCoordinatorClient() {
@@ -82,41 +59,28 @@ public class ServerToServerClient extends Thread {
 		serverToCoordinatorClient.start();
 		
 	}
-	private void sendFiles(){
-		
-		
-		List<Thread> threads = new ArrayList<>();
-		if(serverList!=null)
-		{
-			for(String server: serverList)
-			{
-				String [] serverInfo=server.split(":");
+	
+	private void sendFiles() {
+		if(serverList!=null) {
+			for(String server: serverList) {
+				/*String [] serverInfo=server.split("-");
 				hostName=serverInfo[0];
-				portNumber=Integer.parseInt(serverInfo[1]);
+				portNumber=Integer.parseInt(serverInfo[1]);*/
 				S2SClientSender cs;
 				if (status!=MasterlistEntry.STATUS_DELETED) 
 					cs = new S2SClientSender(false);
-				else  cs = new S2SClientSender(true);
-					
-						cs.setFileData(fileData);//we only put the file in a list to avoid modifying ClientSender
+				else
+					cs = new S2SClientSender(true);
 				
-					cs.setFolderName(folderName);
-					threads.add(cs);
-					cs.run();
-				
-				
+				System.out.println("ServerToServerClient: " + fileData);
+				cs.setFileData(fileData);//we only put the file in a list to avoid modifying ClientSender
+				cs.setFolderName(folderName);
+				cs.setServer(server);
+				cs.run();
 			}
-				for (Thread thread : threads) {
-					try {
-						thread.join();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
 		}
 			//TODO get confirmation of successful sync; this may require modifying ClientSender
 		//}
 	}
-	
 	
 }

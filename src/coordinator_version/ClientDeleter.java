@@ -10,8 +10,11 @@ import java.util.List;
 public class ClientDeleter extends Thread {
 	
 	private List<String> fileList;
+	private String name;
 	
-    public ClientDeleter() {}
+    public ClientDeleter(String name) {
+    	this.name = name;
+    }
     
 	@Override
 	public void run() {
@@ -23,8 +26,8 @@ public class ClientDeleter extends Thread {
 				String servers = fileListItem.replace(fileName + "|", "");
 				Deleter deleter = new Deleter();
 				deleter.setFileName(fileName);
-				System.out.println(fileListItem);
-				System.out.println("File Name: " + fileName);
+				System.out.println(name + ":: " + fileListItem);
+				System.out.println(name + ":: " + "File Name: " + fileName);
 				for (int i = 1; i < fileArray.length; i++) {
 					String[] serverIp = fileArray[i].split(":");
 					String hostName = serverIp[0];
@@ -37,7 +40,7 @@ public class ClientDeleter extends Thread {
 						break;
 					}
 				}
-				System.out.println("Deleter Servers: " + servers);
+				System.out.println(name + ":: " + "Deleter Servers: " + servers);
 				if (deleter.isFileDeleted() || servers.equals("")) {
 					fileList.remove(fileListItem);
 				}
@@ -77,7 +80,7 @@ public class ClientDeleter extends Thread {
 		
 		private void connectToServer() {
 			try {
-				System.out.println("Connecting to " + hostName + ":" + portNumber);
+				System.out.println(name + ":: " + "Connecting to " + hostName + ":" + portNumber);
 				socket = new Socket(hostName, portNumber);
 				connectionSuccess = true;
 			}catch(Exception e) {
@@ -98,7 +101,7 @@ public class ClientDeleter extends Thread {
 		}
 		
 		private void tellToDeleteFile() {
-			System.out.println("DELETE: " + filename);
+			System.out.println(name + ":: " + "DELETE: " + filename);
 			outputToServer.println("DELETE\n" + filename + "|" + servers);
 			try {
 				String reply = inputFromServer.readLine();

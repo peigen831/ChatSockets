@@ -13,37 +13,34 @@ public class S2SClientSender extends Thread {
 	private String fileData;
 	private String folderName;
 	private boolean toDelete=false;
+	private String server;
 	
     public S2SClientSender() {}
     public S2SClientSender(boolean toDelete) {
     	this.toDelete=toDelete;
     }
+    
+    public void setServer(String server) {
+    	this.server = server;
+    }
+    
 	@Override
 	public void run() {
 		
-				String[] fileArray = getFileData().split("|");
+				String[] fileArray = getFileData().split("\\|");
 				String fileName = fileArray[0];
 				//String servers = fileListItem.replace(fileName + "|", "");
 				Sender sender = new Sender(toDelete);
 				sender.setFilepath(folderName + fileName);
-				for (int i = 1; i < fileArray.length; i++) {
-					String[] serverIp = fileArray[i].split(":");
-					String hostName = serverIp[0];
-					int portNumber = Integer.parseInt(serverIp[1]);
-					//servers = servers.replace(fileArray[i] + "|", "");
-					sender.setServerAddress(hostName, portNumber);
-					//sender.setBackupServers(servers);
-					sender.start();
-					
-					try {
-						sender.join();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					if (!sender.isConnectionSuccessful()) {
-						break;
-					}
-				}
+				System.out.println("S2S filedata: " + fileData);
+				System.out.println("S2S filename: " + fileName);
+				String[] serverIp = server.split("-");
+				String hostName = serverIp[0];
+				int portNumber = Integer.parseInt(serverIp[1]);
+				//servers = servers.replace(fileArray[i] + "|", "");
+				sender.setServerAddress(hostName, portNumber);
+				//sender.setBackupServers(servers);
+				sender.run();
 				if (sender.isReceivedFileCorrect()) {
 					//fileList.remove(fileName);
 				}
@@ -67,7 +64,7 @@ public class S2SClientSender extends Thread {
 		this.fileData = fileData;
 	}
 
-	class Sender extends Thread {
+	class Sender {
 		
 		private String hostName;
 		private int portNumber;
@@ -90,7 +87,6 @@ public class S2SClientSender extends Thread {
 	    	this.toDelete=toDelete;
 	    }
 	    
-		@Override
 		public void run() {
 			connectToServer();
 			setupStreams();

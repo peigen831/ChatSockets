@@ -45,6 +45,13 @@ public class PropertiesMonitor {
 		
 		HashMap<String, String> serverAddressportMap = new HashMap<String, String>();
 		
+		if (hasFileServer.length == 0) {
+			for (String activeAddress : activeAddressport) {
+				serverAddressportMap.put(activeAddress.replace(":", "-"), activeAddress);
+			}
+			return serverAddressportMap;
+		}
+		
 		for(int i = 0; i < hasFileServer.length; i++){
 			if(activeAddressport.contains(getAddressPort(hasFileServer[i])))
 			{

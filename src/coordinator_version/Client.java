@@ -57,7 +57,7 @@ public class Client extends Thread {
 		List<Thread> threads = new ArrayList<>();
 		
 		if (!listToGet.isEmpty()) {
-			ClientReceiver cr = new ClientReceiver();
+			ClientReceiver cr = new ClientReceiver(clientName);
 			cr.setFileList(listToGet);
 			cr.setFolderName(folderName);
 			threads.add(cr);
@@ -65,7 +65,7 @@ public class Client extends Thread {
 		}
 		
 		if (!listToGive.isEmpty()) {
-			ClientSender cs = new ClientSender();
+			ClientSender cs = new ClientSender(clientName);
 			cs.setFileList(listToGive);
 			cs.setFolderName(folderName);
 			threads.add(cs);
@@ -73,7 +73,7 @@ public class Client extends Thread {
 		}
 		
 		if (!listToDeleteServer.isEmpty()) {
-			ClientDeleter cd = new ClientDeleter();
+			ClientDeleter cd = new ClientDeleter(clientName);
 			cd.setFileList(listToDeleteServer);
 			threads.add(cd);
 			cd.start();
