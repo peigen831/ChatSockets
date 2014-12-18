@@ -27,8 +27,8 @@ public class ClientSender extends Thread {
 				String servers = fileListItem.replace(fileName + "|", "");
 				Sender sender = new Sender();
 				sender.setFilepath(folderName + fileName);
-				System.out.println(fileListItem);
-				System.out.println("File Name: " + fileName);
+				System.out.println("SENDER: " + fileListItem);
+				System.out.println("SENDER: File Name: " + fileName);
 				for (int i = 1; i < fileArray.length; i++) {
 					String[] serverIp = fileArray[i].split(":");
 					String hostName = serverIp[0];
@@ -41,7 +41,7 @@ public class ClientSender extends Thread {
 						break;
 					}
 				}
-				System.out.println("Sender Servers: " + servers);
+				System.out.println("SENDER: Servers: " + servers);
 				if (sender.isReceivedFileCorrect() || servers.isEmpty()) {
 					fileList.remove(fileListItem);
 				}
@@ -89,7 +89,7 @@ public class ClientSender extends Thread {
 		
 		private void connectToServer() {
 			try {
-				System.out.println("Connecting to " + hostName + ":" + portNumber);
+				System.out.println("SENDER: Connecting to " + hostName + ":" + portNumber);
 				socket = new Socket(hostName, portNumber);
 				connectionSuccess = true;
 			}catch(Exception e) {
@@ -110,7 +110,7 @@ public class ClientSender extends Thread {
 		}
 		
 		private void sendFile() {
-			System.out.println("GIVE: " + file.getName() + "|" + file.length());
+			System.out.println("SENDER: GIVE: " + file.getName() + "|" + file.length());
 			outputToServer.println("GIVE\n" + file.getName() + "|" + file.length() + "|" + servers);
 			try {
 				OutputStream out = socket.getOutputStream();
@@ -167,7 +167,7 @@ public class ClientSender extends Thread {
 		}
 		
 		public boolean isReceivedFileCorrect() {
-			System.out.println(file.length());
+			System.out.println("RECEIVER: " + file.length());
 			if (file.length() == receivedFileSize)
 				return true;
 			return false;

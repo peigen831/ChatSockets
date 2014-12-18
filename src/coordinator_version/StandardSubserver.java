@@ -82,8 +82,8 @@ public class StandardSubserver extends Subserver {
 					newFile.delete();
 				}
 				file.renameTo(newFile);
-				file.delete();
 			}
+			file.delete();
 		}
 		
 		monitor.doneUpdatingFile(filename);
