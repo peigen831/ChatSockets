@@ -35,12 +35,7 @@ public class ClientReceiver extends Thread {
 					String hostName = serverIp[0];
 					int portNumber = Integer.parseInt(serverIp[1]);
 					receiver.setServerAddress(hostName, portNumber);
-					receiver.start();
-					try {
-						receiver.join();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+					receiver.run();
 				}
 				if (receiver.isReceivedFileCorrect()) {
 					fileList.remove(fileListItem);
@@ -57,7 +52,7 @@ public class ClientReceiver extends Thread {
 		this.folderName = folderName;
 	}
 	
-	class Receiver extends Thread {
+	class Receiver {
 		
 		private String hostName;
 		private int portNumber;
@@ -75,7 +70,6 @@ public class ClientReceiver extends Thread {
 			connectionSuccess = false;
 	    }
 		
-		@Override
 		public void run() {
 			connectToServer();
 			setupStreams();

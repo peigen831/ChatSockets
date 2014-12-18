@@ -36,17 +36,13 @@ public class ClientSender extends Thread {
 					servers = servers.replace(fileArray[i] + "|", "");
 					sender.setServerAddress(hostName, portNumber);
 					sender.setBackupServers(servers);
-					sender.start();
-					try {
-						sender.join();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+					sender.run();
 					if (sender.isConnectionSuccessful()) {
 						break;
 					}
 				}
-				if (sender.isReceivedFileCorrect() || servers.equals("")) {
+				System.out.println("Sender Servers: " + servers);
+				if (sender.isReceivedFileCorrect() || servers.isEmpty()) {
 					fileList.remove(fileListItem);
 				}
 			}
@@ -61,7 +57,7 @@ public class ClientSender extends Thread {
 		this.folderName = folderName;
 	}
 	
-	class Sender extends Thread {
+	class Sender {
 		
 		private String hostName;
 		private int portNumber;
@@ -79,7 +75,6 @@ public class ClientSender extends Thread {
 	    	connectionSuccess = false;
 	    }
 	    
-		@Override
 		public void run() {
 			connectToServer();
 			setupStreams();
@@ -172,6 +167,7 @@ public class ClientSender extends Thread {
 		}
 		
 		public boolean isReceivedFileCorrect() {
+			System.out.println(file.length());
 			if (file.length() == receivedFileSize)
 				return true;
 			return false;

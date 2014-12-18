@@ -32,16 +32,12 @@ public class ClientDeleter extends Thread {
 					servers = servers.replace(fileArray[i] + "|", "");
 					deleter.setServerAddress(hostName, portNumber);
 					deleter.setBackupServers(servers);
-					deleter.start();
-					try {
-						deleter.join();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+					deleter.run();
 					if (!deleter.isConnectionSuccessful()) {
 						break;
 					}
 				}
+				System.out.println("Deleter Servers: " + servers);
 				if (deleter.isFileDeleted() || servers.equals("")) {
 					fileList.remove(fileListItem);
 				}
@@ -53,7 +49,7 @@ public class ClientDeleter extends Thread {
 		this.fileList = fileList;
 	}
 	
-	class Deleter extends Thread {
+	class Deleter {
 		
 		private String hostName;
 		private int portNumber;
@@ -72,7 +68,6 @@ public class ClientDeleter extends Thread {
 	    	isFileDeleted = false;
 	    }
 	    
-		@Override
 		public void run() {
 			connectToServer();
 			setupStreams();
