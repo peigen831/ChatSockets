@@ -36,7 +36,7 @@ public class CoordinatorLauncher {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		//(new Client("Client2")).start();
+		(new Client("Client2")).start();
 	}
 
 }
