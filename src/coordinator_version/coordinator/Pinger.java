@@ -1,4 +1,4 @@
-package src.coordinator_version.coordinator;
+package coordinator_version.coordinator;
 
 import java.io.PrintWriter;
 import java.net.Socket;
