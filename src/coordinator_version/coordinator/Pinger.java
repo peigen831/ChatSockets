@@ -26,9 +26,10 @@ public class Pinger extends TimerTask {
 	@Override
 	public void run() {
 		connectToServer();
-		setupStreams();
+		
 		if(connectionSuccess)
 		{
+		    setupStreams();
 		    outputToServer.println("PING");
 		    closeConnection();
 		}
