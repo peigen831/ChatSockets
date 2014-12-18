@@ -1,4 +1,4 @@
-package coordinator_version.coordinator;
+package src.coordinator_version.coordinator;
 
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -27,7 +27,8 @@ public class Pinger extends TimerTask {
 	public void run() {
 		connectToServer();
 		setupStreams();
-		outputToServer.println("PING");
+		if(connectionSuccess)
+		    outputToServer.println("PING");
 		closeConnection();
 		
 		if (connectionSuccess) {
