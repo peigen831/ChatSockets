@@ -1,4 +1,4 @@
-package coordinator_version.coordinator;
+package src.coordinator_version.coordinator;
 
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -26,10 +26,13 @@ public class Pinger extends TimerTask {
 	@Override
 	public void run() {
 		connectToServer();
-		setupStreams();
+		
 		if(connectionSuccess)
+		{
+		    setupStreams();
 		    outputToServer.println("PING");
-		closeConnection();
+		    closeConnection();
+		}
 		
 		if (connectionSuccess) {
 			// Ask monitor to set server as available
