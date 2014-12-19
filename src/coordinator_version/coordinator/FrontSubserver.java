@@ -148,7 +148,7 @@ public class FrontSubserver extends Subserver{
 				}
 				
 				// add to client
-				else if (!clientProp.containsKey(filename)) {
+				else if (!clientProp.containsKey(filename)&&!value[1].equals("DELETED")) {
 					serverAddressportMap = Coordinator.propertiesMonitor.getServerAddressportMap(hasFileServers);
 					//String masterAction = generateMasterlistAction(time, ADDED, serverAddressportMap);
 					String addressports = stringAddressport(serverAddressportMap);
