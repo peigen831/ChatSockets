@@ -32,18 +32,18 @@ public class ClientSender extends Thread {
 				sender.setFilepath(folderName + fileName);
 				System.out.println(name + ":: " + "SENDER: " + fileListItem);
 				System.out.println(name + ":: " + "SENDER: File Name: " + fileName);
-				for (int i = 1; i < fileArray.length; i++) {
-					String[] serverIp = fileArray[i].split(":");
+				//for (int i = 1; i < fileArray.length; i++) {
+					String[] serverIp = fileArray[1].split(":");
 					String hostName = serverIp[0];
 					int portNumber = Integer.parseInt(serverIp[1]);
-					servers = servers.replace(fileArray[i] + "|", "");
+					servers = servers.replace(fileArray[1] + "|", "");
 					sender.setServerAddress(hostName, portNumber);
 					sender.setBackupServers(servers);
 					sender.run();
 					if (sender.isConnectionSuccessful()) {
 						break;
 					}
-				}
+				//}
 				System.out.println(name + ":: " + "SENDER: Servers: " + servers);
 				if (sender.isReceivedFileCorrect() || servers.isEmpty()) {
 					System.out.println(name+":: Removing "+fileListItem+" from list to give");
