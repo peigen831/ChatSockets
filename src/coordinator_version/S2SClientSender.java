@@ -97,10 +97,13 @@ public class S2SClientSender extends Thread {
 			else notifyDeleteFile();
 			closeConnection();
 			
-			connectToServer();
-			setupStreams();
-			requestFileSize();
-			closeConnection();
+			if(!toDelete)
+			{
+				connectToServer();
+				setupStreams();
+				requestFileSize();
+				closeConnection();
+			}
 		}
 		
 		private void connectToServer() {
