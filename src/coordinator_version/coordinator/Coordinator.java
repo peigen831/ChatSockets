@@ -85,4 +85,8 @@ public class Coordinator extends Thread {
 			timer.schedule(new Pinger(coordinatorMonitor, hostName, portNumber), seconds * 1000);
 		}
 	}
+	
+	public static void main(String[] args) {
+		new Coordinator().start();
+	}
 }

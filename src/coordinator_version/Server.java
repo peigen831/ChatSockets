@@ -77,8 +77,9 @@ public class Server extends Thread{
 	}
 
 	public static void main(String[] args) {
-		Server server = new Server(80,2);
-		server.start();
+		new Server(50,Server.SERVER_TO_CLIENT).start();
+		new Server(60,Server.SERVER_TO_CLIENT).start();
+		new Server(75,Server.SERVER_TO_CLIENT).start();
 	}
 	
 }
