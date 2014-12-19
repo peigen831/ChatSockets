@@ -88,13 +88,13 @@ public class StandardSubserver extends Subserver {
 				{
 					//send file to backup servers
 					String servers = filedata.replace(filename + "|" + arrStrFile[1] + "|", "");
-					String fileDataForServers=filedata.replace(servers,"").split("\\|")[0]+"|"+System.currentTimeMillis();
+					String fileDataForServers=filedata.replace(servers,"").split("\\|")[0]+"|"+System.currentTimeMillis()+"|"+servers;
 					//  send to backup servers	//QUESTION: does this send the name of this server as well?
 					// provided: String servers = "server2IP:port|server3IP:port|..."
 					String[] serverList=servers.split("\\|");
 					
 						
-						ServerToServerClient s2sClient=new ServerToServerClient(serverName,filedata, serverList,MasterlistEntry.STATUS_UPDATED);
+						ServerToServerClient s2sClient=new ServerToServerClient(serverName,fileDataForServers, serverList,MasterlistEntry.STATUS_UPDATED);
 						s2sClient.start();
 						//TODO: indicate if file has been added instead of updated (if necessary)
 					
@@ -183,8 +183,8 @@ public class StandardSubserver extends Subserver {
 		
 		if(fromClient)
 		{
-			String servers = filedata.replace(filename + "|", "");
-			String fileDataForServers=filedata.replace(servers,"");
+			String servers = filedata.replace(filename + "|" + arrStrFile[1] + "|", "");
+			String fileDataForServers=filedata.replace(servers,"").split("\\|")[0]+"|"+System.currentTimeMillis()+"|"+servers;
 			//  send to backup servers
 			//QUESTION: does this send the name of this server as well?
 			// provided: String servers = "server2IP:port|server3IP:port|..."

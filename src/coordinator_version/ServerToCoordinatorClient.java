@@ -22,6 +22,7 @@ public class ServerToCoordinatorClient extends Thread {
 	private String folderName;
 	//private String clientProperties;
 	//private long lastSync;
+	private String [] serverList;
 	private String serverName;
 	
 	private Socket socket;
@@ -41,9 +42,11 @@ public class ServerToCoordinatorClient extends Thread {
 	}
 	public void setFileData(String fileData){
 		this.fileData=fileData;
-		//this.status=status;
 	}
-	
+	public void setStatus(int status)
+	{
+		this.status=status;
+	}
 	@Override
 	public void run() {
 		connectToCoordinator();
@@ -121,18 +124,22 @@ public class ServerToCoordinatorClient extends Thread {
 				switch(status)
 				{
 					case MasterlistEntry.STATUS_ADDED:
-						sb.append("ADDED\n");
+						sb.append("ADDED");
 						break;
 					case MasterlistEntry.STATUS_DELETED:
-						sb.append("DELETED\n");
+						sb.append("DELETED");
 						break;
 					case MasterlistEntry.STATUS_UPDATED:
-						sb.append("UPDATED\n");
+						sb.append("UPDATED");
 						break;
+				}
+				for(String server: serverList)
+				{
+					sb.append("|"+server);
 				}
 				
 				try {
-					sb.append("FILE_CHANGE_DONE");
+					sb.append("\nFILE_CHANGE_DONE");
 					outputToServer.println(sb.toString());
 				} catch(Exception e) {
 					e.printStackTrace();
@@ -150,6 +157,9 @@ public class ServerToCoordinatorClient extends Thread {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	public void setServers(String[] serverList) {
+		this.serverList=serverList;
 	}
 	
 }

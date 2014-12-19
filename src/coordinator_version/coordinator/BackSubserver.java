@@ -131,7 +131,7 @@ public class BackSubserver extends Subserver{
 				   entry.addServer(rawInput[i]);
 			   }
 		   }
-		   else entry.addServer(remoteServerName);
+		    //entry.addServer(remoteServerName);
 		  return entry;
 	}
 	private void updateMasterlist(MasterlistEntry entry)
