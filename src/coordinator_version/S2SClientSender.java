@@ -26,7 +26,8 @@ public class S2SClientSender extends Thread {
     
 	@Override
 	public void run() {
-		
+		boolean updateSuccessful=false;
+		while(!updateSuccessful){
 				String[] fileArray = getFileData().split("\\|");
 				String fileName = fileArray[0];
 				//String servers = fileListItem.replace(fileName + "|", "");
@@ -41,9 +42,10 @@ public class S2SClientSender extends Thread {
 				sender.setServerAddress(hostName, portNumber);
 				//sender.setBackupServers(servers);
 				sender.run();
-				if (sender.isReceivedFileCorrect()) {
-					//fileList.remove(fileName);
+				if (!toDelete&&sender.isReceivedFileCorrect()||toDelete&&sender.isFileDeleted()) {
+					updateSuccessful=true;
 				}
+	}
 			
 		
 	}
@@ -190,7 +192,10 @@ public class S2SClientSender extends Thread {
 			file = new File(filepath);
 		}
 		
-		
+		public boolean isFileDeleted()
+		{
+			return isFileDeleted;
+		}
 		
 		public boolean isReceivedFileCorrect() {
 			if (file.length() == receivedFileSize)
