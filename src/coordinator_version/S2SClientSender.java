@@ -151,7 +151,7 @@ public class S2SClientSender extends Thread {
 		
 		private void notifyDeleteFile()
 		{
-		
+				System.out.println(server+":: S2SClientSender: NOTIFY DELETE BACKUP "+ file.getName() + "|" + file.length());
 				outputToServer.println("DELETE_BACKUP\n" + file.getName() + "|" + file.length() );
 				try {
 					String reply = inputFromServer.readLine();

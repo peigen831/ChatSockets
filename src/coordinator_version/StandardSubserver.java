@@ -169,7 +169,7 @@ public class StandardSubserver extends Subserver {
 			e.printStackTrace();
 		}
 		
-		System.out.println("STANDARDSUBSERVER:: received orders to delete "+filedata);
+		System.out.println("STANDARDSUBSERVER "+serverName+":: received orders to delete "+filedata);
 		String[] arrStrFile = filedata.split("\\|");
 		
 		String filename=arrStrFile[0];

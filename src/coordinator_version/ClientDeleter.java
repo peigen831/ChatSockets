@@ -36,7 +36,7 @@ public class ClientDeleter extends Thread {
 					deleter.setServerAddress(hostName, portNumber);
 					deleter.setBackupServers(servers);
 					deleter.run();
-					if (!deleter.isConnectionSuccessful()) {
+					if (deleter.isConnectionSuccessful()) {
 						break;
 					}
 				}
