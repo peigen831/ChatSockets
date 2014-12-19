@@ -14,7 +14,8 @@ public class CoordinatorMonitor {
 	}
 	
 	public synchronized void addAvailableServer(String hostName, int portNumber) {
-		availableServers.add(hostName + ":" + portNumber);
+		if(!availableServers.contains(hostName + ":" + portNumber))
+			availableServers.add(hostName + ":" + portNumber);
 	}
 	
 	public synchronized void removeAvailableServer(String hostName, int portNumber) {

@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import coordinator_version.coordinator.BackSubserver;
+import coordinator_version.coordinator.CoordinatorMonitor;
 import coordinator_version.coordinator.FrontSubserver;
 
 public class Server extends Thread{
@@ -19,9 +20,16 @@ public class Server extends Thread{
 	
 	private String address;
 	private int port=80;
+	private CoordinatorMonitor coordinatorMonitor;
 	
 	//public static int CLIENT_TO_SERVER=3; //unused; client has no subservers
 	
+	public Server(int port,int subserverType, CoordinatorMonitor coordinatorMonitor)//a kludge so we can pass the CoordinatorMonitor to the BackSubserver and FrontSubserver
+	{
+		this.subserverType=subserverType;
+		this.coordinatorMonitor=coordinatorMonitor;
+		this.port=port;
+	}
 	public Server(int port,int subserverType)
 	{
 		this.subserverType=subserverType;
@@ -54,7 +62,7 @@ public class Server extends Thread{
 				case COORDINATOR_TO_CLIENT:
 					subserver=new FrontSubserver(clientSocket, monitor); break;
 				case COORDINATOR_TO_SERVER:
-					subserver=new BackSubserver(clientSocket, monitor); break;
+					subserver=new BackSubserver(clientSocket, monitor, coordinatorMonitor); break;
 				case SERVER_TO_CLIENT:
 				default:
 					subserver = new StandardSubserver(address + "-" + port, clientSocket, monitor); break;

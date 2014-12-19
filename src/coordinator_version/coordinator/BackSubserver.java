@@ -29,12 +29,19 @@ public class BackSubserver extends Subserver{
 	 */
 	private String serverProperties; 
 	private String remoteServerName;
+	private CoordinatorMonitor coordinatorMonitor;
 	private List<MasterlistEntry> masterList=new ArrayList<MasterlistEntry>();
 	
 	public BackSubserver(Socket socket, Monitor monitor) {
 		super(socket, monitor);
 	}
 	
+	public BackSubserver(Socket socket, Monitor monitor,
+			CoordinatorMonitor coordinatorMonitor) {
+		super(socket, monitor);
+		this.coordinatorMonitor=coordinatorMonitor;
+	}
+
 	@Override
 	public void run()
 	{
@@ -131,6 +138,7 @@ public class BackSubserver extends Subserver{
 				   entry.addServer(rawInput[i]);
 			   }
 		   }
+		   
 		    //entry.addServer(remoteServerName);
 		  return entry;
 	}
@@ -215,7 +223,7 @@ public class BackSubserver extends Subserver{
 			Properties properties = new Properties();
 			properties.setProperty("LAST_SYNC", Long.toString(lastHeartbeat));
 			String [] serverAddressData = remoteServerName.split("-");
-			
+			coordinatorMonitor.addAvailableServer(serverAddressData[0], Integer.parseInt(serverAddressData[1]));
 			properties.setProperty("ADDRESS",serverAddressData[0]);
 			properties.setProperty("PORT",serverAddressData[1]);
 			
@@ -254,7 +262,7 @@ public class BackSubserver extends Subserver{
 			MasterlistEntry entry=toMasterlistEntry(file);
 			
 			//String server=socket.getRemoteSocketAddress().toString()+":"+socket.getLocalPort();
-			entry.addServer(serverName);
+			entry.addServer(remoteServerName);
 			updateMasterlist(entry);
 
 		}

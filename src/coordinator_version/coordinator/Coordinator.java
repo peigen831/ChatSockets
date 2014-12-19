@@ -32,7 +32,7 @@ public class Coordinator extends Thread {
 	}
 
 	private void startBackServer(){
-		backServer=new Server(100,Server.COORDINATOR_TO_SERVER);
+		backServer=new Server(100,Server.COORDINATOR_TO_SERVER, coordinatorMonitor);
 		backServer.start();
 	}
 	private void startFrontServer(){
