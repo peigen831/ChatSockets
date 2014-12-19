@@ -19,6 +19,7 @@ public class CoordinatorMonitor {
 	}
 	
 	public synchronized void removeAvailableServer(String hostName, int portNumber) {
+		System.out.println("COORDINATOR MONITOR:: removing"+hostName+":"+portNumber);
 		availableServers.remove(hostName + ":" + portNumber);
 	}
 	

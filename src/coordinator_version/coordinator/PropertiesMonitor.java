@@ -3,6 +3,7 @@ package coordinator_version.coordinator;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -35,7 +36,9 @@ public class PropertiesMonitor {
 	
 	public synchronized HashMap<String, String> getServerToGetMap(String[] hasFileServer){
 		
-		List<String> activeAddressport = Coordinator.coordinatorMonitor.getAvailableServers();
+		List<String> activeAddressport=new ArrayList<String>();
+		for(String s: Coordinator.coordinatorMonitor.getAvailableServers())
+			activeAddressport.add(s);
 		int nChoosen = 0;
 		int nLimit = 2;
 		
