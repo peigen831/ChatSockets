@@ -80,7 +80,7 @@ public class ClientDeleter extends Thread {
 		
 		private void connectToServer() {
 			try {
-				System.out.println(name + ":: " + "Connecting to " + hostName + ":" + portNumber);
+				System.out.println(name + ":: DELETER:" + "Connecting to " + hostName + ":" + portNumber);
 				socket = new Socket(hostName, portNumber);
 				connectionSuccess = true;
 			}catch(Exception e) {
