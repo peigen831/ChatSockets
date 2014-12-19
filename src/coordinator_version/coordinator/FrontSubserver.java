@@ -1,6 +1,5 @@
 package coordinator_version.coordinator;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
@@ -47,6 +46,7 @@ public class FrontSubserver extends Subserver{
 		
 		String index = null;
 		String clientName = null;
+        Long time = System.currentTimeMillis();
         
         // Map<File Name, Action> (Action = ADDED, DELETED, UPDATED)
         Map<String, String> mapClient = new HashMap<>();
@@ -114,6 +114,9 @@ public class FrontSubserver extends Subserver{
                     if (newLastModified > oldLastModified) {
                         mapClient.put(filename, UPDATED);
                         listIndexToGet.add(filename);
+                    }
+                    else {
+                    	clientPropertyAction.put(filename, Long.toString((time)));
                     }
                 }
                 // if file is not in new file index, set action as DELETED
@@ -212,7 +215,6 @@ public class FrontSubserver extends Subserver{
         
         
         /** Get servers for each file **/
-        Long time = System.currentTimeMillis();
         Set<String> tempList; 
         
         tempList = new HashSet<>(listIndexToGet);
@@ -318,18 +320,6 @@ public class FrontSubserver extends Subserver{
 		//Coordinator.propertiesMonitor.updateMasterlistProperties(Coordinator.MASTER_LIST, masterlistAction);
 		Coordinator.propertiesMonitor.updateClientProperties(clientPropPath, clientPropertyAction);
 		
-	}
-	
-	private String generateMasterlistAction(Long time, String status, HashMap<String, String> serverAddressportMap){
-		StringBuilder action = new StringBuilder();
-		
-		action.append(time + "|" + status);
-		
-		for(Entry<String, String> entry: serverAddressportMap.entrySet()){
-			action.append("|" + entry.getKey());
-		}
-		
-		return action.toString();
 	}
 	
 	private String stringAddressport(HashMap<String, String> serverportMap){
