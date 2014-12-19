@@ -173,11 +173,6 @@ public class Client extends Thread {
 	
 	public static void main(String[] args) {
 		(new Client("Client1")).start();
-		try{
-			Thread.sleep(1000);
-		}catch(Exception e){
-			e.printStackTrace();
-		}
 		(new Client("Client2")).start();
 	}
 }
