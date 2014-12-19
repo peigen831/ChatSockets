@@ -28,18 +28,18 @@ public class ClientDeleter extends Thread {
 				deleter.setFileName(fileName);
 				System.out.println(name + ":: " + fileListItem);
 				System.out.println(name + ":: " + "File Name: " + fileName);
-				//for (int i = 1; i < fileArray.length; i++) {
-					String[] serverIp = fileArray[1].split(":");
+				for (int i = 1; i < fileArray.length; i++) {
+					String[] serverIp = fileArray[i].split(":");
 					String hostName = serverIp[0];
 					int portNumber = Integer.parseInt(serverIp[1]);
-					servers = servers.replace(fileArray[1] + "|", "");
+					servers = servers.replace(fileArray[i] + "|", "");
 					deleter.setServerAddress(hostName, portNumber);
 					deleter.setBackupServers(servers);
 					deleter.run();
 					if (!deleter.isConnectionSuccessful()) {
 						break;
 					}
-				//}
+				}
 				System.out.println(name + ":: " + "Deleter Servers: " + servers);
 				if (deleter.isFileDeleted() || servers.equals("")) {
 					fileList.remove(fileListItem);
