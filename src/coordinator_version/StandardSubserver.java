@@ -168,6 +168,8 @@ public class StandardSubserver extends Subserver {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println("STANDARDSUBSERVER:: received orders to delete "+filedata);
 		String[] arrStrFile = filedata.split("\\|");
 		
 		String filename=arrStrFile[0];
@@ -183,7 +185,7 @@ public class StandardSubserver extends Subserver {
 		
 		if(fromClient)
 		{
-			String servers = filedata.replace(filename + "|" + arrStrFile[1] + "|", "");
+			String servers = filedata.replace(filename + "|" , "");
 			String fileDataForServers=filedata.replace(servers,"").split("\\|")[0]+"|"+System.currentTimeMillis()+"|"+servers;
 			//  send to backup servers
 			//QUESTION: does this send the name of this server as well?
