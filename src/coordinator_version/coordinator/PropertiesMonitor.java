@@ -36,11 +36,11 @@ public class PropertiesMonitor {
 	
 	public synchronized HashMap<String, String> getServerToGetMap(String[] hasFileServer){
 		
-		List<String> activeAddressport=new ArrayList<String>();
+		List<String> activeAddressports=new ArrayList<String>();
 		for(String s: Coordinator.coordinatorMonitor.getAvailableServers())
-			activeAddressport.add(s);
-		int nChoosen = 0;
-		int nLimit = 2;
+			activeAddressports.add(s);
+		int nChosen = 0;
+		int nLimit = (int)(2.0/3.0 * Coordinator.maxServers);
 		
 		//System.out.println("List active servers");
 		//for(String a : activeAddressport)
@@ -49,30 +49,40 @@ public class PropertiesMonitor {
 		HashMap<String, String> serverAddressportMap = new HashMap<String, String>();
 		
 		if (hasFileServer.length == 0) {
-			for (String activeAddress : activeAddressport) {
-				serverAddressportMap.put(activeAddress.replace(":", "-"), activeAddress);
+			for(int i = 0; i < activeAddressports.size(); i++)
+			{
+				if(nChosen >= nLimit)
+					break;
+				serverAddressportMap.put(activeAddressports.get(i).replace(":","="), activeAddressports.get(i));
+				nChosen++;
 			}
+			
+			
+			
+			/*for (String activeAddress : activeAddressports) {
+				serverAddressportMap.put(activeAddress.replace(":", "-"), activeAddress);
+			}*/
 			return serverAddressportMap;
 		}
 		
 		for(int i = 0; i < hasFileServer.length; i++){
-			if(activeAddressport.contains(getAddressPort(hasFileServer[i])))
+			if(activeAddressports.contains(getAddressPort(hasFileServer[i])))
 			{
 				serverAddressportMap.put(hasFileServer[i], getAddressPort(hasFileServer[i]));
-				activeAddressport.remove(getAddressPort(hasFileServer[i]));
-				nChoosen ++;
+				activeAddressports.remove(getAddressPort(hasFileServer[i]));
+				nChosen ++;
 			}
 		}
 		
 		serverAddressProperties = loadServerProperties();
 		
-		while(activeAddressport.size() > 0 && nChoosen < nLimit){
-			for(int i = 0; i < activeAddressport.size(); i++)
+		while(activeAddressports.size() > 0 && nChosen < nLimit){
+			for(int i = 0; i < activeAddressports.size(); i++)
 			{
-				if(nChoosen >= nLimit)
+				if(nChosen >= nLimit)
 					break;
-				serverAddressportMap.put(serverAddressProperties.get(activeAddressport.get(i)), activeAddressport.get(i));
-				nChoosen++;
+				serverAddressportMap.put(serverAddressProperties.get(activeAddressports.get(i)), activeAddressports.get(i));
+				nChosen++;
 			}
 		}
 		System.out.println("Servers to give ");
