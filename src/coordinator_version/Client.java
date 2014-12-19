@@ -39,7 +39,6 @@ public class Client extends Thread {
 	public Client(String clientName) {
 		this.clientName = clientName;
 		folderName = clientName + "_Folder/";
-		
 	}
 	
 	@Override
@@ -148,12 +147,40 @@ public class Client extends Thread {
 				String[] arr = index.split("\\|");
 				String toSave = index.replace(arr[0] + "|", "");
 				System.out.println(toSave);
+				File file;
 				switch (arr[0]) {
-					case "TO_GET": listToGet.add(toSave); break;
-					case "TO_GIVE": listToGive.add(toSave); break;
-					case "TO_DESTROY": File file = new File(folderName + arr[1]); file.delete(); break;
-					case "TO_DESTROY_SERVER": listToDeleteServer.add(toSave);break;
-					case "INDEX_DONE": disconnect = true; break;
+					case "CONFLICT":
+						String filename = toSave.split("\\|")[0];
+						file = new File(folderName + filename);
+						if (file.exists()) {
+							String cfilename = folderName + filename + "(" + clientName + "'s_conflicted_copy)";
+							File newfile = new File(cfilename);
+							int counter = 1;
+							while (newfile.exists()) {
+								String cfilename2 = cfilename + "(" + counter + ")";
+								newfile = new File(cfilename2);
+							}
+							file.renameTo(newfile);
+							file.delete();
+							
+							toSave = toSave.replace(filename, newfile.getName());
+						}
+					case "TO_GIVE":
+						listToGive.add(toSave);
+						break;
+					case "TO_GET":
+						listToGet.add(toSave);
+						break;
+					case "TO_DESTROY":
+						file = new File(folderName + arr[1]);
+						file.delete();
+						break;
+					case "TO_DESTROY_SERVER":
+						listToDeleteServer.add(toSave);
+						break;
+					case "INDEX_DONE":
+						disconnect = true;
+						break;
 				}
 			}
 		} while (index != null || !disconnect);

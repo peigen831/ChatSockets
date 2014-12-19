@@ -1,5 +1,6 @@
 package coordinator_version.coordinator;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
@@ -44,7 +45,8 @@ public class FrontSubserver extends Subserver{
 
 	private void getIndex() {
 		
-String index = null;
+		String index = null;
+		String clientName = null;
         
         // Map<File Name, Action> (Action = ADDED, DELETED, UPDATED)
         Map<String, String> mapClient = new HashMap<>();
@@ -52,7 +54,7 @@ String index = null;
         
         Set<String> listIndexToGet = new HashSet<String>();
         Set<String> listIndexToGive = new HashSet<String>();
-        // List<String> listOfConflicts = new HashSet<String>();
+        Set<String> listOfConflicts = new HashSet<String>();
         Set<String> listToDestroyServer = new HashSet<String>();
         Set<String> listToDestroyClient = new HashSet<String>();
         
@@ -77,8 +79,10 @@ String index = null;
                 String[] dataFromClient = index.split(":");
                 
                 //indicate client's identity
-                if(dataFromClient[0].equals("NAME"))
-                    clientPropPath += dataFromClient[1] + ".properties";
+                if(dataFromClient[0].equals("NAME")) {
+                	clientName = dataFromClient[1];
+                    clientPropPath += clientName + ".properties";
+                }
                 
                 //indicate files' identity
                 else
@@ -137,6 +141,7 @@ String index = null;
         for (String filename : masterlistProp.stringPropertyNames()) {
             String value = masterlistProp.getProperty(filename);
             mapServerIndex.put(filename, value);
+            System.out.println(filename + ": " + value);
             String[] propertyValues = value.split("\\|");
             Long lastModified = Long.valueOf(propertyValues[0]);
             String status = propertyValues[1];
@@ -183,7 +188,7 @@ String index = null;
                 if (serverStatus == UPDATED || serverStatus == ADDED) {
                     // if file is UPDATED or ADDED on client, conflict
                     if (clientStatus == UPDATED || clientStatus == ADDED) {
-                        // listOfConflicts.add(filename);
+                        listOfConflicts.add(filename);
                         listIndexToGive.add(filename);
                         listIndexToGet.remove(filename);
                     }
@@ -232,24 +237,37 @@ String index = null;
         listIndexToGive.clear();
         for (String filename : tempList) {
             String value = masterlistProp.getProperty(filename);
-            String[] propertyValues = masterlistProp.getProperty(filename).split("\\|");
-            String[] serversWithFile = value.replace(propertyValues[0] + "|" + propertyValues[1] + "|",
-                    "").split("\\|");
+            String[] serversWithFile = new String[0];
+            if (value != null) {
+	            String[] propertyValues = masterlistProp.getProperty(filename).split("\\|");
+	            serversWithFile = value.replace(propertyValues[0] + "|" + propertyValues[1] + "|",
+	                    "").split("\\|");
+            }
             HashMap<String, String> serverAddressportMap = Coordinator.propertiesMonitor.
             											   getServerAddressportMap(serversWithFile);
             String servers = stringAddressport(serverAddressportMap);
             
             listIndexToGive.add(filename + "|" + servers);
             clientPropertyAction.put(filename, Long.toString((time)));
+            
+            if (listOfConflicts.contains(filename)) {
+            	String newfilename = filename + " (" + clientName + "'s conflicted copy)";
+            	listOfConflicts.remove(filename);
+            	listOfConflicts.add(filename + "|" + servers);
+                clientPropertyAction.put(newfilename, Long.toString((time)));
+            }
         }
         
         tempList = new HashSet<>(listToDestroyServer);
         listToDestroyServer.clear();
         for (String filename : tempList) {
             String value = masterlistProp.getProperty(filename);
-            String[] propertyValues = masterlistProp.getProperty(filename).split("\\|");
-            String[] serversWithFile = value.replace(propertyValues[0] + "|" + propertyValues[1] + "|",
-                    "").split("\\|");
+            String[] serversWithFile = new String[0];
+            if (value != null) {
+	            String[] propertyValues = masterlistProp.getProperty(filename).split("\\|");
+	            serversWithFile = value.replace(propertyValues[0] + "|" + propertyValues[1] + "|",
+	                    "").split("\\|");
+            }
             HashMap<String, String> serverAddressportMap = Coordinator.propertiesMonitor.
             											   getServerAddressportMap(serversWithFile);
             String servers = stringAddressport(serverAddressportMap);
@@ -257,6 +275,9 @@ String index = null;
             listToDestroyServer.add(filename + "|" + servers);
         }
 		
+        
+        /** Send data to client **/
+        
 		StringBuilder sb = new StringBuilder();
 		
 		// send instructions to client
@@ -267,6 +288,10 @@ String index = null;
 		for (String filename : listIndexToGive) {
 			// give client list of files "to get" from server
 			sb.append("TO_GET|" + filename + "\n");
+		}
+		for (String filename : listOfConflicts) {
+			// give client list of files "to get" from server
+			sb.append("CONFLICT|" + filename + "\n");
 		}
 		for (String filename : listToDestroyClient) {
 			// give client list of files "to destroy" on client
