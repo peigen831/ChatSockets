@@ -16,12 +16,18 @@ public class CoordinatorLauncher {
 		}
 		new Server(50,Server.SERVER_TO_CLIENT).start();
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		/*new Server(55,Server.SERVER_TO_CLIENT).start();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 		new Server(60,Server.SERVER_TO_CLIENT).start();
 		try {
 			Thread.sleep(1000);
@@ -29,6 +35,20 @@ public class CoordinatorLauncher {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		/*new Server(65,Server.SERVER_TO_CLIENT).start();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		new Server(70,Server.SERVER_TO_CLIENT).start();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 		new Server(75,Server.SERVER_TO_CLIENT).start();
 		try {
 			Thread.sleep(1000);
