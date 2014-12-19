@@ -103,11 +103,11 @@ public class FrontSubserver extends Subserver{
 			HashMap<String, String> serverAddressportMap;
 			
 			// if the file exists on both client and server
-			if (mapIndexFromClient.containsKey(filename)&&!value[1].equals("DELETED")) {
+			if (mapIndexFromClient.containsKey(filename)) {
 				long clientDate = mapIndexFromClient.get(filename);
 				
 				// add to client, if the file on server is newer
-				if (clientDate < serverLastmodify) { 
+				if (clientDate < serverLastmodify&&!value[1].equals("DELETED")) { 
 					serverAddressportMap = Coordinator.propertiesMonitor.getServerAddressportMap(hasFileServers);
 					String masterAction = generateMasterlistAction(time, ADDED, serverAddressportMap);
 					String addressports = stringAddressport(serverAddressportMap);
