@@ -144,7 +144,7 @@ public class Client extends Thread {
 				e.printStackTrace();
 			}
 			if (index != null) {
-				System.out.println(index);
+				System.out.println(clientName+":: received "+index);
 				String[] arr = index.split("\\|");
 				String toSave = index.replace(arr[0] + "|", "");
 				System.out.println(toSave);

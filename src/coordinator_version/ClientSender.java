@@ -46,6 +46,7 @@ public class ClientSender extends Thread {
 				}
 				System.out.println(name + ":: " + "SENDER: Servers: " + servers);
 				if (sender.isReceivedFileCorrect() || servers.isEmpty()) {
+					System.out.println(name+":: Removing "+fileListItem+" from list to give");
 					fileList.remove(fileListItem);
 				}
 			}
@@ -170,7 +171,8 @@ public class ClientSender extends Thread {
 		}
 		
 		public boolean isReceivedFileCorrect() {
-			System.out.println(name + ":: " + "RECEIVER: " + file.length());
+			System.out.println(name + ":: " + "RECEIVER: Expected file size on server " + file.length());
+			System.out.println(name + ":: " + "RECEIVER: Actual file size on server " + receivedFileSize);
 			if (file.length() == receivedFileSize)
 				return true;
 			return false;
