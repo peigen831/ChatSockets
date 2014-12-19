@@ -251,7 +251,7 @@ public class FrontSubserver extends Subserver{
             clientPropertyAction.put(filename, Long.toString((time)));
             
             if (listOfConflicts.contains(filename)) {
-            	String newfilename = filename + " (" + clientName + "'s conflicted copy)";
+            	String newfilename = filename + "(" + clientName + "'s_conflicted_copy)";
             	listOfConflicts.remove(filename);
             	listOfConflicts.add(filename + "|" + servers);
                 clientPropertyAction.put(newfilename, Long.toString((time)));

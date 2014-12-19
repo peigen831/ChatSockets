@@ -7,8 +7,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
+import org.apache.commons.io.FileUtils;
 
 /*
  * Message from Coordinator to Client:
@@ -85,6 +86,8 @@ public class Client extends Thread {
 				e.printStackTrace();
 			}
 		}
+		
+		checkConflictingFiles();
 		
 		//setLastSync();
 	}
@@ -196,6 +199,34 @@ public class Client extends Thread {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void checkConflictingFiles() {
+		String conflictText = "(" + clientName + "'s_conflicted_copy)";
+		File fileDirectory = new File(folderName);
+		if (fileDirectory.exists() && fileDirectory.isDirectory()) {
+			List<String> files = Arrays.asList(fileDirectory.list());
+			for (String filename : files) {
+				if (filename.contains(conflictText) && files.contains(filename.replace(conflictText, ""))) {
+					
+					// Compare file with conflicted file
+					File cfile = new File(folderName + filename);
+					File file = new File(folderName + filename.replace(conflictText, ""));
+					
+					if (cfile != null && file != null && cfile.exists() && file.exists()) {
+						try {
+							if (FileUtils.contentEquals(file, cfile)) {
+								cfile.delete();
+							}
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+			
+		}
+		
 	}
 	
 	public static void main(String[] args) {
